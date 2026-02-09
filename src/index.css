@@ -256,6 +256,7 @@ body {
 .work-rendered-fg {
   position: relative;
   z-index: 1;
+  opacity: 0.85;
 }
 
 /* ===== Curl Tab ===== */

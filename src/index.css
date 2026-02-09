@@ -216,6 +216,17 @@ body {
   border-color: var(--border);
 }
 
+[data-theme="dark"] .toolbar-btn {
+  color: var(--text-secondary);
+  border-color: #3A3A3A;
+}
+
+[data-theme="dark"] .toolbar-btn-active {
+  color: #F0EDE8;
+  background: #1E1E1E;
+  border-color: #4A4A4A;
+}
+
 /* ===== Layered Work (JSON Background) ===== */
 
 .work-layered {
@@ -227,7 +238,7 @@ body {
   inset: 0;
   overflow: hidden;
   z-index: 0;
-  opacity: 0.06;
+  opacity: 0.15;
   pointer-events: none;
 }
 

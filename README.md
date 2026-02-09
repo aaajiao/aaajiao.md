@@ -7,6 +7,10 @@ One URL, two interfaces. A portfolio site for contemporary artist [aaajiao](http
 
 Features: `.md` / `curl` tab switching, dark/light theme, JSON data overlay on artworks, interactive API explorer with live responses, chunked infinite scroll, download as `.md`.
 
+| `.md` tab | `curl` tab |
+|-----------|------------|
+| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) |
+
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 
 ## API

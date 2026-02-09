@@ -8,7 +8,7 @@ Portfolio website for contemporary artist aaajiao. One URL, two audiences:
 - **Humans** see Markdown rendered via Streamdown (Vercel's MD component)
 - **AI agents** hit `/api/*` endpoints and get raw JSON
 
-There is no local data copy. All work data is fetched at runtime from GitHub (`aaajiao/aaajiao_scraper` repo → `aaajiao_works.json`).
+All work data is fetched from GitHub (`aaajiao/aaajiao_scraper` repo → `aaajiao_works.json`) with in-memory caching and ETag-based conditional requests.
 
 ## Commands
 
@@ -29,7 +29,11 @@ Browser (/)                          AI (curl /api/*)
     ├─ fetch /api/works ──────┐            │
     │                         ▼            ▼
     │              Vercel Serverless Functions (api/)
-    │              fetch GitHub raw JSON → return
+    │              fetchWorks() — in-memory cache
+    │              ├─ <60s: return cached
+    │              └─ ≥60s: ETag conditional fetch
+    │                  ├─ 304: reuse cache
+    │                  └─ 200: update cache
     │                         │
     ▼                         │
 App.tsx                       │
@@ -42,7 +46,7 @@ App.tsx                       │
     API explorer              │
 ```
 
-**Data flow**: `GitHub raw URL → api/works/ → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses)`
+**Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses)`
 
 ### Frontend (`src/`)
 
@@ -79,6 +83,7 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 ### Shared (`shared/`)
 
 - `shared/types.ts` — `Work` interface (canonical type) and `GITHUB_RAW_URL` constant, used by both frontend and API
+- `shared/fetchWorks.ts` — cached data fetcher used by all API handlers. In-memory cache with 60s TTL; uses ETag (`If-None-Match`) for conditional requests so GitHub returns 304 when data hasn't changed. Falls back to stale cache if GitHub is unreachable.
 
 ### Vercel Config
 
@@ -89,7 +94,7 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 All artwork data comes from:
 `https://raw.githubusercontent.com/aaajiao/aaajiao_scraper/main/aaajiao_works.json`
 
-When the scraper pushes new data, the site reflects it within the cache TTL (5 min) without redeployment.
+When the scraper pushes new data, the site reflects it within ~60s (in-memory TTL) + Vercel edge cache (5 min) without redeployment.
 
 ## Gotchas
 

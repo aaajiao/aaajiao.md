@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { GITHUB_RAW_URL, type Work } from '../../shared/types'
+import { GITHUB_RAW_URL, type Work } from '../../shared/types.js'
 
 function slugFromUrl(url: string): string {
   const parts = url.replace(/\/$/, '').split('/')

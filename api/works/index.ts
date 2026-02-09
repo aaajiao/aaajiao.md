@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { GITHUB_RAW_URL, type Work } from '../../shared/types'
+import { GITHUB_RAW_URL, type Work } from '../../shared/types.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')

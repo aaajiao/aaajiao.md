@@ -15,6 +15,10 @@ export default function App() {
         return res.json()
       })
       .then((data: Work[]) => {
+        data.sort((a, b) => {
+          const endYear = (y: string) => parseInt(y.split('-').pop()!) || 0
+          return endYear(b.year) - endYear(a.year)
+        })
         setWorks(data)
         setLoading(false)
       })

@@ -19,8 +19,8 @@ export function workToMarkdown(work: Work): string {
   if (work.size) lines.push(`**Size**: ${work.size}`, '')
   if (work.duration) lines.push(`**Duration**: ${work.duration}`, '')
   if (work.credits) lines.push(`**Credits**: ${work.credits}`, '')
-  if (work.video_link) lines.push(`**Video**: ${work.video_link}`, '')
-  if (work.url) lines.push(`**URL**: ${work.url}`, '')
+  if (work.video_link) lines.push(`**Video**: [${work.video_link}](${work.video_link})`, '')
+  if (work.url) lines.push(`**URL**: [${work.url}](${work.url})`, '')
 
   if (work.description_cn) {
     lines.push(`**中文描述**: ${work.description_cn}`, '')
@@ -32,10 +32,7 @@ export function workToMarkdown(work: Work): string {
   if (work.images.length > 0) {
     lines.push('### 图片', '')
     for (const img of work.images) {
-      lines.push(
-        `<a href="${img}" target="_blank"><img src="${img}" width="400"></a>`,
-        ''
-      )
+      lines.push(`[![](${img})](${img})`, '')
     }
   }
 

@@ -253,6 +253,19 @@ body {
   padding: 0;
 }
 
+/* JSON syntax highlight tokens */
+.json-key  { color: #8B5CF6; }
+.json-str  { color: #059669; }
+.json-num  { color: #D97706; }
+.json-bool { color: #DC2626; }
+.json-null { color: #9E9E9E; }
+
+[data-theme="dark"] .json-key  { color: #A78BFA; }
+[data-theme="dark"] .json-str  { color: #34D399; }
+[data-theme="dark"] .json-num  { color: #FBBF24; }
+[data-theme="dark"] .json-bool { color: #F87171; }
+[data-theme="dark"] .json-null { color: #6B7280; }
+
 .work-rendered-fg {
   position: relative;
   z-index: 1;

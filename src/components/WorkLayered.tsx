@@ -1,5 +1,7 @@
+import { useMemo } from 'react'
 import { Streamdown } from 'streamdown'
 import { workToMarkdown } from '../lib/jsonToMarkdown'
+import { highlightJson } from '../lib/jsonHighlight'
 import type { Work } from '../../shared/types'
 
 interface WorkLayeredProps {
@@ -8,11 +10,13 @@ interface WorkLayeredProps {
 }
 
 export function WorkLayered({ work, showJson }: WorkLayeredProps) {
+  const jsonHtml = useMemo(() => showJson ? highlightJson(work) : '', [work, showJson])
+
   return (
     <div className="work-layered">
       {showJson && (
         <div className="work-json-bg" aria-hidden="true">
-          <pre>{JSON.stringify(work, null, 2)}</pre>
+          <pre dangerouslySetInnerHTML={{ __html: jsonHtml }} />
         </div>
       )}
       <div className="work-rendered-fg">

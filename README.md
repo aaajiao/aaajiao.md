@@ -5,6 +5,8 @@ One URL, two interfaces. A portfolio site for contemporary artist [aaajiao](http
 - **Humans** visit `/` and see artwork data rendered as Markdown via [Streamdown](https://github.com/vercel/streamdown)
 - **AI agents** hit `/api/*` and get structured JSON
 
+Features: `.md` / `curl` tab switching, dark/light theme, JSON data overlay on artworks, interactive API explorer with live responses, chunked infinite scroll, download as `.md`.
+
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 
 ## API
@@ -55,8 +57,10 @@ Browser (/)                          AI (curl /api/*)
     v                       |
   App.tsx                   |
     -> sort by year desc    |
-    -> chunked rendering    |
-    -> .md / curl tabs      |
+    -> .md tab: Streamdown  |
+       + JSON overlay       |
+    -> curl tab: live API   |
+       explorer             |
 ```
 
 ## License

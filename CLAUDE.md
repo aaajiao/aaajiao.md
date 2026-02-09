@@ -34,25 +34,33 @@ Browser (/)                          AI (curl /api/*)
     ▼                         │
 App.tsx                       │
   → sort works by year desc   │
-  → Portfolio receives Work[] │
-  → chunked rendering via     │
-    IntersectionObserver      │
-  → "Download MD" button      │
+  → SiteHeader: .md / curl    │
+    tab switch + theme toggle │
+  → .md tab: Streamdown +     │
+    JSON overlay + download   │
+  → curl tab: interactive     │
+    API explorer              │
 ```
 
-**Data flow**: `GitHub raw URL → api/works/ → App.tsx (sort) → Portfolio (chunk + render via Streamdown)`
+**Data flow**: `GitHub raw URL → api/works/ → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses)`
 
 ### Frontend (`src/`)
 
-- `App.tsx` — fetches `/api/works`, sorts works newest-first, passes `Work[]` to Portfolio
+- `App.tsx` — fetches `/api/works`, sorts works newest-first, manages `.md`/`curl` tab state and theme, passes `Work[]` to active tab
+- `components/SiteHeader.tsx` — site title, `.md`/`curl` tab switcher, theme toggle button
+- `components/ThemeToggle.tsx` — light/dark mode toggle (sun/moon icon)
+- `components/MdTab.tsx` — Markdown view container: JSON overlay toggle (`{ }` button), download button, wraps Portfolio
+- `components/CurlTab.tsx` — interactive API explorer: lists all endpoints with live responses, copy-to-clipboard curl commands, JSON syntax highlighting
+- `components/Portfolio.tsx` — chunked Streamdown rendering with fade-in animation; receives `showJson` prop for JSON overlay mode
+- `components/WorkLayered.tsx` — single work card: Streamdown markdown foreground with optional semi-transparent JSON background overlay (via `mix-blend-multiply`/`screen`)
 - `lib/jsonToMarkdown.ts` — pure functions for markdown conversion:
   - `headerMarkdown()` — title + separator
   - `workToMarkdown(work)` — single work → markdown
   - `worksChunkToMarkdown(works)` — array of works → markdown
   - `jsonToMarkdown(works)` — full markdown (header + all works), used for download
+- `lib/jsonHighlight.ts` — lightweight JSON syntax highlighter (regex-based, returns HTML with `<span>` classes for keys, strings, numbers, booleans, null)
 - `hooks/useChunkedWorks.ts` — progressive loading hook: renders 10 works at a time, IntersectionObserver triggers next chunk with `rootMargin: '200px'`
-- `components/Portfolio.tsx` — chunked Streamdown rendering with fade-in animation; download button generates complete markdown from all works
-- `components/ApiHint.tsx` — "For AI: curl …/api" banner
+- `hooks/useTheme.ts` — dark/light theme hook: reads from `localStorage` (key `aaajiao-theme`), falls back to `prefers-color-scheme`, sets `data-theme` attribute on `<html>`
 
 Styling: Tailwind CSS v4 via `@tailwindcss/vite` plugin. Streamdown requires `@source` directive in `src/index.css` to pick up its utility classes.
 

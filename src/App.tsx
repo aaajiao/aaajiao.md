@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { Work } from './lib/jsonToMarkdown'
 import { jsonToMarkdown } from './lib/jsonToMarkdown'
-import { Portfolio } from './components/Portfolio'
-import { ApiHint } from './components/ApiHint'
+import { MdTab } from './components/MdTab'
+import { CurlTab } from './components/CurlTab'
 import { SiteHeader } from './components/SiteHeader'
 import { useTheme } from './hooks/useTheme'
 
@@ -21,6 +21,7 @@ export default function App() {
   const [works, setWorks] = useState<Work[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'.md' | 'curl'>('.md')
   const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
@@ -65,10 +66,13 @@ export default function App() {
         <SiteHeader
           theme={theme}
           onToggleTheme={toggleTheme}
-          onDownload={() => downloadMarkdown(works)}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
         />
-        <Portfolio works={works} />
-        <ApiHint />
+        {activeTab === '.md'
+          ? <MdTab works={works} onDownload={() => downloadMarkdown(works)} />
+          : <CurlTab works={works} />
+        }
       </div>
     </div>
   )

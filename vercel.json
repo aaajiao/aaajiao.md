@@ -1,0 +1,8 @@
+{
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api", "destination": "/api/index" },
+    { "source": "/api/works", "destination": "/api/works/index" },
+    { "source": "/api/works/:slug", "destination": "/api/works/[slug]" }
+  ]
+}

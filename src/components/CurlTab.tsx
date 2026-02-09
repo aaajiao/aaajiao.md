@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { highlightJson } from '../lib/jsonHighlight'
 import type { Work } from '../../shared/types'
 
 interface Endpoint {
@@ -37,12 +38,12 @@ export function CurlTab({ works }: CurlTabProps) {
           let display: string
           if (ep.truncateArray && Array.isArray(data)) {
             const preview = data.slice(0, 2)
-            display = JSON.stringify(preview, null, 2)
+            display = highlightJson(preview)
             if (data.length > 2) {
               display = display.slice(0, -1) + `  // ... ${data.length} works total\n]`
             }
           } else {
-            display = JSON.stringify(data, null, 2)
+            display = highlightJson(data)
           }
           setResponses((prev) => ({ ...prev, [ep.path]: display }))
         })
@@ -83,9 +84,10 @@ export function CurlTab({ works }: CurlTabProps) {
               {copiedPath === ep.path ? 'copied' : 'copy'}
             </button>
           </div>
-          <pre className="curl-response">
-            {responses[ep.path] ?? '// loading...'}
-          </pre>
+          <pre
+            className="curl-response"
+            dangerouslySetInnerHTML={{ __html: responses[ep.path] ?? '// loading...' }}
+          />
         </div>
       ))}
     </div>

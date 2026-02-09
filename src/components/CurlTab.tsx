@@ -64,28 +64,28 @@ export function CurlTab({ works }: CurlTabProps) {
   }, [origin])
 
   return (
-    <div className="curl-tab">
+    <div className="flex flex-col gap-8 mt-4">
       {endpoints.map((ep) => (
-        <div key={ep.path} className="curl-example">
-          <div className="curl-example-header">
-            <span className="curl-label">{ep.label}</span>
-            <span className="curl-desc">{ep.description}</span>
+        <div key={ep.path} className="border border-border rounded-sm overflow-hidden">
+          <div className="flex items-baseline gap-3 px-[0.9rem] py-[0.6rem] border-b border-border bg-code">
+            <span className="font-display text-[0.8rem] font-medium text-foreground">{ep.label}</span>
+            <span className="font-display text-[0.7rem] text-subtle">{ep.description}</span>
           </div>
-          <div className="curl-command-row">
-            <code className="curl-command">
+          <div className="flex items-center justify-between px-[0.9rem] py-2 border-b border-border bg-surface-elevated">
+            <code className="font-display text-[0.78rem] text-foreground overflow-x-auto whitespace-nowrap">
               {ep.path.includes('?')
                 ? `curl "${origin}${ep.path}"`
                 : `curl ${origin}${ep.path}`}
             </code>
             <button
-              className="curl-copy-btn"
+              className="font-display text-[0.68rem] tracking-[0.04em] px-2 py-[0.2rem] border border-border rounded-sm bg-transparent text-subtle cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-foreground shrink-0 ml-3"
               onClick={() => copyCommand(ep.path)}
             >
               {copiedPath === ep.path ? 'copied' : 'copy'}
             </button>
           </div>
           <pre
-            className="curl-response"
+            className="font-display text-[0.72rem] leading-[1.5] text-muted px-[0.9rem] py-[0.8rem] m-0 max-h-80 overflow-y-auto whitespace-pre-wrap break-all"
             dangerouslySetInnerHTML={{ __html: responses[ep.path] ?? '// loading...' }}
           />
         </div>

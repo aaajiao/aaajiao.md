@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @source "../node_modules/streamdown/dist/*.js";
 
+/* ===== Dark variant for [data-theme="dark"] ===== */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ===== Design Tokens ===== */
 
 :root {
@@ -13,8 +16,6 @@
   --accent: #0046FF;
   --accent-hover: #0035CC;
   --code-bg: #EDEAE3;
-  --font-display: 'DM Mono', ui-monospace, monospace;
-  --font-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
 }
 
 [data-theme="dark"] {
@@ -29,6 +30,26 @@
   --code-bg: #161616;
 }
 
+/* ===== Tailwind Theme Extension ===== */
+
+@theme {
+  --color-surface: var(--bg);
+  --color-surface-elevated: var(--bg-elevated);
+  --color-foreground: var(--text-primary);
+  --color-muted: var(--text-secondary);
+  --color-subtle: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-code: var(--code-bg);
+
+  --font-family-display: 'DM Mono', ui-monospace, monospace;
+  --font-family-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+
+  --animate-pulse-soft: pulse 2s ease-in-out infinite;
+  --animate-fade-in: fadeSlideIn 0.4s ease-out both;
+}
+
 /* ===== Base ===== */
 
 html {
@@ -36,344 +57,23 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-family-body);
   background-color: var(--bg);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== Site Header ===== */
-
-.site-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.site-title {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  color: var(--text-primary);
-}
-
-.site-subtitle {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  color: var(--text-tertiary);
-  margin-top: 0.4rem;
-  letter-spacing: 0.04em;
-}
-
-.site-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.download-btn {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-}
-.download-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-}
-
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-}
-.theme-toggle:hover {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-}
-
-/* ===== Loading States ===== */
-
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: var(--bg);
-}
-
-.loading-title {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  animation: pulse 2s ease-in-out infinite;
-}
+/* ===== Animations ===== */
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
 
-.loading-sentinel {
-  padding: 2rem 0;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: var(--text-tertiary);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* ===== Tab Navigation ===== */
-
-.site-title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 1.2rem;
-}
-
-.tab-nav {
-  display: flex;
-  gap: 0.15rem;
-}
-
-.tab-btn {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  padding: 0.25rem 0.65rem;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
-}
-
-.tab-btn:hover {
-  color: var(--text-secondary);
-}
-
-.tab-active {
-  color: var(--text-primary);
-  background: var(--code-bg);
-  border-color: var(--border);
-}
-
-/* ===== MD Tab Toolbar ===== */
-
-.md-tab-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.toolbar-btn {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  padding: 0.4rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
-}
-
-.toolbar-btn:hover {
-  color: var(--text-secondary);
-  border-color: var(--text-secondary);
-}
-
-.toolbar-btn-active {
-  color: var(--text-primary);
-  background: var(--code-bg);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .toolbar-btn {
-  color: var(--text-secondary);
-  border-color: #3A3A3A;
-}
-
-[data-theme="dark"] .toolbar-btn-active {
-  color: #F0EDE8;
-  background: #1E1E1E;
-  border-color: #4A4A4A;
-}
-
-/* ===== Layered Work (JSON Background) ===== */
-
-.work-layered {
-  position: relative;
-}
-
-.work-json-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  opacity: 0.22;
-  pointer-events: none;
-}
-
-.work-json-bg pre {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  line-height: 1.4;
-  white-space: pre-wrap;
-  word-break: break-all;
-  color: var(--text-primary);
-  margin: 0;
-  padding: 0;
-}
-
-/* JSON syntax highlight tokens */
-.json-key  { color: #8B5CF6; }
-.json-str  { color: #059669; }
-.json-num  { color: #D97706; }
-.json-bool { color: #DC2626; }
-.json-null { color: #9E9E9E; }
-
-[data-theme="dark"] .json-key  { color: #A78BFA; }
-[data-theme="dark"] .json-str  { color: #34D399; }
-[data-theme="dark"] .json-num  { color: #FBBF24; }
-[data-theme="dark"] .json-bool { color: #F87171; }
-[data-theme="dark"] .json-null { color: #6B7280; }
-
-.work-rendered-fg {
-  position: relative;
-  z-index: 1;
-}
-
-.work-layered .work-rendered-fg {
-  mix-blend-mode: multiply;
-}
-
-[data-theme="dark"] .work-layered .work-rendered-fg {
-  mix-blend-mode: screen;
-}
-
-/* ===== Curl Tab ===== */
-
-.curl-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.curl-example {
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.curl-example-header {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 0.6rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--code-bg);
-}
-
-.curl-label {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.curl-desc {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  color: var(--text-tertiary);
-}
-
-.curl-command-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-elevated);
-}
-
-.curl-command {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  color: var(--text-primary);
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.curl-copy-btn {
-  font-family: var(--font-display);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-  flex-shrink: 0;
-  margin-left: 0.75rem;
-}
-
-.curl-copy-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-}
-
-.curl-response {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  padding: 0.8rem 0.9rem;
-  margin: 0;
-  max-height: 20rem;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-/* ===== Chunk Animation ===== */
-
 @keyframes fadeSlideIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
-}
-.chunk-enter {
-  animation: fadeSlideIn 0.4s ease-out both;
 }
 
 /* ===== Streamdown / Prose Overrides ===== */
@@ -389,16 +89,16 @@ body {
 }
 
 .prose h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-family-display);
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   margin-bottom: 1rem;
-  display: none; /* header is in SiteHeader now */
+  display: none;
 }
 
 .prose h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-family-display);
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -410,7 +110,7 @@ body {
 }
 
 .prose h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-family-display);
   font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0.04em;
@@ -428,7 +128,7 @@ body {
 }
 
 .prose p strong {
-  font-family: var(--font-display);
+  font-family: var(--font-family-display);
   font-size: 0.78rem;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -465,23 +165,23 @@ body {
 }
 
 .prose code {
-  font-family: var(--font-display);
+  font-family: var(--font-family-display);
   font-size: 0.82rem;
   background: var(--code-bg);
   padding: 0.15em 0.4em;
   border-radius: 2px;
 }
 
-/* ===== Error State ===== */
+/* ===== JSON Syntax Highlights ===== */
 
-.error-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: var(--bg);
-  font-family: var(--font-display);
-  color: #D44;
-  font-size: 0.9rem;
-}
+.json-key  { color: #8B5CF6; }
+.json-str  { color: #059669; }
+.json-num  { color: #D97706; }
+.json-bool { color: #DC2626; }
+.json-null { color: #9E9E9E; }
+
+[data-theme="dark"] .json-key  { color: #A78BFA; }
+[data-theme="dark"] .json-str  { color: #34D399; }
+[data-theme="dark"] .json-num  { color: #FBBF24; }
+[data-theme="dark"] .json-bool { color: #F87171; }
+[data-theme="dark"] .json-null { color: #6B7280; }

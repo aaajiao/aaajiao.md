@@ -11,28 +11,36 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ theme, onToggleTheme, activeTab, onTabChange }: SiteHeaderProps) {
   return (
-    <header className="site-header">
-      <div className="site-header-identity">
-        <div className="site-title-row">
-          <h1 className="site-title">aaajiao</h1>
-          <nav className="tab-nav">
+    <header className="flex items-end justify-between pb-8 mb-8 border-b border-border">
+      <div>
+        <div className="flex items-baseline gap-[1.2rem]">
+          <h1 className="font-display text-[2.5rem] font-medium tracking-[-0.02em] leading-none text-foreground">aaajiao</h1>
+          <nav className="flex gap-[0.15rem]">
             <button
-              className={`tab-btn${activeTab === '.md' ? ' tab-active' : ''}`}
+              className={`font-display text-[0.8rem] tracking-[0.02em] px-[0.65rem] py-1 border rounded-sm cursor-pointer transition-colors duration-200 ${
+                activeTab === '.md'
+                  ? 'text-foreground bg-code border-border'
+                  : 'text-subtle bg-transparent border-transparent hover:text-muted'
+              }`}
               onClick={() => onTabChange('.md')}
             >
               .md
             </button>
             <button
-              className={`tab-btn${activeTab === 'curl' ? ' tab-active' : ''}`}
+              className={`font-display text-[0.8rem] tracking-[0.02em] px-[0.65rem] py-1 border rounded-sm cursor-pointer transition-colors duration-200 ${
+                activeTab === 'curl'
+                  ? 'text-foreground bg-code border-border'
+                  : 'text-subtle bg-transparent border-transparent hover:text-muted'
+              }`}
               onClick={() => onTabChange('curl')}
             >
               curl
             </button>
           </nav>
         </div>
-        <p className="site-subtitle">作品档案 / Works Archive</p>
+        <p className="font-display text-[0.8rem] text-subtle mt-[0.4rem] tracking-[0.04em]">作品档案 / Works Archive</p>
       </div>
-      <div className="site-header-actions">
+      <div className="flex items-center gap-3">
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
       </div>
     </header>

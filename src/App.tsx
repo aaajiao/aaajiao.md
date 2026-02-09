@@ -46,22 +46,22 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="loading-screen">
-        <span className="loading-title">aaajiao</span>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-surface">
+        <span className="font-display text-[2rem] font-medium text-foreground animate-pulse-soft">aaajiao</span>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="error-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-surface font-display text-[#D44] text-[0.9rem]">
         Error: {error}
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg)', color: 'var(--text-primary)' }}>
+    <div className="min-h-screen bg-surface text-foreground">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <SiteHeader
           theme={theme}

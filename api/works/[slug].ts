@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { GITHUB_RAW_URL, type Work } from '../../shared/types.js'
+import { fetchWorks } from '../../shared/fetchWorks.js'
 
 function slugFromUrl(url: string): string {
   const parts = url.replace(/\/$/, '').split('/')
@@ -21,13 +21,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const response = await fetch(GITHUB_RAW_URL)
-    if (!response.ok) {
-      res.status(502).json({ error: 'Failed to fetch from GitHub' })
-      return
-    }
-
-    const works: Work[] = await response.json()
+    const works = await fetchWorks()
     const target = slug.toLowerCase()
     const work = works.find((w) => slugFromUrl(w.url) === target)
 

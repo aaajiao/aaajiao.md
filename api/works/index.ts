@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { GITHUB_RAW_URL, type Work } from '../../shared/types.js'
+import type { Work } from '../../shared/types.js'
+import { fetchWorks } from '../../shared/fetchWorks.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -10,13 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   )
 
   try {
-    const response = await fetch(GITHUB_RAW_URL)
-    if (!response.ok) {
-      res.status(502).json({ error: 'Failed to fetch from GitHub' })
-      return
-    }
-
-    let works: Work[] = await response.json()
+    let works: Work[] = await fetchWorks()
 
     // Filter by query params
     const { year, type } = req.query

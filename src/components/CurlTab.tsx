@@ -78,7 +78,7 @@ export function CurlTab({ works }: CurlTabProps) {
                 : `curl ${origin}${ep.path}`}
             </code>
             <button
-              className="font-display text-[0.68rem] tracking-[0.04em] px-2 py-[0.2rem] border border-border rounded-sm bg-transparent text-subtle cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-foreground shrink-0 ml-3"
+              className="font-display text-[0.68rem] tracking-[0.04em] px-2 py-[0.2rem] border border-border rounded-sm bg-transparent text-muted cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-foreground shrink-0 ml-3"
               onClick={() => copyCommand(ep.path)}
             >
               {copiedPath === ep.path ? 'copied' : 'copy'}

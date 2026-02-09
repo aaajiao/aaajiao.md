@@ -1,15 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-
-const GITHUB_RAW_URL =
-  'https://raw.githubusercontent.com/aaajiao/aaajiao_scraper/main/aaajiao_works.json'
-
-interface Work {
-  url: string
-  title: string
-  year: string
-  type: string
-  [key: string]: unknown
-}
+import { GITHUB_RAW_URL, type Work } from '../../shared/types'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')

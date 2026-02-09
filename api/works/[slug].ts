@@ -1,12 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-
-const GITHUB_RAW_URL =
-  'https://raw.githubusercontent.com/aaajiao/aaajiao_scraper/main/aaajiao_works.json'
-
-interface Work {
-  url: string
-  [key: string]: unknown
-}
+import { GITHUB_RAW_URL, type Work } from '../../shared/types'
 
 function slugFromUrl(url: string): string {
   const parts = url.replace(/\/$/, '').split('/')

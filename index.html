@@ -3,7 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>aaajiao — Portfolio</title>
+    <title>aaajiao — Works Archive</title>
+    <meta name="description" content="aaajiao 作品档案 — Complete works archive of contemporary artist aaajiao" />
+    <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E0E0E" media="(prefers-color-scheme: dark)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        var t = localStorage.getItem('aaajiao-theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

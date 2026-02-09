@@ -37,13 +37,13 @@ export function Portfolio({ works }: PortfolioProps) {
         </button>
       </div>
       <div className="prose prose-invert max-w-none">
-        <Streamdown mode="static">{headerMarkdown()}</Streamdown>
+        <Streamdown mode="static" linkSafety={{ enabled: false }}>{headerMarkdown()}</Streamdown>
         {chunks.map((chunk, i) => (
           <div
             key={i}
             className={i === latestChunkIndex && i > 0 ? 'chunk-enter' : ''}
           >
-            <Streamdown mode="static">
+            <Streamdown mode="static" linkSafety={{ enabled: false }}>
               {worksChunkToMarkdown(chunk)}
             </Streamdown>
           </div>

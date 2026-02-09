@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @source "../node_modules/streamdown/dist/*.js";
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chunk-enter {
+  animation: fadeSlideIn 0.6s ease-out both;
+}

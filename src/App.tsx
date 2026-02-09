@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { jsonToMarkdown, type Work } from './lib/jsonToMarkdown'
+import type { Work } from './lib/jsonToMarkdown'
 import { Portfolio } from './components/Portfolio'
 import { ApiHint } from './components/ApiHint'
 
 export default function App() {
-  const [markdown, setMarkdown] = useState<string>('')
+  const [works, setWorks] = useState<Work[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -14,8 +14,8 @@ export default function App() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
       })
-      .then((works: Work[]) => {
-        setMarkdown(jsonToMarkdown(works))
+      .then((data: Work[]) => {
+        setWorks(data)
         setLoading(false)
       })
       .catch((err) => {
@@ -44,7 +44,7 @@ export default function App() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <ApiHint />
-        <Portfolio markdown={markdown} />
+        <Portfolio works={works} />
       </div>
     </div>
   )

@@ -1,15 +1,17 @@
 # aaajiao.md
 
-One URL, two interfaces. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that serves humans and AI agents from the same origin.
+One URL, three views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at three levels of abstraction.
 
-- **Humans** visit `/` and see artwork data rendered as Markdown via [Streamdown](https://github.com/vercel/streamdown)
+- **`.md`** — human-readable Markdown via [Streamdown](https://github.com/vercel/streamdown)
+- **`curl`** — interactive API explorer with live JSON responses
+- **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode
 - **AI agents** hit `/api/*` and get structured JSON
 
-Features: `.md` / `curl` tab switching, dark/light theme, JSON data overlay on artworks, interactive API explorer with live responses, chunked infinite scroll, download as `.md`.
+From Markdown to structured data to raw binary — the same information, three ways of seeing.
 
-| `.md` tab | `curl` tab |
-|-----------|------------|
-| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) |
+| `.md` tab | `curl` tab | `bin` tab |
+|-----------|------------|-----------|
+| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) | ![bin tab](public/screenshot-bin.png) |
 
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 
@@ -65,6 +67,8 @@ Browser (/)                          AI (curl /api/*)
        + JSON overlay       |
     -> curl tab: live API   |
        explorer             |
+    -> bin tab: bit-pixel   |
+       bitmap + decode      |
 ```
 
 ## License

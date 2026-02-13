@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { fetchWorks } from '../../shared/fetchWorks.js'
+import { sendNegotiated } from '../../shared/respond.js'
 
 function slugFromUrl(url: string): string {
   const parts = url.replace(/\/$/, '').split('/')
@@ -8,11 +9,6 @@ function slugFromUrl(url: string): string {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Content-Type', 'application/json')
-  res.setHeader(
-    'Cache-Control',
-    's-maxage=300, stale-while-revalidate=600'
-  )
 
   const { slug } = req.query
   if (!slug || typeof slug !== 'string') {
@@ -30,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return
     }
 
-    res.json(work)
+    sendNegotiated({ res, acceptHeader: req.headers.accept, data: work })
   } catch {
     res.status(500).json({ error: 'Internal server error' })
   }

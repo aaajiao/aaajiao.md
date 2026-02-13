@@ -1,15 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import type { Work } from '../../shared/types.js'
 import { fetchWorks } from '../../shared/fetchWorks.js'
+import { sendNegotiated } from '../../shared/respond.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Content-Type', 'application/json')
-  res.setHeader(
-    'Cache-Control',
-    's-maxage=300, stale-while-revalidate=600'
-  )
-
   try {
     let works: Work[] = await fetchWorks()
 
@@ -24,8 +18,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       works = works.filter((w) => w.type.toLowerCase() === t)
     }
 
-    res.json(works)
+    sendNegotiated({ res, acceptHeader: req.headers.accept, data: works })
   } catch {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.status(500).json({ error: 'Internal server error' })
   }
 }

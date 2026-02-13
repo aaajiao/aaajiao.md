@@ -3,7 +3,7 @@
 One URL, three views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at three levels of abstraction.
 
 - **`.md`** — human-readable Markdown via [Streamdown](https://github.com/vercel/streamdown)
-- **`curl`** — interactive API explorer with live JSON responses
+- **`curl`** — interactive API explorer with live JSON, Markdown, and binary responses
 - **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode
 - **AI agents** hit `/api/*` and get structured JSON
 
@@ -21,7 +21,7 @@ No local data copy. All work data is fetched at runtime from the [aaajiao_scrape
 # Index / navigation
 curl https://aaajiao.md/api
 
-# All works
+# All works (JSON, default)
 curl https://aaajiao.md/api/works
 
 # Filter by year or type
@@ -32,7 +32,22 @@ curl "https://aaajiao.md/api/works?type=Installation"
 curl https://aaajiao.md/api/works/guard-i
 ```
 
-All responses are JSON with CORS enabled.
+### Content Negotiation
+
+Same URL, different `Accept` header — three representations:
+
+```bash
+# Markdown (with YAML front-matter)
+curl -H "Accept: text/markdown" https://aaajiao.md/api/works
+
+# Raw bytes (UTF-8 encoded JSON)
+curl -H "Accept: application/octet-stream" https://aaajiao.md/api/works -o works.bin
+
+# Single work as Markdown
+curl -H "Accept: text/markdown" https://aaajiao.md/api/works/guard-i
+```
+
+All responses include CORS headers and `Content-Signal: ai-input=yes, ai-train=yes, search=yes`.
 
 ## Stack
 
@@ -58,7 +73,9 @@ Browser (/)                          AI (curl /api/*)
     +-- fetch /api/works ---+              |
     |                       v              v
     |              Vercel Serverless Functions
-    |              GitHub raw JSON -> return
+    |              GitHub raw JSON -> cache -> negotiate
+    |              Accept: json | markdown | binary
+    |              + Content-Signal header
     |                       |
     v                       |
   App.tsx                   |
@@ -66,7 +83,8 @@ Browser (/)                          AI (curl /api/*)
     -> .md tab: Streamdown  |
        + JSON overlay       |
     -> curl tab: live API   |
-       explorer             |
+       explorer + content   |
+       negotiation demos    |
     -> bin tab: bit-pixel   |
        bitmap + decode      |
 ```

@@ -185,3 +185,25 @@ body {
 [data-theme="dark"] .json-num  { color: #FBBF24; }
 [data-theme="dark"] .json-bool { color: #F87171; }
 [data-theme="dark"] .json-null { color: #6B7280; }
+
+/* ===== Markdown Syntax Highlights ===== */
+
+.md-heading      { color: #8B5CF6; }
+.md-bold         { color: #1A1A1A; }
+.md-hr           { color: #9E9E9E; }
+.md-meta-key     { color: #D97706; }
+.md-meta-val     { color: #059669; }
+.md-link-bracket { color: #9E9E9E; }
+.md-link-text    { color: #0046FF; }
+.md-link-url     { color: #059669; }
+.md-comment      { color: #9E9E9E; font-style: italic; }
+
+[data-theme="dark"] .md-heading      { color: #A78BFA; }
+[data-theme="dark"] .md-bold         { color: #E8E6E1; }
+[data-theme="dark"] .md-hr           { color: #6B7280; }
+[data-theme="dark"] .md-meta-key     { color: #FBBF24; }
+[data-theme="dark"] .md-meta-val     { color: #34D399; }
+[data-theme="dark"] .md-link-bracket { color: #6B7280; }
+[data-theme="dark"] .md-link-text    { color: #4D7FFF; }
+[data-theme="dark"] .md-link-url     { color: #34D399; }
+[data-theme="dark"] .md-comment      { color: #6B7280; font-style: italic; }

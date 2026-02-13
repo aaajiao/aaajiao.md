@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { highlightJson } from '../lib/jsonHighlight'
+import { highlightMarkdown } from '../lib/mdHighlight'
 import type { Work } from '../../shared/types'
 
 interface Endpoint {
@@ -53,13 +54,14 @@ export function CurlTab({ works }: CurlTabProps) {
               const tokens = res.headers.get('x-markdown-tokens')
               const lines = text.split('\n')
               const preview = lines.slice(0, 20).join('\n')
-              let display = preview
+              let suffix = ''
               if (lines.length > 20) {
-                display += `\n\n// ... ${lines.length} lines total`
+                suffix += `\n\n// ... ${lines.length} lines total`
               }
               if (tokens) {
-                display += `\n// x-markdown-tokens: ${tokens}`
+                suffix += `\n// x-markdown-tokens: ${tokens}`
               }
+              const display = highlightMarkdown(preview) + highlightMarkdown(suffix)
               setResponses((prev) => ({ ...prev, [key]: display }))
             })
           }
@@ -102,7 +104,6 @@ export function CurlTab({ works }: CurlTabProps) {
     <div className="flex flex-col gap-8 mt-4">
       {endpoints.map((ep) => {
         const key = endpointKey(ep)
-        const isPlainText = !!ep.acceptHeader
         return (
           <div key={key} className="border border-border rounded-sm overflow-hidden">
             <div className="flex items-baseline gap-3 px-[0.9rem] py-[0.6rem] border-b border-border bg-code">
@@ -120,7 +121,7 @@ export function CurlTab({ works }: CurlTabProps) {
                 {copiedPath === key ? 'copied' : 'copy'}
               </button>
             </div>
-            {isPlainText ? (
+            {ep.acceptHeader === 'application/octet-stream' ? (
               <pre className="font-display text-[0.72rem] leading-[1.5] text-muted px-[0.9rem] py-[0.8rem] m-0 max-h-80 overflow-y-auto whitespace-pre-wrap break-all">
                 {responses[key] ?? '// loading...'}
               </pre>

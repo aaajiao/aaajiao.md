@@ -3,7 +3,6 @@ import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
-import { DecodeOverlay } from './DecodeOverlay'
 import type { BreathingState } from '../hooks/useBreathingDecode'
 
 interface BitGridProps {
@@ -23,10 +22,24 @@ function parseCssHex(hex: string): [number, number, number] {
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
 }
 
-interface InteractionState {
+// Unified overlay card data — same format for breathing, hover, and click
+interface OverlayCard {
   region: FieldRegion
-  byteIndex: number
-  pos: { x: number; y: number }
+  lines: string[]
+  path: string
+  top: number
+  opacity: number
+  maxWidth: number
+  locked: boolean
+}
+
+function buildCardText(region: FieldRegion): string {
+  let displayValue = region.value
+  if (displayValue.startsWith('"') && displayValue.endsWith('"')) {
+    displayValue = displayValue.slice(1, -1)
+  }
+  if (displayValue.length > 200) displayValue = displayValue.slice(0, 197) + '...'
+  return `${region.key}: ${displayValue}`
 }
 
 export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
@@ -35,8 +48,8 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef(0)
 
-  const [hoverState, setHoverState] = useState<InteractionState | null>(null)
-  const [lockState, setLockState] = useState<InteractionState | null>(null)
+  const [hoverState, setHoverState] = useState<FieldRegion | null>(null)
+  const [lockState, setLockState] = useState<FieldRegion | null>(null)
 
   const targetPixelSize = containerWidth >= 640 ? 3 : 2
   const columnsPerRow =
@@ -44,6 +57,20 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const totalBits = bytes.length * 8
   const numRows = columnsPerRow > 0 ? Math.ceil(totalBits / columnsPerRow) : 0
   const displayHeight = columnsPerRow > 0 ? numRows * (containerWidth / columnsPerRow) : 0
+
+  // Compute region → CSS pixel position
+  const regionToY = useCallback(
+    (region: FieldRegion) => {
+      if (columnsPerRow === 0) return { yStart: 0, yEnd: 0 }
+      const pixelSize = containerWidth / columnsPerRow
+      const startBit = region.start * 8
+      const endBit = region.end * 8
+      const startRow = Math.floor(startBit / columnsPerRow)
+      const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+      return { yStart: startRow * pixelSize, yEnd: (endRow + 1) * pixelSize }
+    },
+    [columnsPerRow, containerWidth],
+  )
 
   // Draw base bitmap
   useEffect(() => {
@@ -72,7 +99,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       d[idx + 3] = 255
     }
 
-    // Fill trailing pixels with bg
     const total = columnsPerRow * numRows
     for (let bi = totalBits; bi < total; bi++) {
       const idx = bi * 4
@@ -84,7 +110,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     ctx.putImageData(imgData, 0, 0)
 
-    // Size overlay canvas to match
     const overlay = overlayCanvasRef.current
     if (overlay) {
       overlay.width = columnsPerRow
@@ -121,7 +146,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
 
-  // Draw overlay highlight (manual interaction OR breathing)
+  // Draw overlay highlight on canvas
   useEffect(() => {
     const canvas = overlayCanvasRef.current
     if (!canvas || columnsPerRow === 0) return
@@ -130,8 +155,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const active = lockState ?? hoverState
     const breathing = !active ? breathingState : null
-
-    const region = active?.region ?? breathing?.region
+    const region = active ?? breathing?.region
     if (!region) return
 
     const style = getComputedStyle(document.documentElement)
@@ -164,47 +188,42 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
-  // Compute breathing text overlay position + lines via Pretext
-  const breathingText = useMemo(() => {
-    const active = lockState ?? hoverState
-    if (active || !breathingState || breathingState.opacity <= 0) return null
+  // Unified overlay card — same for breathing, hover, and click
+  const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
 
-    const { region, opacity } = breathingState
-    const pixelSize = containerWidth / columnsPerRow
+    const active = lockState ?? hoverState
+    const breathing = !active ? breathingState : null
 
-    const startBit = region.start * 8
-    const endBit = region.end * 8
-    const startRow = Math.floor(startBit / columnsPerRow)
-    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
-    const yStart = startRow * pixelSize
-    const yEnd = (endRow + 1) * pixelSize
-    const regionHeight = yEnd - yStart
+    const region = active ?? breathing?.region
+    if (!region) return null
+    if (breathing && breathing.opacity <= 0) return null
 
-    let displayValue = region.value
-    if (displayValue.startsWith('"') && displayValue.endsWith('"')) {
-      displayValue = displayValue.slice(1, -1)
-    }
-    if (displayValue.length > 200) displayValue = displayValue.slice(0, 197) + '...'
-    const displayText = `${region.key}: ${displayValue}`
-
+    const displayText = buildCardText(region)
     const prepared = prepareWithSegments(displayText, TEXT_FONT)
     const layout = layoutWithLines(prepared, containerWidth - 32, TEXT_LINE_HEIGHT)
     const textBlockHeight = layout.height
+
+    const { yStart, yEnd } = regionToY(region)
+    const regionHeight = yEnd - yStart
 
     let textY = yStart + (regionHeight - textBlockHeight) / 2
     textY = Math.max(4, Math.min(textY, displayHeight - textBlockHeight - 4))
 
     return {
+      region,
       lines: layout.lines.map((l) => l.text),
+      path: `works${region.path}`,
       top: textY,
-      opacity,
+      opacity: active ? 1 : breathing?.opacity ?? 0,
       maxWidth: layout.lines.reduce((max, l) => Math.max(max, l.width), 0),
+      locked: !!lockState,
     }
-  }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, displayHeight])
+  }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, displayHeight, regionToY])
 
+  // Hit test — returns region (not byte index)
   const hitTest = useCallback(
-    (clientX: number, clientY: number, rect: DOMRect): InteractionState | null => {
+    (clientX: number, clientY: number, rect: DOMRect): FieldRegion | null => {
       const x = clientX - rect.left
       const y = clientY - rect.top
       const pixelSize = rect.width / columnsPerRow
@@ -214,13 +233,9 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       const byteIndex = bitIndex >> 3
 
       if (byteIndex < 0 || byteIndex >= bytes.length) return null
-
-      const region = findRegion(regions, byteIndex)
-      if (!region) return null
-
-      return { region, byteIndex, pos: { x, y } }
+      return findRegion(regions, byteIndex)
     },
-    [bytes, regions, columnsPerRow]
+    [bytes, regions, columnsPerRow],
   )
 
   // Notify parent of interaction state for breathing pause/resume
@@ -238,7 +253,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         setHoverState(hitTest(clientX, clientY, rect))
       })
     },
-    [hitTest, lockState]
+    [hitTest, lockState],
   )
 
   const handleMouseLeave = useCallback(() => {
@@ -257,7 +272,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       const hit = hitTest(e.clientX, e.clientY, rect)
       if (hit) setLockState(hit)
     },
-    [hitTest, lockState]
+    [hitTest, lockState],
   )
 
   const handleTouchStart = useCallback(
@@ -278,7 +293,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         setLockState(hit)
       }
     },
-    [hitTest, lockState]
+    [hitTest, lockState],
   )
 
   // Escape key dismisses lock
@@ -294,8 +309,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     return () => document.removeEventListener('keydown', handleKey)
   }, [lockState])
 
-  const activeState = lockState ?? hoverState
-
   const canvasStyle: React.CSSProperties = {
     width: '100%',
     height: displayHeight,
@@ -310,16 +323,21 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
-      {breathingText && (
+      {overlayCard && (
         <div
           className="absolute left-0 right-0 pointer-events-none z-10"
-          style={{ top: breathingText.top, opacity: breathingText.opacity }}
+          style={{ top: overlayCard.top, opacity: overlayCard.opacity }}
         >
           <div
-            className="mx-4 px-4 py-3 rounded-sm bg-surface/90 border border-border/50 shadow-sm backdrop-blur-sm"
-            style={{ maxWidth: breathingText.maxWidth + 32 }}
+            className={`mx-4 px-4 py-3 rounded-sm bg-surface/90 border shadow-sm backdrop-blur-sm ${
+              overlayCard.locked ? 'border-accent/60' : 'border-border/50'
+            }`}
+            style={{ maxWidth: overlayCard.maxWidth + 32 }}
           >
-            {breathingText.lines.map((line, i) => (
+            <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em] mb-1">
+              {overlayCard.path}
+            </div>
+            {overlayCard.lines.map((line, i) => (
               <div
                 key={i}
                 className="font-body text-[13px] leading-[19px] text-foreground"
@@ -338,16 +356,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         onClick={handleClick}
         onTouchStart={handleTouchStart}
       />
-      {activeState && (
-        <DecodeOverlay
-          region={activeState.region}
-          bytes={bytes}
-          byteIndex={activeState.byteIndex}
-          locked={!!lockState}
-          pos={activeState.pos}
-          containerWidth={containerWidth}
-        />
-      )}
     </div>
   )
 }

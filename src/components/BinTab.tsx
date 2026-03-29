@@ -14,7 +14,6 @@ export function BinTab({ works, theme }: BinTabProps) {
   const bytes = useMemo(() => new TextEncoder().encode(jsonString), [jsonString])
   const regions = useMemo(() => buildByteOffsetMap(jsonString), [jsonString])
 
-  // BitGrid reports its visible byte range here
   const visibleRangeRef = useRef<{ startByte: number; endByte: number } | null>(null)
   const getVisibleRange = useCallback(() => visibleRangeRef.current, [])
 
@@ -39,7 +38,7 @@ export function BinTab({ works, theme }: BinTabProps) {
       bytes={bytes}
       regions={regions}
       theme={theme}
-      breathingState={breathing.state}
+      breathingSlots={breathing.slots}
       onInteractionChange={handleInteractionChange}
       onVisibleRangeChange={handleVisibleRangeChange}
     />

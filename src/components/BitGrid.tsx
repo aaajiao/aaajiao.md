@@ -143,7 +143,46 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
 
-  // Draw overlay: highlight for hover/click, or text decode for breathing
+  // Breathing: compute Pretext text layout for the decoded region
+  const breathingLayout = useMemo(() => {
+    const active = lockState ?? hoverState
+    if (active || !breathingState || breathingState.opacity <= 0) return null
+    if (containerWidth <= 0 || columnsPerRow === 0) return null
+
+    const { region, opacity } = breathingState
+    const pixelSize = containerWidth / columnsPerRow
+
+    const regionBytes = bytes.slice(region.start, region.end)
+    const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+
+    const font = '13px "IBM Plex Sans", sans-serif'
+    const lineHeight = 18
+    const prepared = prepareWithSegments(text, font)
+    const layout = layoutWithLines(prepared, containerWidth - 12, lineHeight)
+    const textHeightCss = layout.height + 8
+    const lines = layout.lines.map((l) => l.text)
+
+    // Region position in canvas and CSS coords
+    const startBit = region.start * 8
+    const endBit = region.end * 8
+    const startRow = Math.floor(startBit / columnsPerRow)
+    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+    const yStartCss = startRow * pixelSize
+    const regionHeightCss = (endRow - startRow + 1) * pixelSize
+
+    // How much the bits need to shift to make room
+    const extraHeight = Math.max(0, textHeightCss - regionHeightCss)
+    const shiftCss = extraHeight * 0.5 * opacity
+
+    return {
+      region, opacity, lines, font, lineHeight,
+      startRow, endRow,
+      yStartCss, regionHeightCss, textHeightCss,
+      shiftCss,
+    }
+  }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow])
+
+  // Draw overlay: highlight for hover/click, or erase region for breathing
   useEffect(() => {
     const canvas = overlayCanvasRef.current
     if (!canvas || columnsPerRow === 0) return
@@ -151,13 +190,10 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     const active = lockState ?? hoverState
-    const breathing = !active ? breathingState : null
-    const region = active?.region ?? breathing?.region
+    const region = active?.region ?? breathingLayout?.region
     if (!region) return
 
     const style = getComputedStyle(document.documentElement)
-    const accent = style.getPropertyValue('--accent').trim()
-    const [ar, ag, ab] = parseCssHex(accent)
 
     const startBit = region.start * 8
     const endBit = region.end * 8
@@ -165,7 +201,8 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
 
     if (active) {
-      // Hover/click: tinted highlight
+      const accent = style.getPropertyValue('--accent').trim()
+      const [ar, ag, ab] = parseCssHex(accent)
       const alpha = lockState ? 0.35 : 0.2
       ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
       for (let row = startRow; row <= endRow; row++) {
@@ -175,42 +212,15 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         const hlEnd = Math.min(endBit, rowEnd) - rowStart
         ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
       }
-    } else if (breathing && breathing.opacity > 0) {
-      // Breathing: replace bits with decoded text directly on canvas
+    } else if (breathingLayout) {
+      // Erase region bits so DOM text shows through
       const bg = parseCssHex(style.getPropertyValue('--bg').trim())
-      const opacity = breathing.opacity
-
-      // Fill region with bg to erase binary
-      ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},${opacity})`
+      ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},${breathingLayout.opacity})`
       for (let row = startRow; row <= endRow; row++) {
-        const rowStart = row * columnsPerRow
-        const rowEnd = rowStart + columnsPerRow
-        const hlStart = Math.max(startBit, rowStart) - rowStart
-        const hlEnd = Math.min(endBit, rowEnd) - rowStart
-        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
-      }
-
-      // Decode bytes and render text on canvas at bitmap resolution
-      const regionBytes = bytes.slice(region.start, region.end)
-      const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
-
-      const fontSize = 5
-      const prepared = prepareWithSegments(text, `${fontSize}px sans-serif`)
-      const lineHeight = fontSize + 1
-      const textWidth = columnsPerRow - 2
-      const layout = layoutWithLines(prepared, textWidth, lineHeight)
-
-      const maxLines = Math.floor((endRow - startRow + 1) / lineHeight) || 1
-
-      ctx.fillStyle = `rgba(${ar},${ag},${ab},${opacity})`
-      ctx.font = `${fontSize}px sans-serif`
-      ctx.textBaseline = 'top'
-
-      for (let i = 0; i < Math.min(layout.lines.length, maxLines); i++) {
-        ctx.fillText(layout.lines[i].text, 1, startRow + i * lineHeight)
+        ctx.fillRect(0, row, columnsPerRow, 1)
       }
     }
-  }, [hoverState, lockState, breathingState, columnsPerRow, bytes])
+  }, [hoverState, lockState, breathingLayout, columnsPerRow])
 
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
   const overlayCard = useMemo((): OverlayCard | null => {
@@ -378,14 +388,107 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     imageRendering: 'pixelated',
   }
 
+  // Split the bitmap into top/bottom clips that shift apart during breathing
+  const topClip = breathingLayout
+    ? `inset(0 0 ${100 - (breathingLayout.yStartCss / displayHeight) * 100}% 0)`
+    : undefined
+  const bottomClip = breathingLayout
+    ? `inset(${((breathingLayout.yStartCss + breathingLayout.regionHeightCss) / displayHeight) * 100}% 0 0 0)`
+    : undefined
+
   return (
     <div ref={containerRef} className="relative mt-4 select-none">
-      <canvas ref={baseCanvasRef} className="block" style={canvasStyle} />
-      <canvas
-        ref={overlayCanvasRef}
-        className="absolute top-0 left-0"
-        style={{ ...canvasStyle, pointerEvents: 'none' }}
-      />
+      {!breathingLayout ? (
+        <>
+          <canvas ref={baseCanvasRef} className="block" style={canvasStyle} />
+          <canvas
+            ref={overlayCanvasRef}
+            className="absolute top-0 left-0"
+            style={{ ...canvasStyle, pointerEvents: 'none' }}
+          />
+        </>
+      ) : (
+        <>
+          {/* Top portion: bits above region, shifted up */}
+          <canvas
+            ref={baseCanvasRef}
+            className="block"
+            style={canvasStyle}
+          />
+          <div
+            className="absolute top-0 left-0 w-full pointer-events-none"
+            style={{
+              height: displayHeight,
+              clipPath: topClip,
+              transform: `translateY(${-breathingLayout.shiftCss}px)`,
+              transition: 'transform 0.15s ease-out',
+            }}
+          >
+            <canvas
+              className="block"
+              style={canvasStyle}
+              ref={(el) => {
+                // Mirror base canvas content
+                if (el && baseCanvasRef.current && el !== baseCanvasRef.current) {
+                  el.width = baseCanvasRef.current.width
+                  el.height = baseCanvasRef.current.height
+                  el.getContext('2d')?.drawImage(baseCanvasRef.current, 0, 0)
+                }
+              }}
+            />
+          </div>
+          {/* Bottom portion: bits below region, shifted down */}
+          <div
+            className="absolute top-0 left-0 w-full pointer-events-none"
+            style={{
+              height: displayHeight,
+              clipPath: bottomClip,
+              transform: `translateY(${breathingLayout.shiftCss}px)`,
+              transition: 'transform 0.15s ease-out',
+            }}
+          >
+            <canvas
+              className="block"
+              style={canvasStyle}
+              ref={(el) => {
+                if (el && baseCanvasRef.current && el !== baseCanvasRef.current) {
+                  el.width = baseCanvasRef.current.width
+                  el.height = baseCanvasRef.current.height
+                  el.getContext('2d')?.drawImage(baseCanvasRef.current, 0, 0)
+                }
+              }}
+            />
+          </div>
+          {/* Decoded text in the gap */}
+          <div
+            className="absolute left-0 right-0 pointer-events-none px-[6px]"
+            style={{
+              top: breathingLayout.yStartCss - breathingLayout.shiftCss,
+              opacity: breathingLayout.opacity,
+              minHeight: breathingLayout.textHeightCss,
+            }}
+          >
+            {breathingLayout.lines.map((line, i) => (
+              <div
+                key={i}
+                className="text-accent"
+                style={{
+                  font: breathingLayout.font,
+                  lineHeight: `${breathingLayout.lineHeight}px`,
+                }}
+              >
+                {line}
+              </div>
+            ))}
+          </div>
+          {/* Overlay canvas for erase mask */}
+          <canvas
+            ref={overlayCanvasRef}
+            className="absolute top-0 left-0"
+            style={{ ...canvasStyle, pointerEvents: 'none' }}
+          />
+        </>
+      )}
       {overlayCard && decodeRows && (
         <div
           className="absolute z-50 pointer-events-none"

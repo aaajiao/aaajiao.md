@@ -19,6 +19,10 @@ function parseCssHex(hex: string): [number, number, number] {
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 interface InteractionState {
   region: FieldRegion
   byteIndex: number
@@ -36,14 +40,11 @@ interface OverlayCard {
   displayValue: string
 }
 
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
-
 export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
   const [containerRef, containerWidth] = useContainerWidth()
   const baseCanvasRef = useRef<HTMLCanvasElement>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
+  const bitmapDataRef = useRef<ImageData | null>(null)
   const rafRef = useRef(0)
 
   const [hoverState, setHoverState] = useState<InteractionState | null>(null)
@@ -55,34 +56,17 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const totalBits = bytes.length * 8
   const numRows = columnsPerRow > 0 ? Math.ceil(totalBits / columnsPerRow) : 0
   const displayHeight = columnsPerRow > 0 ? numRows * (containerWidth / columnsPerRow) : 0
+  const pixelSize = columnsPerRow > 0 ? containerWidth / columnsPerRow : 0
 
-  const regionToY = useCallback(
-    (region: FieldRegion) => {
-      if (columnsPerRow === 0) return { yStart: 0, yEnd: 0 }
-      const pixelSize = containerWidth / columnsPerRow
-      const startBit = region.start * 8
-      const endBit = region.end * 8
-      const startRow = Math.floor(startBit / columnsPerRow)
-      const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
-      return { yStart: startRow * pixelSize, yEnd: (endRow + 1) * pixelSize }
-    },
-    [columnsPerRow, containerWidth],
-  )
-
-  // Draw base bitmap
+  // Build base bitmap ImageData (stored for re-use during breathing)
   useEffect(() => {
-    const canvas = baseCanvasRef.current
-    if (!canvas || columnsPerRow === 0 || bytes.length === 0) return
-
-    const ctx = canvas.getContext('2d')!
-    canvas.width = columnsPerRow
-    canvas.height = numRows
+    if (columnsPerRow === 0 || bytes.length === 0) return
 
     const style = getComputedStyle(document.documentElement)
     const fg = parseCssHex(style.getPropertyValue('--text-primary').trim())
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
 
-    const imgData = ctx.createImageData(columnsPerRow, numRows)
+    const imgData = new ImageData(columnsPerRow, numRows)
     const d = imgData.data
 
     for (let bi = 0; bi < totalBits; bi++) {
@@ -90,68 +74,24 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       const bit = (byte >> (7 - (bi & 7))) & 1
       const idx = bi * 4
       const c = bit ? fg : bg
-      d[idx] = c[0]
-      d[idx + 1] = c[1]
-      d[idx + 2] = c[2]
-      d[idx + 3] = 255
+      d[idx] = c[0]; d[idx + 1] = c[1]; d[idx + 2] = c[2]; d[idx + 3] = 255
     }
-
     const total = columnsPerRow * numRows
     for (let bi = totalBits; bi < total; bi++) {
       const idx = bi * 4
-      d[idx] = bg[0]
-      d[idx + 1] = bg[1]
-      d[idx + 2] = bg[2]
-      d[idx + 3] = 255
+      d[idx] = bg[0]; d[idx + 1] = bg[1]; d[idx + 2] = bg[2]; d[idx + 3] = 255
     }
 
-    ctx.putImageData(imgData, 0, 0)
-
-    const overlay = overlayCanvasRef.current
-    if (overlay) {
-      overlay.width = columnsPerRow
-      overlay.height = numRows
-    }
+    bitmapDataRef.current = imgData
   }, [bytes, theme, columnsPerRow, numRows, totalBits])
 
-  // Report visible byte range on scroll/resize
-  useEffect(() => {
-    if (!onVisibleRangeChange || columnsPerRow === 0 || !containerRef.current) return
-
-    const update = () => {
-      const el = containerRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const pixelSize = rect.width / columnsPerRow
-      const viewTop = Math.max(0, -rect.top)
-      const viewBottom = Math.min(rect.height, window.innerHeight - rect.top)
-      if (viewBottom <= viewTop) return
-
-      const startRow = Math.floor(viewTop / pixelSize)
-      const endRow = Math.ceil(viewBottom / pixelSize)
-      const startByte = Math.floor((startRow * columnsPerRow) / 8)
-      const endByte = Math.min(bytes.length, Math.ceil((endRow * columnsPerRow) / 8))
-      onVisibleRangeChange(startByte, endByte)
-    }
-
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
-    }
-  }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
-
-  // Breathing: compute Pretext text layout for the decoded region
+  // Breathing: compute Pretext layout for decoded text
   const breathingLayout = useMemo(() => {
     const active = lockState ?? hoverState
     if (active || !breathingState || breathingState.opacity <= 0) return null
     if (containerWidth <= 0 || columnsPerRow === 0) return null
 
     const { region, opacity } = breathingState
-    const pixelSize = containerWidth / columnsPerRow
-
     const regionBytes = bytes.slice(region.start, region.end)
     const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
 
@@ -159,345 +99,271 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const lineHeight = 18
     const prepared = prepareWithSegments(text, font)
     const layout = layoutWithLines(prepared, containerWidth - 12, lineHeight)
-    const textHeightCss = layout.height + 8
     const lines = layout.lines.map((l) => l.text)
+    const textHeightPx = layout.height + 4
 
-    // Region position in canvas and CSS coords
     const startBit = region.start * 8
     const endBit = region.end * 8
     const startRow = Math.floor(startBit / columnsPerRow)
     const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
-    const yStartCss = startRow * pixelSize
     const regionHeightCss = (endRow - startRow + 1) * pixelSize
 
-    // How much the bits need to shift to make room
-    const extraHeight = Math.max(0, textHeightCss - regionHeightCss)
-    const shiftCss = extraHeight * 0.5 * opacity
+    // Extra canvas rows needed for text vs region bits
+    const textRows = Math.ceil(textHeightPx / pixelSize)
+    const regionRows = endRow - startRow + 1
+    const extraRows = Math.max(0, textRows - regionRows)
+    const shiftRows = Math.round(extraRows * 0.5 * opacity)
 
     return {
       region, opacity, lines, font, lineHeight,
-      startRow, endRow,
-      yStartCss, regionHeightCss, textHeightCss,
-      shiftCss,
+      startRow, endRow, shiftRows, textHeightPx, regionHeightCss,
     }
-  }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow])
+  }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow, pixelSize])
 
-  // Draw overlay: highlight for hover/click, or erase region for breathing
+  // Render base canvas: normal bitmap or shifted bitmap during breathing
+  useEffect(() => {
+    const canvas = baseCanvasRef.current
+    const imgData = bitmapDataRef.current
+    if (!canvas || !imgData || columnsPerRow === 0) return
+
+    const ctx = canvas.getContext('2d')!
+
+    if (!breathingLayout || breathingLayout.shiftRows === 0) {
+      // Normal: render bitmap as-is
+      canvas.width = columnsPerRow
+      canvas.height = numRows
+      ctx.putImageData(imgData, 0, 0)
+    } else {
+      // Breathing: shift rows apart to open gap for text
+      const { startRow, endRow, shiftRows } = breathingLayout
+      const gapHeight = shiftRows * 2
+      const newHeight = numRows + gapHeight
+      canvas.width = columnsPerRow
+      canvas.height = newHeight
+
+      // Top portion: rows 0..startRow-1 shifted up by shiftRows (clamped)
+      ctx.putImageData(imgData, 0, -shiftRows, 0, 0, columnsPerRow, startRow)
+      // Bottom portion: rows endRow+1..end shifted down by shiftRows
+      ctx.putImageData(imgData, 0, endRow + 1 + shiftRows, 0, endRow + 1, columnsPerRow, numRows - endRow - 1)
+      // Gap area stays blank (canvas default)
+    }
+
+    // Size overlay to match
+    const overlay = overlayCanvasRef.current
+    if (overlay) {
+      overlay.width = canvas.width
+      overlay.height = canvas.height
+    }
+  }, [bitmapDataRef.current, breathingLayout, columnsPerRow, numRows])
+
+  // Report visible byte range on scroll/resize
+  useEffect(() => {
+    if (!onVisibleRangeChange || columnsPerRow === 0 || !containerRef.current) return
+    const update = () => {
+      const el = containerRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const ps = rect.width / columnsPerRow
+      const viewTop = Math.max(0, -rect.top)
+      const viewBottom = Math.min(rect.height, window.innerHeight - rect.top)
+      if (viewBottom <= viewTop) return
+      const startByte = Math.floor((Math.floor(viewTop / ps) * columnsPerRow) / 8)
+      const endByte = Math.min(bytes.length, Math.ceil((Math.ceil(viewBottom / ps) * columnsPerRow) / 8))
+      onVisibleRangeChange(startByte, endByte)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update, { passive: true })
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
+  }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
+
+  // Draw overlay: highlight for hover/click
   useEffect(() => {
     const canvas = overlayCanvasRef.current
-    if (!canvas || columnsPerRow === 0) return
+    if (!canvas || canvas.width === 0) return
     const ctx = canvas.getContext('2d')!
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     const active = lockState ?? hoverState
-    const region = active?.region ?? breathingLayout?.region
-    if (!region) return
+    if (!active) return
 
     const style = getComputedStyle(document.documentElement)
+    const accent = style.getPropertyValue('--accent').trim()
+    const [ar, ag, ab] = parseCssHex(accent)
+    const alpha = lockState ? 0.35 : 0.2
+    ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
 
-    const startBit = region.start * 8
-    const endBit = region.end * 8
+    const startBit = active.region.start * 8
+    const endBit = active.region.end * 8
     const startRow = Math.floor(startBit / columnsPerRow)
     const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
 
-    if (active) {
-      const accent = style.getPropertyValue('--accent').trim()
-      const [ar, ag, ab] = parseCssHex(accent)
-      const alpha = lockState ? 0.35 : 0.2
-      ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
-      for (let row = startRow; row <= endRow; row++) {
-        const rowStart = row * columnsPerRow
-        const rowEnd = rowStart + columnsPerRow
-        const hlStart = Math.max(startBit, rowStart) - rowStart
-        const hlEnd = Math.min(endBit, rowEnd) - rowStart
-        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
-      }
-    } else if (breathingLayout) {
-      // Erase region bits so DOM text shows through
-      const bg = parseCssHex(style.getPropertyValue('--bg').trim())
-      ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},${breathingLayout.opacity})`
-      for (let row = startRow; row <= endRow; row++) {
-        ctx.fillRect(0, row, columnsPerRow, 1)
-      }
+    for (let row = startRow; row <= endRow; row++) {
+      const rowStart = row * columnsPerRow
+      const rowEnd = rowStart + columnsPerRow
+      const hlStart = Math.max(startBit, rowStart) - rowStart
+      const hlEnd = Math.min(endBit, rowEnd) - rowStart
+      ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
     }
-  }, [hoverState, lockState, breathingLayout, columnsPerRow])
+  }, [hoverState, lockState, columnsPerRow])
 
-  // Unified overlay card — positioned like old DecodeOverlay (above the point)
+  // Overlay card (tooltip) for hover/click/breathing
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
-
     const active = lockState ?? hoverState
     const breathing = !active ? breathingState : null
-
     const region = active?.region ?? breathing?.region
     if (!region) return null
     if (breathing && breathing.opacity <= 0) return null
 
     const byteIndex = active?.byteIndex ?? region.start
+    const displayValue = region.value.length > 80 ? region.value.slice(0, 77) + '...' : region.value
 
-    const displayValue = region.value.length > 80
-      ? region.value.slice(0, 77) + '...'
-      : region.value
-
-    // Position: for hover/click use cursor pos; for breathing use region top-center
-    let posX: number
-    let posY: number
+    let posX: number, posY: number
     if (active) {
-      posX = active.pos.x
-      posY = active.pos.y
+      posX = active.pos.x; posY = active.pos.y
     } else {
-      const { yStart } = regionToY(region)
       posX = containerWidth / 2
-      posY = yStart
+      posY = breathingLayout ? (breathingLayout.startRow - breathingLayout.shiftRows) * pixelSize : 0
     }
 
     const margin = 140
-    const left = Math.max(margin, Math.min(posX, containerWidth - margin))
-    const top = posY - 8
-
     return {
-      path: `works${region.path}`,
-      left,
-      top,
-      opacity: active ? 1 : breathing?.opacity ?? 0,
-      locked: !!lockState,
-      byteIndex,
-      region,
-      displayValue,
+      path: `works${region.path}`, left: Math.max(margin, Math.min(posX, containerWidth - margin)),
+      top: posY - 8, opacity: active ? 1 : breathing?.opacity ?? 0,
+      locked: !!lockState, byteIndex, region, displayValue,
     }
-  }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, regionToY])
+  }, [hoverState, lockState, breathingState, breathingLayout, containerWidth, columnsPerRow, pixelSize])
 
-  // Build decode rows for the card
+  // Decode rows for card
   const decodeRows = useMemo(() => {
     if (!overlayCard) return null
     const { byteIndex, region } = overlayCard
-    const windowSize = 4
     const start = Math.max(region.start, byteIndex - 1)
-    const end = Math.min(region.end, start + windowSize)
-
+    const end = Math.min(region.end, start + 4)
     const binaryParts: { text: string; active: boolean }[] = []
     const hexParts: { text: string; active: boolean }[] = []
-
     for (let i = start; i < end; i++) {
-      const b = bytes[i]
-      const active = i === byteIndex
+      const b = bytes[i]; const active = i === byteIndex
       binaryParts.push({ text: b.toString(2).padStart(8, '0'), active })
       hexParts.push({ text: b.toString(16).padStart(2, '0').toUpperCase(), active })
     }
-
     const decoded = new TextDecoder('utf-8', { fatal: false }).decode(bytes.slice(start, end))
-
     return { binaryParts, hexParts, decoded }
   }, [overlayCard, bytes])
 
   // Hit test
   const hitTest = useCallback(
     (clientX: number, clientY: number, rect: DOMRect): InteractionState | null => {
-      const x = clientX - rect.left
-      const y = clientY - rect.top
-      const pixelSize = rect.width / columnsPerRow
-      const col = Math.floor(x / pixelSize)
-      const row = Math.floor(y / pixelSize)
+      const x = clientX - rect.left; const y = clientY - rect.top
+      const ps = rect.width / columnsPerRow
+      const col = Math.floor(x / ps); const row = Math.floor(y / ps)
       const bitIndex = row * columnsPerRow + col
       const byteIndex = bitIndex >> 3
-
       if (byteIndex < 0 || byteIndex >= bytes.length) return null
-
       const region = findRegion(regions, byteIndex)
       if (!region) return null
-
       return { region, byteIndex, pos: { x, y } }
     },
     [bytes, regions, columnsPerRow],
   )
 
-  // Notify parent of interaction state for breathing pause/resume
   useEffect(() => {
     onInteractionChange?.(hoverState !== null || lockState !== null)
   }, [hoverState, lockState, onInteractionChange])
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (lockState) return
-      cancelAnimationFrame(rafRef.current)
-      const rect = e.currentTarget.getBoundingClientRect()
-      const { clientX, clientY } = e
-      rafRef.current = requestAnimationFrame(() => {
-        setHoverState(hitTest(clientX, clientY, rect))
-      })
-    },
-    [hitTest, lockState],
-  )
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (lockState) return
+    cancelAnimationFrame(rafRef.current)
+    const rect = e.currentTarget.getBoundingClientRect()
+    const { clientX, clientY } = e
+    rafRef.current = requestAnimationFrame(() => { setHoverState(hitTest(clientX, clientY, rect)) })
+  }, [hitTest, lockState])
 
   const handleMouseLeave = useCallback(() => {
     cancelAnimationFrame(rafRef.current)
     if (!lockState) setHoverState(null)
   }, [lockState])
 
-  const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (lockState) {
-        setLockState(null)
-        setHoverState(null)
-        return
-      }
-      const rect = e.currentTarget.getBoundingClientRect()
-      const hit = hitTest(e.clientX, e.clientY, rect)
-      if (hit) setLockState(hit)
-    },
-    [hitTest, lockState],
-  )
+  const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (lockState) { setLockState(null); setHoverState(null); return }
+    const rect = e.currentTarget.getBoundingClientRect()
+    const hit = hitTest(e.clientX, e.clientY, rect)
+    if (hit) setLockState(hit)
+  }, [hitTest, lockState])
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      const touch = e.touches[0]
-      if (!touch) return
-      const rect = e.currentTarget.getBoundingClientRect()
-      const hit = hitTest(touch.clientX, touch.clientY, rect)
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0]; if (!touch) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const hit = hitTest(touch.clientX, touch.clientY, rect)
+    if (lockState) { setLockState(null); setHoverState(null); return }
+    if (hit) { e.preventDefault(); setLockState(hit) }
+  }, [hitTest, lockState])
 
-      if (lockState) {
-        setLockState(null)
-        setHoverState(null)
-        return
-      }
-
-      if (hit) {
-        e.preventDefault()
-        setLockState(hit)
-      }
-    },
-    [hitTest, lockState],
-  )
-
-  // Escape key dismisses lock
   useEffect(() => {
     if (!lockState) return
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setLockState(null)
-        setHoverState(null)
-      }
-    }
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setLockState(null); setHoverState(null) } }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [lockState])
 
+  const actualHeight = breathingLayout
+    ? (numRows + breathingLayout.shiftRows * 2) * pixelSize
+    : displayHeight
+
   const canvasStyle: React.CSSProperties = {
     width: '100%',
-    height: displayHeight,
+    height: actualHeight,
     imageRendering: 'pixelated',
   }
 
-  // Split the bitmap into top/bottom clips that shift apart during breathing
-  const topClip = breathingLayout
-    ? `inset(0 0 ${100 - (breathingLayout.yStartCss / displayHeight) * 100}% 0)`
-    : undefined
-  const bottomClip = breathingLayout
-    ? `inset(${((breathingLayout.yStartCss + breathingLayout.regionHeightCss) / displayHeight) * 100}% 0 0 0)`
-    : undefined
+  // Position of breathing text in the opened gap
+  const breathingTextTop = breathingLayout
+    ? (breathingLayout.startRow - breathingLayout.shiftRows + breathingLayout.shiftRows) * pixelSize
+    : 0
 
   return (
     <div ref={containerRef} className="relative mt-4 select-none">
-      {!breathingLayout ? (
-        <>
-          <canvas ref={baseCanvasRef} className="block" style={canvasStyle} />
-          <canvas
-            ref={overlayCanvasRef}
-            className="absolute top-0 left-0"
-            style={{ ...canvasStyle, pointerEvents: 'none' }}
-          />
-        </>
-      ) : (
-        <>
-          {/* Top portion: bits above region, shifted up */}
-          <canvas
-            ref={baseCanvasRef}
-            className="block"
-            style={canvasStyle}
-          />
-          <div
-            className="absolute top-0 left-0 w-full pointer-events-none"
-            style={{
-              height: displayHeight,
-              clipPath: topClip,
-              transform: `translateY(${-breathingLayout.shiftCss}px)`,
-              transition: 'transform 0.15s ease-out',
-            }}
-          >
-            <canvas
-              className="block"
-              style={canvasStyle}
-              ref={(el) => {
-                // Mirror base canvas content
-                if (el && baseCanvasRef.current && el !== baseCanvasRef.current) {
-                  el.width = baseCanvasRef.current.width
-                  el.height = baseCanvasRef.current.height
-                  el.getContext('2d')?.drawImage(baseCanvasRef.current, 0, 0)
-                }
-              }}
-            />
-          </div>
-          {/* Bottom portion: bits below region, shifted down */}
-          <div
-            className="absolute top-0 left-0 w-full pointer-events-none"
-            style={{
-              height: displayHeight,
-              clipPath: bottomClip,
-              transform: `translateY(${breathingLayout.shiftCss}px)`,
-              transition: 'transform 0.15s ease-out',
-            }}
-          >
-            <canvas
-              className="block"
-              style={canvasStyle}
-              ref={(el) => {
-                if (el && baseCanvasRef.current && el !== baseCanvasRef.current) {
-                  el.width = baseCanvasRef.current.width
-                  el.height = baseCanvasRef.current.height
-                  el.getContext('2d')?.drawImage(baseCanvasRef.current, 0, 0)
-                }
-              }}
-            />
-          </div>
-          {/* Decoded text in the gap */}
-          <div
-            className="absolute left-0 right-0 pointer-events-none px-[6px]"
-            style={{
-              top: breathingLayout.yStartCss - breathingLayout.shiftCss,
-              opacity: breathingLayout.opacity,
-              minHeight: breathingLayout.textHeightCss,
-            }}
-          >
-            {breathingLayout.lines.map((line, i) => (
-              <div
-                key={i}
-                className="text-accent"
-                style={{
-                  font: breathingLayout.font,
-                  lineHeight: `${breathingLayout.lineHeight}px`,
-                }}
-              >
-                {line}
-              </div>
-            ))}
-          </div>
-          {/* Overlay canvas for erase mask */}
-          <canvas
-            ref={overlayCanvasRef}
-            className="absolute top-0 left-0"
-            style={{ ...canvasStyle, pointerEvents: 'none' }}
-          />
-        </>
+      <canvas ref={baseCanvasRef} className="block" style={canvasStyle} />
+      <canvas
+        ref={overlayCanvasRef}
+        className="absolute top-0 left-0"
+        style={{ ...canvasStyle, pointerEvents: 'none' }}
+      />
+      {breathingLayout && (
+        <div
+          className="absolute left-0 right-0 pointer-events-none px-[6px]"
+          style={{
+            top: breathingTextTop,
+            opacity: breathingLayout.opacity,
+          }}
+        >
+          {breathingLayout.lines.map((line, i) => (
+            <div
+              key={i}
+              className="text-accent"
+              style={{ font: breathingLayout.font, lineHeight: `${breathingLayout.lineHeight}px` }}
+            >
+              {line}
+            </div>
+          ))}
+        </div>
       )}
+      <div
+        className="absolute top-0 left-0 w-full cursor-crosshair"
+        style={{ height: actualHeight }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+        onTouchStart={handleTouchStart}
+      />
       {overlayCard && decodeRows && (
         <div
           className="absolute z-50 pointer-events-none"
           style={{
-            left: overlayCard.left,
-            top: overlayCard.top,
+            left: overlayCard.left, top: overlayCard.top,
             opacity: overlayCard.opacity,
-            transform: 'translate(-50%, -100%)',
-            maxWidth: 340,
+            transform: 'translate(-50%, -100%)', maxWidth: 340,
           }}
         >
           <div
@@ -509,24 +375,18 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
             <div className="font-display text-[0.7rem] leading-[1.7]">
               <div className="flex gap-[0.6ch] whitespace-nowrap">
                 {decodeRows.binaryParts.map((p, i) => (
-                  <span key={i} className={p.active ? 'text-accent font-medium' : 'text-subtle'}>
-                    {p.text}
-                  </span>
+                  <span key={i} className={p.active ? 'text-accent font-medium' : 'text-subtle'}>{p.text}</span>
                 ))}
               </div>
               <div className="flex gap-[0.6ch] whitespace-nowrap">
                 {decodeRows.hexParts.map((p, i) => (
-                  <span key={i} className={p.active ? 'text-accent' : 'text-subtle'}>
-                    {p.text}
-                  </span>
+                  <span key={i} className={p.active ? 'text-accent' : 'text-subtle'}>{p.text}</span>
                 ))}
               </div>
               <div className="text-foreground whitespace-nowrap">{decodeRows.decoded}</div>
             </div>
             <div className="border-t border-border my-2" />
-            <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em]">
-              {overlayCard.path}
-            </div>
+            <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em]">{overlayCard.path}</div>
             <div
               className="font-display text-[0.72rem] mt-1 break-all leading-[1.5]"
               dangerouslySetInnerHTML={{
@@ -536,14 +396,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           </div>
         </div>
       )}
-      <div
-        className="absolute top-0 left-0 w-full cursor-crosshair"
-        style={{ height: displayHeight }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
-        onTouchStart={handleTouchStart}
-      />
     </div>
   )
 }

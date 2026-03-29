@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
-import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
+import { prepareWithSegments } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
@@ -44,6 +44,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const [containerRef, containerWidth] = useContainerWidth()
   const baseCanvasRef = useRef<HTMLCanvasElement>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
+  const flowCanvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef(0)
 
   const [hoverState, setHoverState] = useState<InteractionState | null>(null)
@@ -111,7 +112,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
   }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
 
-  // Draw overlay: hover/click highlight OR breathing bit-erase
+  // Draw overlay: hover/click highlight only
   useEffect(() => {
     const canvas = overlayCanvasRef.current
     if (!canvas || columnsPerRow === 0) return
@@ -119,83 +120,138 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     const active = lockState ?? hoverState
-    const breathing = !active ? breathingState : null
-    const region = active?.region ?? breathing?.region
-    if (!region) return
-
-    const startBit = region.start * 8
-    const endBit = region.end * 8
-    const startRow = Math.floor(startBit / columnsPerRow)
-    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+    if (!active) return
 
     const style = getComputedStyle(document.documentElement)
+    const accent = style.getPropertyValue('--accent').trim()
+    const [ar, ag, ab] = parseCssHex(accent)
+    const alpha = lockState ? 0.35 : 0.2
+    ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
 
-    if (active) {
-      // Hover/click: tinted highlight
-      const accent = style.getPropertyValue('--accent').trim()
-      const [ar, ag, ab] = parseCssHex(accent)
-      const alpha = lockState ? 0.35 : 0.2
-      ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
-      for (let row = startRow; row <= endRow; row++) {
-        const rowStart = row * columnsPerRow
-        const rowEnd = rowStart + columnsPerRow
-        const hlStart = Math.max(startBit, rowStart) - rowStart
-        const hlEnd = Math.min(endBit, rowEnd) - rowStart
-        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
-      }
-    } else if (breathing && breathing.opacity > 0) {
-      // Breathing: erase region bits (fill with bg) so text shows through
-      const bg = parseCssHex(style.getPropertyValue('--bg').trim())
-      ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},${breathing.opacity})`
-      for (let row = startRow; row <= endRow; row++) {
-        const rowStart = row * columnsPerRow
-        const rowEnd = rowStart + columnsPerRow
-        const hlStart = Math.max(startBit, rowStart) - rowStart
-        const hlEnd = Math.min(endBit, rowEnd) - rowStart
-        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
-      }
-    }
-  }, [hoverState, lockState, breathingState, columnsPerRow])
-
-  // Breathing: Pretext layout for in-place text (same position as bits)
-  const breathingText = useMemo(() => {
-    const active = lockState ?? hoverState
-    if (active || !breathingState || breathingState.opacity <= 0) return null
-    if (containerWidth <= 0 || columnsPerRow === 0) return null
-
-    const { region, opacity } = breathingState
-
-    // Region pixel bounds
-    const startBit = region.start * 8
-    const endBit = region.end * 8
+    const startBit = active.region.start * 8
+    const endBit = active.region.end * 8
     const startRow = Math.floor(startBit / columnsPerRow)
     const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
 
-    let xStart: number, width: number
-    if (startRow === endRow) {
-      xStart = (startBit % columnsPerRow) * pixelSize
-      width = (endBit - startBit) * pixelSize
-    } else {
-      xStart = 0
-      width = containerWidth
+    for (let row = startRow; row <= endRow; row++) {
+      const rowStart = row * columnsPerRow
+      const rowEnd = rowStart + columnsPerRow
+      const hlStart = Math.max(startBit, rowStart) - rowStart
+      const hlEnd = Math.min(endBit, rowEnd) - rowStart
+      ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
     }
-    const yStart = startRow * pixelSize
-    const regionHeight = (endRow - startRow + 1) * pixelSize
+  }, [hoverState, lockState, columnsPerRow])
 
-    // Decode bytes
+  // Breathing: mixed-content flow canvas (bits + Pretext text)
+  useEffect(() => {
+    const canvas = flowCanvasRef.current
+    if (!canvas || containerWidth <= 0 || columnsPerRow === 0) return
+
+    const active = lockState ?? hoverState
+    if (active || !breathingState || breathingState.opacity <= 0) {
+      canvas.style.opacity = '0'
+      return
+    }
+
+    const { region, opacity } = breathingState
+    const FLOW_LINE_HEIGHT = 18
+    const FLOW_FONT = '13px "IBM Plex Sans", sans-serif'
+    const bitCellWidth = pixelSize
+    const contextBytes = 80
+
+    // Window of bytes around the region
+    const windowStart = Math.max(0, region.start - contextBytes)
+    const windowEnd = Math.min(bytes.length, region.end + contextBytes)
+
+    // Decode region text + prepare with Pretext
     const regionBytes = bytes.slice(region.start, region.end)
-    const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+    const regionText = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+    const prepared = prepareWithSegments(regionText, FLOW_FONT)
 
-    // Pretext layout: fit text within region bounds
-    const font = '13px "IBM Plex Sans", sans-serif'
-    const lineHeight = 18
-    const textWidth = Math.max(width - 8, 40)
-    const prepared = prepareWithSegments(text, font)
-    const maxLines = Math.max(1, Math.floor(regionHeight / lineHeight))
-    const layout = layoutWithLines(prepared, textWidth, lineHeight)
-    const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
+    // Position the flow canvas over the bitmap area corresponding to windowStart
+    const windowStartBit = windowStart * 8
+    const windowStartRow = Math.floor(windowStartBit / columnsPerRow)
+    const canvasTopCss = windowStartRow * pixelSize
 
-    return { lines, xStart, width, yStart, regionHeight, opacity, font, lineHeight }
+    // Estimate canvas height (generous, we'll fill with bg)
+    const totalWindowBits = (windowEnd - windowStart) * 8
+    const bitsPerFlowLine = Math.floor(containerWidth / bitCellWidth)
+    const estLines = Math.ceil(totalWindowBits / bitsPerFlowLine) + 10
+    const canvasHeightCss = estLines * FLOW_LINE_HEIGHT
+
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = Math.ceil(containerWidth * dpr)
+    canvas.height = Math.ceil(canvasHeightCss * dpr)
+    canvas.style.top = `${canvasTopCss}px`
+    canvas.style.width = `${containerWidth}px`
+    canvas.style.height = `${canvasHeightCss}px`
+    canvas.style.opacity = String(opacity)
+
+    const ctx = canvas.getContext('2d')!
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.scale(dpr, dpr)
+
+    // Get colors
+    const style = getComputedStyle(document.documentElement)
+    const fg = parseCssHex(style.getPropertyValue('--text-primary').trim())
+    const bg = parseCssHex(style.getPropertyValue('--bg').trim())
+    const accent = style.getPropertyValue('--accent').trim()
+
+    // Fill bg
+    ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`
+    ctx.fillRect(0, 0, containerWidth, canvasHeightCss)
+
+    // Flow cursor
+    let cx = 0
+    let cy = 0
+
+    // Align cursor to starting bit position within the row
+    const startBitInRow = windowStartBit % columnsPerRow
+    cx = startBitInRow * bitCellWidth
+
+    let regionTextRendered = false
+
+    for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
+      if (byteIdx >= region.start && byteIdx < region.end) {
+        if (!regionTextRendered) {
+          // Render decoded text using Pretext segment widths
+          ctx.fillStyle = accent
+          ctx.font = FLOW_FONT
+          ctx.textBaseline = 'middle'
+
+          for (let s = 0; s < prepared.segments.length; s++) {
+            const seg = prepared.segments[s]
+            const segWidth = prepared.widths[s]
+
+            if (cx + segWidth > containerWidth) {
+              cx = 0
+              cy += FLOW_LINE_HEIGHT
+            }
+
+            ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
+            cx += segWidth
+          }
+
+          regionTextRendered = true
+        }
+        // Skip remaining bytes in the region (already rendered as text)
+        continue
+      }
+
+      // Render 8 bits as colored cells
+      const b = bytes[byteIdx]
+      for (let bit = 7; bit >= 0; bit--) {
+        if (cx + bitCellWidth > containerWidth + 0.5) {
+          cx = 0
+          cy += FLOW_LINE_HEIGHT
+        }
+        const val = (b >> bit) & 1
+        const c = val ? fg : bg
+        ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+        ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
+        cx += bitCellWidth
+      }
+    }
   }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow, pixelSize])
 
   // Overlay card (tooltip) for hover/click/breathing
@@ -316,33 +372,11 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
-      {breathingText && (
-        <div
-          className="absolute pointer-events-none overflow-hidden"
-          style={{
-            left: breathingText.xStart,
-            top: breathingText.yStart,
-            width: breathingText.width,
-            height: breathingText.regionHeight,
-            opacity: breathingText.opacity,
-            padding: 4,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            {breathingText.lines.map((line, i) => (
-              <div
-                key={i}
-                className="text-accent"
-                style={{ font: breathingText.font, lineHeight: `${breathingText.lineHeight}px` }}
-              >
-                {line}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <canvas
+        ref={flowCanvasRef}
+        className="absolute left-0 pointer-events-none"
+        style={{ opacity: 0 }}
+      />
       <div
         className="absolute top-0 left-0 w-full cursor-crosshair"
         style={{ height: displayHeight }}

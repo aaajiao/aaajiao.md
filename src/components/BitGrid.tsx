@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
-import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
@@ -33,7 +32,11 @@ interface OverlayCard {
   locked: boolean
   byteIndex: number
   region: FieldRegion
-  valueLines: string[]
+  displayValue: string
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
@@ -181,32 +184,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
-  // Pretext watermark: decoded text ghosting through binary during breathing
-  const watermark = useMemo(() => {
-    const active = lockState ?? hoverState
-    if (active || !breathingState || breathingState.opacity <= 0) return null
-    if (containerWidth <= 0 || columnsPerRow === 0) return null
-
-    const { region, opacity } = breathingState
-    const { yStart, yEnd } = regionToY(region)
-    const regionHeight = yEnd - yStart
-    if (regionHeight < 12) return null
-
-    // Build the raw decoded text
-    let text = region.value
-    if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1)
-    if (text.length > 300) text = text.slice(0, 300)
-
-    const font = '13px "IBM Plex Sans", sans-serif'
-    const lineHeight = 17
-    const prepared = prepareWithSegments(text, font)
-    const maxLines = Math.max(1, Math.floor(regionHeight / lineHeight))
-    const layout = layoutWithLines(prepared, containerWidth - 16, lineHeight)
-    const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
-
-    return { lines, yStart, regionHeight, opacity, font, lineHeight }
-  }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, regionToY])
-
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
@@ -220,16 +197,9 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const byteIndex = active?.byteIndex ?? region.start
 
-    // Pretext layout for value text
-    let val = region.value
-    if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1)
-    if (val.length > 300) val = val.slice(0, 297) + '...'
-    const prepared = prepareWithSegments(val, '12px "IBM Plex Sans", sans-serif')
-    const layout = layoutWithLines(prepared, 300, 17)
-    const valueLines = layout.lines.slice(0, 6).map((l) => l.text)
-    if (layout.lines.length > 6) {
-      valueLines[5] = valueLines[5] + '...'
-    }
+    const displayValue = region.value.length > 80
+      ? region.value.slice(0, 77) + '...'
+      : region.value
 
     // Position: for hover/click use cursor pos; for breathing use region top-center
     let posX: number
@@ -255,7 +225,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       locked: !!lockState,
       byteIndex,
       region,
-      valueLines,
+      displayValue,
     }
   }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, regionToY])
 
@@ -388,30 +358,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
-      {watermark && (
-        <div
-          className="absolute left-0 right-0 pointer-events-none overflow-hidden px-2"
-          style={{
-            top: watermark.yStart,
-            height: watermark.regionHeight,
-            opacity: watermark.opacity * 0.18,
-            mixBlendMode: 'difference',
-          }}
-        >
-          {watermark.lines.map((line, i) => (
-            <div
-              key={i}
-              className="text-foreground whitespace-pre-wrap break-all"
-              style={{
-                font: watermark.font,
-                lineHeight: `${watermark.lineHeight}px`,
-              }}
-            >
-              {line}
-            </div>
-          ))}
-        </div>
-      )}
       {overlayCard && decodeRows && (
         <div
           className="absolute z-50 pointer-events-none"
@@ -450,15 +396,12 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
             <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em]">
               {overlayCard.path}
             </div>
-            <div className="mt-1">
-              <span className="json-key font-display text-[0.72rem]">"{overlayCard.region.key}"</span>
-              <span className="text-muted font-display text-[0.72rem]">: </span>
-              {overlayCard.valueLines.map((line, i) => (
-                <div key={i} className="font-body text-[0.78rem] leading-[1.45] text-muted">
-                  {line}
-                </div>
-              ))}
-            </div>
+            <div
+              className="font-display text-[0.72rem] mt-1 break-all leading-[1.5]"
+              dangerouslySetInnerHTML={{
+                __html: `<span class="json-key">"${escapeHtml(overlayCard.region.key)}"</span>: <span class="text-muted">${escapeHtml(overlayCard.displayValue)}</span>`,
+              }}
+            />
           </div>
         </div>
       )}

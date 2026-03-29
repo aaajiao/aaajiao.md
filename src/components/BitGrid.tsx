@@ -143,7 +143,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
 
-  // Draw overlay highlight on canvas
+  // Draw overlay: highlight for hover/click, or text decode for breathing
   useEffect(() => {
     const canvas = overlayCanvasRef.current
     if (!canvas || columnsPerRow === 0) return
@@ -157,76 +157,60 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const style = getComputedStyle(document.documentElement)
     const accent = style.getPropertyValue('--accent').trim()
-    const hex = accent.replace('#', '')
-    const r = parseInt(hex.slice(0, 2), 16)
-    const g = parseInt(hex.slice(2, 4), 16)
-    const b = parseInt(hex.slice(4, 6), 16)
+    const [ar, ag, ab] = parseCssHex(accent)
 
-    let alpha: number
+    const startBit = region.start * 8
+    const endBit = region.end * 8
+    const startRow = Math.floor(startBit / columnsPerRow)
+    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+
     if (active) {
-      alpha = lockState ? 0.35 : 0.2
-    } else {
-      alpha = (breathing?.opacity ?? 0) * 0.25
+      // Hover/click: tinted highlight
+      const alpha = lockState ? 0.35 : 0.2
+      ctx.fillStyle = `rgba(${ar},${ag},${ab},${alpha})`
+      for (let row = startRow; row <= endRow; row++) {
+        const rowStart = row * columnsPerRow
+        const rowEnd = rowStart + columnsPerRow
+        const hlStart = Math.max(startBit, rowStart) - rowStart
+        const hlEnd = Math.min(endBit, rowEnd) - rowStart
+        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
+      }
+    } else if (breathing && breathing.opacity > 0) {
+      // Breathing: replace bits with decoded text directly on canvas
+      const bg = parseCssHex(style.getPropertyValue('--bg').trim())
+      const opacity = breathing.opacity
+
+      // Fill region with bg to erase binary
+      ctx.fillStyle = `rgba(${bg[0]},${bg[1]},${bg[2]},${opacity})`
+      for (let row = startRow; row <= endRow; row++) {
+        const rowStart = row * columnsPerRow
+        const rowEnd = rowStart + columnsPerRow
+        const hlStart = Math.max(startBit, rowStart) - rowStart
+        const hlEnd = Math.min(endBit, rowEnd) - rowStart
+        ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
+      }
+
+      // Decode bytes and render text on canvas at bitmap resolution
+      const regionBytes = bytes.slice(region.start, region.end)
+      const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+
+      const fontSize = 5
+      const prepared = prepareWithSegments(text, `${fontSize}px sans-serif`)
+      const lineHeight = fontSize + 1
+      const textWidth = columnsPerRow - 2
+      const layout = layoutWithLines(prepared, textWidth, lineHeight)
+
+      const maxLines = Math.floor((endRow - startRow + 1) / lineHeight) || 1
+
+      ctx.fillStyle = `rgba(${ar},${ag},${ab},${opacity})`
+      ctx.font = `${fontSize}px sans-serif`
+      ctx.textBaseline = 'top'
+
+      for (let i = 0; i < Math.min(layout.lines.length, maxLines); i++) {
+        ctx.fillText(layout.lines[i].text, 1, startRow + i * lineHeight)
+      }
     }
-
-    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`
-
-    const startBit = region.start * 8
-    const endBit = region.end * 8
-    const startRow = Math.floor(startBit / columnsPerRow)
-    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
-
-    for (let row = startRow; row <= endRow; row++) {
-      const rowStart = row * columnsPerRow
-      const rowEnd = rowStart + columnsPerRow
-      const hlStart = Math.max(startBit, rowStart) - rowStart
-      const hlEnd = Math.min(endBit, rowEnd) - rowStart
-      ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
-    }
-  }, [hoverState, lockState, breathingState, columnsPerRow])
-
-  // Pretext watermark: binary region transforms into readable text in-place
-  const watermark = useMemo(() => {
-    const active = lockState ?? hoverState
-    if (active || !breathingState || breathingState.opacity <= 0) return null
-    if (containerWidth <= 0 || columnsPerRow === 0) return null
-
-    const { region, opacity } = breathingState
-    const { yStart, yEnd } = regionToY(region)
-    const regionHeight = yEnd - yStart
-
-    // Raw UTF-8 decode of the actual bytes in this region
-    const regionBytes = bytes.slice(region.start, region.end)
-    const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
-
-    const pixelSize = containerWidth / columnsPerRow
-    const startBit = region.start * 8
-    const endBit = region.end * 8
-    const startRow = Math.floor(startBit / columnsPerRow)
-    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
-
-    let xStart: number
-    let width: number
-    if (startRow === endRow) {
-      xStart = (startBit % columnsPerRow) * pixelSize
-      width = (endBit - startBit) * pixelSize
-    } else {
-      xStart = 0
-      width = containerWidth
-    }
-
-    const font = '13px "IBM Plex Sans", sans-serif'
-    const lineHeight = 18
-    const pad = 4
-    const effectiveHeight = Math.max(regionHeight, lineHeight + pad * 2)
-    const textWidth = Math.max(width - pad * 2, 60)
-    const prepared = prepareWithSegments(text, font)
-    const maxLines = Math.max(1, Math.floor((effectiveHeight - pad * 2) / lineHeight))
-    const layout = layoutWithLines(prepared, textWidth, lineHeight)
-    const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
-
-    return { lines, yStart, xStart, width, effectiveHeight, opacity, font, lineHeight, pad }
-  }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, regionToY])
+  }, [hoverState, lockState, breathingState, columnsPerRow, bytes])
 
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
   const overlayCard = useMemo((): OverlayCard | null => {
@@ -402,33 +386,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
-      {watermark && (
-        <div
-          className="absolute pointer-events-none overflow-hidden"
-          style={{
-            top: watermark.yStart,
-            left: watermark.xStart,
-            width: watermark.width,
-            height: watermark.effectiveHeight,
-            opacity: watermark.opacity,
-            padding: watermark.pad,
-          }}
-        >
-          {watermark.lines.map((line, i) => (
-            <div
-              key={i}
-              className="text-accent font-medium"
-              style={{
-                font: watermark.font,
-                lineHeight: `${watermark.lineHeight}px`,
-                textShadow: '0 0 2px var(--bg), 0 0 4px var(--bg)',
-              }}
-            >
-              {line}
-            </div>
-          ))}
-        </div>
-      )}
       {overlayCard && decodeRows && (
         <div
           className="absolute z-50 pointer-events-none"

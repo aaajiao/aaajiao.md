@@ -195,10 +195,9 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const { yStart, yEnd } = regionToY(region)
     const regionHeight = yEnd - yStart
 
-    let text = region.value
-    if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1)
-    if (text.startsWith('[')) text = text.slice(0, 120)
-    if (text.length > 400) text = text.slice(0, 400)
+    // Raw UTF-8 decode of the actual bytes in this region
+    const regionBytes = bytes.slice(region.start, region.end)
+    const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
 
     const pixelSize = containerWidth / columnsPerRow
     const startBit = region.start * 8

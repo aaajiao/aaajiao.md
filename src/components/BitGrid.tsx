@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
+import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
@@ -183,6 +184,32 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
+  // Pretext watermark: decoded text ghosting through binary during breathing
+  const watermark = useMemo(() => {
+    const active = lockState ?? hoverState
+    if (active || !breathingState || breathingState.opacity <= 0) return null
+    if (containerWidth <= 0 || columnsPerRow === 0) return null
+
+    const { region, opacity } = breathingState
+    const { yStart, yEnd } = regionToY(region)
+    const regionHeight = yEnd - yStart
+    if (regionHeight < 12) return null
+
+    // Build the raw decoded text
+    let text = region.value
+    if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1)
+    if (text.length > 300) text = text.slice(0, 300)
+
+    const font = '13px "IBM Plex Sans", sans-serif'
+    const lineHeight = 17
+    const prepared = prepareWithSegments(text, font)
+    const maxLines = Math.max(1, Math.floor(regionHeight / lineHeight))
+    const layout = layoutWithLines(prepared, containerWidth - 16, lineHeight)
+    const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
+
+    return { lines, yStart, regionHeight, opacity, font, lineHeight }
+  }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, regionToY])
+
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
@@ -352,6 +379,30 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
+      {watermark && (
+        <div
+          className="absolute left-0 right-0 pointer-events-none overflow-hidden px-2"
+          style={{
+            top: watermark.yStart,
+            height: watermark.regionHeight,
+            opacity: watermark.opacity * 0.18,
+            mixBlendMode: 'difference',
+          }}
+        >
+          {watermark.lines.map((line, i) => (
+            <div
+              key={i}
+              className="text-foreground whitespace-pre-wrap break-all"
+              style={{
+                font: watermark.font,
+                lineHeight: `${watermark.lineHeight}px`,
+              }}
+            >
+              {line}
+            </div>
+          ))}
+        </div>
+      )}
       {overlayCard && decodeRows && (
         <div
           className="absolute z-50 pointer-events-none"

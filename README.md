@@ -4,7 +4,7 @@ One URL, three views. A portfolio site for contemporary artist [aaajiao](https:/
 
 - **`.md`** — human-readable Markdown via [Streamdown](https://github.com/vercel/streamdown)
 - **`curl`** — interactive API explorer with live JSON, Markdown, and binary responses
-- **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode
+- **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode, ambient breathing animation decodes fields sequentially using [Pretext](https://github.com/chenglou/pretext)
 - **AI agents** hit `/api/*` and get structured JSON
 
 From Markdown to structured data to raw binary — the same information, three ways of seeing.
@@ -51,7 +51,7 @@ All responses include CORS headers and `Content-Signal: ai-input=yes, ai-train=y
 
 ## Stack
 
-- **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown
+- **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown + [Pretext](https://github.com/chenglou/pretext)
 - **API**: Vercel Serverless Functions (Node.js)
 - **Data**: GitHub raw JSON (cached 5 min, no redeploy needed)
 - **Runtime**: Bun
@@ -87,6 +87,7 @@ Browser (/)                          AI (curl /api/*)
        negotiation demos    |
     -> bin tab: bit-pixel   |
        bitmap + decode      |
+       + breathing (Pretext) |
 ```
 
 ## License

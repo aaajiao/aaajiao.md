@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Portfolio website for contemporary artist aaajiao. One URL, three views of the same data:
 - **`.md` tab** — Markdown rendered via Streamdown (human-readable)
 - **`curl` tab** — interactive API explorer (structured JSON, Markdown, and binary examples)
-- **`bin` tab** — bit-pixel bitmap visualization (binary representation)
+- **`bin` tab** — bit-pixel bitmap visualization with breathing decode animation (Pretext sequential bit→text reflow)
 - **AI agents** hit `/api/*` endpoints and get raw JSON
 
 The API supports HTTP content negotiation — the same URL returns JSON, Markdown, or raw bytes depending on the `Accept` header. A `Content-Signal` header declares data usage rights (`ai-input=yes, ai-train=yes, search=yes`).
@@ -57,6 +57,8 @@ App.tsx                       │
     negotiation examples      │
   → bin tab: bit-pixel bitmap │
     + hover/click decode      │
+    + breathing decode (Pretext│
+      sequential bit→text)    │
 ```
 
 **Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → negotiateFormat(Accept) → JSON / Markdown / bytes → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses + negotiation demos) or bin tab (binary bitmap)`
@@ -70,9 +72,9 @@ App.tsx                       │
 - `components/CurlTab.tsx` — interactive API explorer: lists all endpoints with live responses, copy-to-clipboard curl commands, JSON syntax highlighting. Includes content negotiation examples (Markdown and Binary endpoints with custom `Accept` headers)
 - `components/Portfolio.tsx` — chunked Streamdown rendering with fade-in animation; receives `showJson` prop for JSON overlay mode
 - `components/WorkLayered.tsx` — single work card: Streamdown markdown foreground with optional semi-transparent JSON background overlay (via `mix-blend-multiply`/`screen`)
-- `components/BinTab.tsx` — bin tab container: serializes works to JSON, encodes to bytes, builds byte offset map, renders BitGrid
-- `components/BitGrid.tsx` — dual-canvas bit-pixel renderer: base canvas (1:1 ratio with CSS `image-rendering: pixelated` scaling) + overlay canvas for field highlights. Handles mouse hover (RAF-throttled), click lock/unlock, touch, and Escape key. Reads theme colors from CSS variables
-- `components/DecodeOverlay.tsx` — three-layer decode tooltip: Layer 2 (hover) shows binary bits, hex bytes, decoded UTF-8 with active byte highlighted; Layer 3 (click/locked) adds JSON path and key-value display
+- `components/BinTab.tsx` — bin tab container: serializes works to JSON, encodes to bytes, builds byte offset map, manages breathing decode animation via `useBreathingDecode`, renders BitGrid
+- `components/BitGrid.tsx` — triple-canvas bit-pixel renderer: base canvas (1:1 pixelated bitmap) + overlay canvas (hover/click highlights) + flow canvas (breathing decode: mixed bit-strips + Pretext text at CSS resolution). Unified tooltip card for all interaction states. Handles mouse hover (RAF-throttled), click lock/unlock, touch, Escape key, and breathing pause/resume
+- `hooks/useBreathingDecode.ts` — RAF-based animation hook: cycles through visible field regions with decode (progress 0→1, segments appear one by one) → hold → encode (1→0, segments revert to bits). Picks regions from visible viewport via scroll-reported byte range. Exposes pause/resume for interaction override
 - `lib/jsonToMarkdown.ts` — re-export shim: forwards all exports from `shared/jsonToMarkdown.ts` so frontend imports remain unchanged
 - `lib/jsonHighlight.ts` — lightweight JSON syntax highlighter (regex-based, returns HTML with `<span>` classes for keys, strings, numbers, booleans, null)
 - `lib/byteOffsetMap.ts` — JSON string → byte offset field mapping:

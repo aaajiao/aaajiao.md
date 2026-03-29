@@ -194,19 +194,34 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
     const accent = style.getPropertyValue('--accent').trim()
 
-    // Flow render function (used for both dry-run and draw passes)
-    // Bits use pixelSize × pixelSize (matching bitmap), text uses FLOW_LINE_HEIGHT
+    // Flow render: bits at pixelSize, text at FLOW_LINE_HEIGHT, continuous inline flow.
+    // Row height = max element height on that row. No forced breaks between text/bits.
     const flowPass = (draw: boolean, ctx?: CanvasRenderingContext2D) => {
       let cx = (windowStartBit % columnsPerRow) * bitCellWidth
       let cy = 0
-      let currentLineH = bitCellWidth // start at bitmap density
+      let rowH = bitCellWidth // max height of current row
       let regionDone = false
 
-      const wrapBit = () => {
-        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += currentLineH; currentLineH = bitCellWidth }
+      const wrap = (w: number, h: number) => {
+        if (cx + w > containerWidth + 0.5) {
+          cx = 0
+          cy += rowH
+          rowH = h
+        } else {
+          if (h > rowH) rowH = h
+        }
       }
-      const wrapSeg = (w: number) => {
-        if (cx + w > containerWidth) { cx = 0; cy += currentLineH; currentLineH = FLOW_LINE_HEIGHT }
+
+      const drawBit = (val: number) => {
+        wrap(bitCellWidth, bitCellWidth)
+        if (draw && ctx) {
+          const c = val ? fg : bg
+          ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+          // Vertically center bit cell in row
+          const yOff = (rowH - bitCellWidth) / 2
+          ctx.fillRect(cx, cy + yOff, Math.ceil(bitCellWidth), Math.ceil(bitCellWidth))
+        }
+        cx += bitCellWidth
       }
 
       for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
@@ -214,64 +229,40 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           if (!regionDone) {
             for (let s = 0; s < totalSegs; s++) {
               if (s < decodedSegs) {
-                // Decoded segment → text
+                // Decoded → text segment
                 const seg = prepared.segments[s]
                 const segWidth = prepared.widths[s]
-                // Switch to text line height
-                if (currentLineH < FLOW_LINE_HEIGHT) { currentLineH = FLOW_LINE_HEIGHT }
-                wrapSeg(segWidth)
+                wrap(segWidth, FLOW_LINE_HEIGHT)
                 if (draw && ctx) {
                   ctx.fillStyle = accent
                   ctx.font = FLOW_FONT
                   ctx.textBaseline = 'middle'
-                  ctx.fillText(seg, cx, cy + currentLineH / 2)
+                  ctx.fillText(seg, cx, cy + rowH / 2)
                 }
                 cx += segWidth
               } else {
-                // Undecoded segment → bit cells at bitmap density
+                // Undecoded → bit cells
                 const segBytes = new TextEncoder().encode(prepared.segments[s])
-                // If previous was text, snap to new line at bit density
-                if (currentLineH > bitCellWidth && s === decodedSegs && cx > 0) {
-                  cx = 0; cy += currentLineH; currentLineH = bitCellWidth
-                }
                 for (let bi = 0; bi < segBytes.length; bi++) {
                   const b = segBytes[bi]
                   for (let bit = 7; bit >= 0; bit--) {
-                    wrapBit()
-                    if (draw && ctx) {
-                      const val = (b >> bit) & 1
-                      const c = val ? fg : bg
-                      ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
-                      ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), Math.ceil(bitCellWidth))
-                    }
-                    cx += bitCellWidth
+                    drawBit((b >> bit) & 1)
                   }
                 }
               }
             }
             regionDone = true
-            // After region, reset to bit density
-            if (currentLineH > bitCellWidth && cx > 0) {
-              cx = 0; cy += currentLineH; currentLineH = bitCellWidth
-            }
           }
           continue
         }
 
-        // Non-region bytes: bits at bitmap density
+        // Non-region bytes
         const b = bytes[byteIdx]
         for (let bit = 7; bit >= 0; bit--) {
-          wrapBit()
-          if (draw && ctx) {
-            const val = (b >> bit) & 1
-            const c = val ? fg : bg
-            ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
-            ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), Math.ceil(bitCellWidth))
-          }
-          cx += bitCellWidth
+          drawBit((b >> bit) & 1)
         }
       }
-      return cy + currentLineH
+      return cy + rowH
     }
 
     // Pass 1: measure

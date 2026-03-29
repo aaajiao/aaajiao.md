@@ -404,7 +404,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       />
       {watermark && (
         <div
-          className="absolute pointer-events-none overflow-hidden bg-surface"
+          className="absolute pointer-events-none overflow-hidden"
           style={{
             top: watermark.yStart,
             left: watermark.xStart,
@@ -417,10 +417,11 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           {watermark.lines.map((line, i) => (
             <div
               key={i}
-              className="text-foreground"
+              className="text-accent font-medium"
               style={{
                 font: watermark.font,
                 lineHeight: `${watermark.lineHeight}px`,
+                textShadow: '0 0 2px var(--bg), 0 0 4px var(--bg)',
               }}
             >
               {line}

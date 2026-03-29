@@ -22,15 +22,21 @@ function parseCssHex(hex: string): [number, number, number] {
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
 }
 
-// Unified overlay card data — same format for breathing, hover, and click
-interface OverlayCard {
+interface InteractionState {
   region: FieldRegion
+  byteIndex: number
+}
+
+interface OverlayCard {
   lines: string[]
   path: string
   top: number
   opacity: number
   maxWidth: number
   locked: boolean
+  // Decode rows
+  byteIndex: number
+  region: FieldRegion
 }
 
 function buildCardText(region: FieldRegion): string {
@@ -38,7 +44,7 @@ function buildCardText(region: FieldRegion): string {
   if (displayValue.startsWith('"') && displayValue.endsWith('"')) {
     displayValue = displayValue.slice(1, -1)
   }
-  if (displayValue.length > 200) displayValue = displayValue.slice(0, 197) + '...'
+  if (displayValue.length > 120) displayValue = displayValue.slice(0, 117) + '...'
   return `${region.key}: ${displayValue}`
 }
 
@@ -48,8 +54,8 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef(0)
 
-  const [hoverState, setHoverState] = useState<FieldRegion | null>(null)
-  const [lockState, setLockState] = useState<FieldRegion | null>(null)
+  const [hoverState, setHoverState] = useState<InteractionState | null>(null)
+  const [lockState, setLockState] = useState<InteractionState | null>(null)
 
   const targetPixelSize = containerWidth >= 640 ? 3 : 2
   const columnsPerRow =
@@ -58,7 +64,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const numRows = columnsPerRow > 0 ? Math.ceil(totalBits / columnsPerRow) : 0
   const displayHeight = columnsPerRow > 0 ? numRows * (containerWidth / columnsPerRow) : 0
 
-  // Compute region → CSS pixel position
   const regionToY = useCallback(
     (region: FieldRegion) => {
       if (columnsPerRow === 0) return { yStart: 0, yEnd: 0 }
@@ -155,7 +160,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const active = lockState ?? hoverState
     const breathing = !active ? breathingState : null
-    const region = active ?? breathing?.region
+    const region = active?.region ?? breathing?.region
     if (!region) return
 
     const style = getComputedStyle(document.documentElement)
@@ -188,16 +193,18 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
-  // Unified overlay card — same for breathing, hover, and click
+  // Unified overlay card
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
 
     const active = lockState ?? hoverState
     const breathing = !active ? breathingState : null
 
-    const region = active ?? breathing?.region
+    const region = active?.region ?? breathing?.region
     if (!region) return null
     if (breathing && breathing.opacity <= 0) return null
+
+    const byteIndex = active?.byteIndex ?? region.start
 
     const displayText = buildCardText(region)
     const prepared = prepareWithSegments(displayText, TEXT_FONT)
@@ -211,19 +218,43 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     textY = Math.max(4, Math.min(textY, displayHeight - textBlockHeight - 4))
 
     return {
-      region,
       lines: layout.lines.map((l) => l.text),
       path: `works${region.path}`,
       top: textY,
       opacity: active ? 1 : breathing?.opacity ?? 0,
       maxWidth: layout.lines.reduce((max, l) => Math.max(max, l.width), 0),
       locked: !!lockState,
+      byteIndex,
+      region,
     }
   }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, displayHeight, regionToY])
 
-  // Hit test — returns region (not byte index)
+  // Build decode rows for the card
+  const decodeRows = useMemo(() => {
+    if (!overlayCard) return null
+    const { byteIndex, region } = overlayCard
+    const windowSize = 4
+    const start = Math.max(region.start, byteIndex - 1)
+    const end = Math.min(region.end, start + windowSize)
+
+    const binaryParts: { text: string; active: boolean }[] = []
+    const hexParts: { text: string; active: boolean }[] = []
+
+    for (let i = start; i < end; i++) {
+      const b = bytes[i]
+      const active = i === byteIndex
+      binaryParts.push({ text: b.toString(2).padStart(8, '0'), active })
+      hexParts.push({ text: b.toString(16).padStart(2, '0').toUpperCase(), active })
+    }
+
+    const decoded = new TextDecoder('utf-8', { fatal: false }).decode(bytes.slice(start, end))
+
+    return { binaryParts, hexParts, decoded }
+  }, [overlayCard, bytes])
+
+  // Hit test
   const hitTest = useCallback(
-    (clientX: number, clientY: number, rect: DOMRect): FieldRegion | null => {
+    (clientX: number, clientY: number, rect: DOMRect): InteractionState | null => {
       const x = clientX - rect.left
       const y = clientY - rect.top
       const pixelSize = rect.width / columnsPerRow
@@ -233,7 +264,11 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       const byteIndex = bitIndex >> 3
 
       if (byteIndex < 0 || byteIndex >= bytes.length) return null
-      return findRegion(regions, byteIndex)
+
+      const region = findRegion(regions, byteIndex)
+      if (!region) return null
+
+      return { region, byteIndex }
     },
     [bytes, regions, columnsPerRow],
   )
@@ -323,7 +358,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
-      {overlayCard && (
+      {overlayCard && decodeRows && (
         <div
           className="absolute left-0 right-0 pointer-events-none z-10"
           style={{ top: overlayCard.top, opacity: overlayCard.opacity }}
@@ -332,8 +367,28 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
             className={`mx-4 px-4 py-3 rounded-sm bg-surface/90 border shadow-sm backdrop-blur-sm ${
               overlayCard.locked ? 'border-accent/60' : 'border-border/50'
             }`}
-            style={{ maxWidth: overlayCard.maxWidth + 32 }}
+            style={{ maxWidth: Math.max(overlayCard.maxWidth + 32, 340) }}
           >
+            {/* Decode rows: binary / hex / UTF-8 */}
+            <div className="font-display text-[0.7rem] leading-[1.7] mb-2">
+              <div className="flex gap-[0.6ch] whitespace-nowrap">
+                {decodeRows.binaryParts.map((p, i) => (
+                  <span key={i} className={p.active ? 'text-accent font-medium' : 'text-subtle'}>
+                    {p.text}
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-[0.6ch] whitespace-nowrap">
+                {decodeRows.hexParts.map((p, i) => (
+                  <span key={i} className={p.active ? 'text-accent' : 'text-subtle'}>
+                    {p.text}
+                  </span>
+                ))}
+              </div>
+              <div className="text-foreground whitespace-nowrap">{decodeRows.decoded}</div>
+            </div>
+            {/* Separator + field info */}
+            <div className="border-t border-border my-2" />
             <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em] mb-1">
               {overlayCard.path}
             </div>

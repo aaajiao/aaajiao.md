@@ -173,48 +173,60 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const windowStartRow = Math.floor(windowStartBit / columnsPerRow)
     const canvasTopCss = windowStartRow * pixelSize
 
-    // Estimate canvas height (generous, we'll fill with bg)
-    const totalWindowBits = (windowEnd - windowStart) * 8
-    const bitsPerFlowLine = Math.floor(containerWidth / bitCellWidth)
-    const estLines = Math.ceil(totalWindowBits / bitsPerFlowLine) + 10
-    const canvasHeightCss = estLines * FLOW_LINE_HEIGHT
-
-    const dpr = window.devicePixelRatio || 1
-    canvas.width = Math.ceil(containerWidth * dpr)
-    canvas.height = Math.ceil(canvasHeightCss * dpr)
-    canvas.style.top = `${canvasTopCss}px`
-    canvas.style.width = `${containerWidth}px`
-    canvas.style.height = `${canvasHeightCss}px`
-    canvas.style.opacity = String(opacity)
-
-    const ctx = canvas.getContext('2d')!
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
-    ctx.scale(dpr, dpr)
-
     // Get colors
     const style = getComputedStyle(document.documentElement)
     const fg = parseCssHex(style.getPropertyValue('--text-primary').trim())
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
     const accent = style.getPropertyValue('--accent').trim()
 
-    // Fill bg
-    ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`
-    ctx.fillRect(0, 0, containerWidth, canvasHeightCss)
-
-    // Flow cursor
-    let cx = 0
+    // Pass 1: calculate actual content height (dry run)
+    let cx = (windowStartBit % columnsPerRow) * bitCellWidth
     let cy = 0
-
-    // Align cursor to starting bit position within the row
-    const startBitInRow = windowStartBit % columnsPerRow
-    cx = startBitInRow * bitCellWidth
-
-    let regionTextRendered = false
+    let regionTextDone = false
 
     for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
       if (byteIdx >= region.start && byteIdx < region.end) {
-        if (!regionTextRendered) {
-          // Render decoded text using Pretext segment widths
+        if (!regionTextDone) {
+          for (let s = 0; s < prepared.segments.length; s++) {
+            const segWidth = prepared.widths[s]
+            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
+            cx += segWidth
+          }
+          regionTextDone = true
+        }
+        continue
+      }
+      for (let bit = 7; bit >= 0; bit--) {
+        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
+        cx += bitCellWidth
+      }
+    }
+
+    const contentHeight = cy + FLOW_LINE_HEIGHT
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = Math.ceil(containerWidth * dpr)
+    canvas.height = Math.ceil(contentHeight * dpr)
+    canvas.style.top = `${canvasTopCss}px`
+    canvas.style.width = `${containerWidth}px`
+    canvas.style.height = `${contentHeight}px`
+    canvas.style.opacity = String(opacity)
+
+    const ctx = canvas.getContext('2d')!
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.scale(dpr, dpr)
+
+    // Fill bg for exact content area
+    ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`
+    ctx.fillRect(0, 0, containerWidth, contentHeight)
+
+    // Pass 2: render
+    cx = (windowStartBit % columnsPerRow) * bitCellWidth
+    cy = 0
+    regionTextDone = false
+
+    for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
+      if (byteIdx >= region.start && byteIdx < region.end) {
+        if (!regionTextDone) {
           ctx.fillStyle = accent
           ctx.font = FLOW_FONT
           ctx.textBaseline = 'middle'
@@ -222,29 +234,18 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           for (let s = 0; s < prepared.segments.length; s++) {
             const seg = prepared.segments[s]
             const segWidth = prepared.widths[s]
-
-            if (cx + segWidth > containerWidth) {
-              cx = 0
-              cy += FLOW_LINE_HEIGHT
-            }
-
+            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
             ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
             cx += segWidth
           }
-
-          regionTextRendered = true
+          regionTextDone = true
         }
-        // Skip remaining bytes in the region (already rendered as text)
         continue
       }
 
-      // Render 8 bits as colored cells
       const b = bytes[byteIdx]
       for (let bit = 7; bit >= 0; bit--) {
-        if (cx + bitCellWidth > containerWidth + 0.5) {
-          cx = 0
-          cy += FLOW_LINE_HEIGHT
-        }
+        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
         const val = (b >> bit) & 1
         const c = val ? fg : bg
         ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`

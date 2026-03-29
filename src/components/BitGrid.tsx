@@ -3,13 +3,13 @@ import { prepareWithSegments } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
-import type { BreathingSlot } from '../hooks/useBreathingDecode'
+import type { BreathingState } from '../hooks/useBreathingDecode'
 
 interface BitGridProps {
   bytes: Uint8Array
   regions: FieldRegion[]
   theme: string
-  breathingSlots: BreathingSlot[]
+  breathingState: BreathingState | null
   onInteractionChange?: (active: boolean) => void
   onVisibleRangeChange?: (startByte: number, endByte: number) => void
 }
@@ -40,7 +40,7 @@ interface OverlayCard {
   displayValue: string
 }
 
-export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
+export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
   const [containerRef, containerWidth] = useContainerWidth()
   const baseCanvasRef = useRef<HTMLCanvasElement>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -142,22 +142,23 @@ export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionCh
     }
   }, [hoverState, lockState, columnsPerRow])
 
-  // Breathing: mixed-content flow canvas (bits + Pretext text for multiple slots)
+  // Breathing: mixed-content flow canvas (bits + Pretext text)
   useEffect(() => {
     const canvas = flowCanvasRef.current
     if (!canvas || containerWidth <= 0 || columnsPerRow === 0) return
 
     const active = lockState ?? hoverState
-    if (active || breathingSlots.length === 0) {
+    if (active || !breathingState || breathingState.opacity <= 0) {
       canvas.style.opacity = '0'
       return
     }
 
+    const { region, opacity } = breathingState
     const FLOW_LINE_HEIGHT = 18
     const FLOW_FONT = '13px "IBM Plex Sans", sans-serif'
     const bitCellWidth = pixelSize
 
-    // Visible viewport window
+    // Window = entire visible viewport (all visible bytes participate in reflow)
     const el = containerRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
@@ -170,45 +171,39 @@ export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionCh
     const windowStart = Math.max(0, Math.floor((viewStartRow * columnsPerRow) / 8))
     const windowEnd = Math.min(bytes.length, Math.ceil((viewEndRow * columnsPerRow) / 8))
 
-    // Prepare all active slots with Pretext
-    const slotData = breathingSlots.map((slot) => {
-      const regionBytes = bytes.slice(slot.region.start, slot.region.end)
-      const text = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
-      const prepared = prepareWithSegments(text, FLOW_FONT)
-      return { ...slot, prepared }
-    })
+    // Decode region text + prepare with Pretext
+    const regionBytes = bytes.slice(region.start, region.end)
+    const regionText = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+    const prepared = prepareWithSegments(regionText, FLOW_FONT)
 
-    // Find which slot (if any) owns each byte
-    const findSlot = (byteIdx: number) =>
-      slotData.find((s) => byteIdx >= s.region.start && byteIdx < s.region.end)
-
-    // Canvas position
+    // Position the flow canvas over the bitmap area corresponding to windowStart
     const windowStartBit = windowStart * 8
     const windowStartRow = Math.floor(windowStartBit / columnsPerRow)
     const canvasTopCss = windowStartRow * pixelSize
 
+    // Get colors
     const style = getComputedStyle(document.documentElement)
     const fg = parseCssHex(style.getPropertyValue('--text-primary').trim())
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
     const accent = style.getPropertyValue('--accent').trim()
 
-    // Pass 1: dry run for content height
+    // Pass 1: calculate actual content height (dry run)
     let cx = (windowStartBit % columnsPerRow) * bitCellWidth
     let cy = 0
-    const renderedRegions = new Set<number>()
+    let regionTextDone = false
 
     for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
-      const slot = findSlot(byteIdx)
-      if (slot && !renderedRegions.has(slot.region.start)) {
-        renderedRegions.add(slot.region.start)
-        for (let s = 0; s < slot.prepared.segments.length; s++) {
-          const w = slot.prepared.widths[s]
-          if (cx + w > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
-          cx += w
+      if (byteIdx >= region.start && byteIdx < region.end) {
+        if (!regionTextDone) {
+          for (let s = 0; s < prepared.segments.length; s++) {
+            const segWidth = prepared.widths[s]
+            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
+            cx += segWidth
+          }
+          regionTextDone = true
         }
         continue
       }
-      if (slot) continue // skip remaining bytes of rendered region
       for (let bit = 7; bit >= 0; bit--) {
         if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
         cx += bitCellWidth
@@ -222,42 +217,39 @@ export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionCh
     canvas.style.top = `${canvasTopCss}px`
     canvas.style.width = `${containerWidth}px`
     canvas.style.height = `${contentHeight}px`
-    canvas.style.opacity = '1'
+    canvas.style.opacity = String(opacity)
 
     const ctx = canvas.getContext('2d')!
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.scale(dpr, dpr)
 
+    // Fill bg for exact content area
     ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`
     ctx.fillRect(0, 0, containerWidth, contentHeight)
 
     // Pass 2: render
     cx = (windowStartBit % columnsPerRow) * bitCellWidth
     cy = 0
-    renderedRegions.clear()
+    regionTextDone = false
 
     for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
-      const slot = findSlot(byteIdx)
-      if (slot && !renderedRegions.has(slot.region.start)) {
-        renderedRegions.add(slot.region.start)
+      if (byteIdx >= region.start && byteIdx < region.end) {
+        if (!regionTextDone) {
+          ctx.fillStyle = accent
+          ctx.font = FLOW_FONT
+          ctx.textBaseline = 'middle'
 
-        ctx.save()
-        ctx.globalAlpha = slot.opacity
-        ctx.fillStyle = accent
-        ctx.font = FLOW_FONT
-        ctx.textBaseline = 'middle'
-
-        for (let s = 0; s < slot.prepared.segments.length; s++) {
-          const seg = slot.prepared.segments[s]
-          const segWidth = slot.prepared.widths[s]
-          if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
-          ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
-          cx += segWidth
+          for (let s = 0; s < prepared.segments.length; s++) {
+            const seg = prepared.segments[s]
+            const segWidth = prepared.widths[s]
+            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
+            ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
+            cx += segWidth
+          }
+          regionTextDone = true
         }
-        ctx.restore()
         continue
       }
-      if (slot) continue
 
       const b = bytes[byteIdx]
       for (let bit = 7; bit >= 0; bit--) {
@@ -269,21 +261,16 @@ export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionCh
         cx += bitCellWidth
       }
     }
-  }, [breathingSlots, hoverState, lockState, bytes, containerWidth, columnsPerRow, pixelSize])
+  }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow, pixelSize])
 
-  // Overlay card (tooltip) for hover/click or top breathing slot
+  // Overlay card (tooltip) for hover/click/breathing
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
     const active = lockState ?? hoverState
-
-    // For breathing: show tooltip for the highest-opacity slot
-    const topSlot = !active && breathingSlots.length > 0
-      ? breathingSlots.reduce((a, b) => (b.opacity > a.opacity ? b : a))
-      : null
-
-    const region = active?.region ?? topSlot?.region
+    const breathing = !active ? breathingState : null
+    const region = active?.region ?? breathing?.region
     if (!region) return null
-    if (topSlot && topSlot.opacity <= 0) return null
+    if (breathing && breathing.opacity <= 0) return null
 
     const byteIndex = active?.byteIndex ?? region.start
     const displayValue = region.value.length > 80 ? region.value.slice(0, 77) + '...' : region.value
@@ -303,10 +290,10 @@ export function BitGrid({ bytes, regions, theme, breathingSlots, onInteractionCh
       path: `works${region.path}`,
       left: Math.max(margin, Math.min(posX, containerWidth - margin)),
       top: posY - 8,
-      opacity: active ? 1 : topSlot?.opacity ?? 0,
+      opacity: active ? 1 : breathing?.opacity ?? 0,
       locked: !!lockState, byteIndex, region, displayValue,
     }
-  }, [hoverState, lockState, breathingSlots, containerWidth, columnsPerRow, pixelSize])
+  }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, pixelSize])
 
   // Decode rows for card
   const decodeRows = useMemo(() => {

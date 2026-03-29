@@ -12,6 +12,7 @@ interface BitGridProps {
   theme: string
   breathingState: BreathingState | null
   onInteractionChange?: (active: boolean) => void
+  onVisibleRangeChange?: (startByte: number, endByte: number) => void
 }
 
 const TEXT_FONT = '13px "IBM Plex Sans", sans-serif'
@@ -28,7 +29,7 @@ interface InteractionState {
   pos: { x: number; y: number }
 }
 
-export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange }: BitGridProps) {
+export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
   const [containerRef, containerWidth] = useContainerWidth()
   const baseCanvasRef = useRef<HTMLCanvasElement>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -90,6 +91,35 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       overlay.height = numRows
     }
   }, [bytes, theme, columnsPerRow, numRows, totalBits])
+
+  // Report visible byte range on scroll/resize
+  useEffect(() => {
+    if (!onVisibleRangeChange || columnsPerRow === 0 || !containerRef.current) return
+
+    const update = () => {
+      const el = containerRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const pixelSize = rect.width / columnsPerRow
+      const viewTop = Math.max(0, -rect.top)
+      const viewBottom = Math.min(rect.height, window.innerHeight - rect.top)
+      if (viewBottom <= viewTop) return
+
+      const startRow = Math.floor(viewTop / pixelSize)
+      const endRow = Math.ceil(viewBottom / pixelSize)
+      const startByte = Math.floor((startRow * columnsPerRow) / 8)
+      const endByte = Math.min(bytes.length, Math.ceil((endRow * columnsPerRow) / 8))
+      onVisibleRangeChange(startByte, endByte)
+    }
+
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [onVisibleRangeChange, columnsPerRow, bytes.length, containerRef])
 
   // Draw overlay highlight (manual interaction OR breathing)
   useEffect(() => {

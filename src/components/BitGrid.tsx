@@ -1,14 +1,21 @@
-import { useRef, useEffect, useState, useCallback } from 'react'
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
+import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
 import { DecodeOverlay } from './DecodeOverlay'
+import type { BreathingState } from '../hooks/useBreathingDecode'
 
 interface BitGridProps {
   bytes: Uint8Array
   regions: FieldRegion[]
   theme: string
+  breathingState: BreathingState | null
+  onInteractionChange?: (active: boolean) => void
 }
+
+const TEXT_FONT = '13px "IBM Plex Sans", sans-serif'
+const TEXT_LINE_HEIGHT = 19
 
 function parseCssHex(hex: string): [number, number, number] {
   const h = hex.replace('#', '')
@@ -21,7 +28,7 @@ interface InteractionState {
   pos: { x: number; y: number }
 }
 
-export function BitGrid({ bytes, regions, theme }: BitGridProps) {
+export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange }: BitGridProps) {
   const [containerRef, containerWidth] = useContainerWidth()
   const baseCanvasRef = useRef<HTMLCanvasElement>(null)
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -84,7 +91,7 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
     }
   }, [bytes, theme, columnsPerRow, numRows, totalBits])
 
-  // Draw overlay highlight
+  // Draw overlay highlight (manual interaction OR breathing)
   useEffect(() => {
     const canvas = overlayCanvasRef.current
     if (!canvas || columnsPerRow === 0) return
@@ -92,7 +99,10 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     const active = lockState ?? hoverState
-    if (!active) return
+    const breathing = !active ? breathingState : null
+
+    const region = active?.region ?? breathing?.region
+    if (!region) return
 
     const style = getComputedStyle(document.documentElement)
     const accent = style.getPropertyValue('--accent').trim()
@@ -100,12 +110,18 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
     const r = parseInt(hex.slice(0, 2), 16)
     const g = parseInt(hex.slice(2, 4), 16)
     const b = parseInt(hex.slice(4, 6), 16)
-    const alpha = lockState ? 0.35 : 0.2
+
+    let alpha: number
+    if (active) {
+      alpha = lockState ? 0.35 : 0.2
+    } else {
+      alpha = (breathing?.opacity ?? 0) * 0.25
+    }
 
     ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`
 
-    const startBit = active.region.start * 8
-    const endBit = active.region.end * 8
+    const startBit = region.start * 8
+    const endBit = region.end * 8
     const startRow = Math.floor(startBit / columnsPerRow)
     const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
 
@@ -116,7 +132,46 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
       const hlEnd = Math.min(endBit, rowEnd) - rowStart
       ctx.fillRect(hlStart, row, hlEnd - hlStart, 1)
     }
-  }, [hoverState, lockState, columnsPerRow])
+  }, [hoverState, lockState, breathingState, columnsPerRow])
+
+  // Compute breathing text overlay position + lines via Pretext
+  const breathingText = useMemo(() => {
+    const active = lockState ?? hoverState
+    if (active || !breathingState || breathingState.opacity <= 0) return null
+    if (containerWidth <= 0 || columnsPerRow === 0) return null
+
+    const { region, opacity } = breathingState
+    const pixelSize = containerWidth / columnsPerRow
+
+    const startBit = region.start * 8
+    const endBit = region.end * 8
+    const startRow = Math.floor(startBit / columnsPerRow)
+    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+    const yStart = startRow * pixelSize
+    const yEnd = (endRow + 1) * pixelSize
+    const regionHeight = yEnd - yStart
+
+    let displayValue = region.value
+    if (displayValue.startsWith('"') && displayValue.endsWith('"')) {
+      displayValue = displayValue.slice(1, -1)
+    }
+    if (displayValue.length > 200) displayValue = displayValue.slice(0, 197) + '...'
+    const displayText = `${region.key}: ${displayValue}`
+
+    const prepared = prepareWithSegments(displayText, TEXT_FONT)
+    const layout = layoutWithLines(prepared, containerWidth - 32, TEXT_LINE_HEIGHT)
+    const textBlockHeight = layout.height
+
+    let textY = yStart + (regionHeight - textBlockHeight) / 2
+    textY = Math.max(4, Math.min(textY, displayHeight - textBlockHeight - 4))
+
+    return {
+      lines: layout.lines.map((l) => l.text),
+      top: textY,
+      opacity,
+      maxWidth: layout.lines.reduce((max, l) => Math.max(max, l.width), 0),
+    }
+  }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, displayHeight])
 
   const hitTest = useCallback(
     (clientX: number, clientY: number, rect: DOMRect): InteractionState | null => {
@@ -138,13 +193,19 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
     [bytes, regions, columnsPerRow]
   )
 
+  // Notify parent of interaction state for breathing pause/resume
+  useEffect(() => {
+    onInteractionChange?.(hoverState !== null || lockState !== null)
+  }, [hoverState, lockState, onInteractionChange])
+
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (lockState) return
       cancelAnimationFrame(rafRef.current)
+      const rect = e.currentTarget.getBoundingClientRect()
+      const { clientX, clientY } = e
       rafRef.current = requestAnimationFrame(() => {
-        const rect = e.currentTarget.getBoundingClientRect()
-        setHoverState(hitTest(e.clientX, e.clientY, rect))
+        setHoverState(hitTest(clientX, clientY, rect))
       })
     },
     [hitTest, lockState]
@@ -219,6 +280,26 @@ export function BitGrid({ bytes, regions, theme }: BitGridProps) {
         className="absolute top-0 left-0"
         style={{ ...canvasStyle, pointerEvents: 'none' }}
       />
+      {breathingText && (
+        <div
+          className="absolute left-0 right-0 pointer-events-none z-10"
+          style={{ top: breathingText.top, opacity: breathingText.opacity }}
+        >
+          <div
+            className="mx-4 px-4 py-3 rounded-sm bg-surface/90 border border-border/50 shadow-sm backdrop-blur-sm"
+            style={{ maxWidth: breathingText.maxWidth + 32 }}
+          >
+            {breathingText.lines.map((line, i) => (
+              <div
+                key={i}
+                className="font-body text-[13px] leading-[19px] text-foreground"
+              >
+                {line}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <div
         className="absolute top-0 left-0 w-full cursor-crosshair"
         style={{ height: displayHeight }}

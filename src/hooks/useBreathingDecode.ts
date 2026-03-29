@@ -3,13 +3,14 @@ import type { FieldRegion } from '../lib/byteOffsetMap'
 
 export interface BreathingState {
   region: FieldRegion
-  opacity: number
+  /** 0→1 during decode, 1 during hold, 1→0 during encode. Represents fraction of segments decoded. */
+  progress: number
 }
 
-const FADE_IN = 1000
-const HOLD = 2500
-const FADE_OUT = 1000
-const CYCLE = FADE_IN + HOLD + FADE_OUT
+const DECODE = 2000
+const HOLD = 2000
+const ENCODE = 2000
+const CYCLE = DECODE + HOLD + ENCODE
 
 function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2
@@ -30,13 +31,11 @@ export function useBreathingDecode(
     const range = getVisibleRange?.()
     if (!range) return regions[0]
 
-    // Filter to regions overlapping the visible byte range
     const visible = regions.filter(
       (r) => r.end > range.startByte && r.start < range.endByte,
     )
     if (visible.length === 0) return null
 
-    // Pick the next one after the previous, cycling within visible set
     const prevIdx = prevRegionRef.current
       ? visible.findIndex((r) => r === prevRegionRef.current)
       : -1
@@ -55,7 +54,6 @@ export function useBreathingDecode(
 
       if (startRef.current === 0) {
         startRef.current = now
-        // Pick a region at cycle start
         const picked = pickRegion()
         if (picked) prevRegionRef.current = picked
       }
@@ -63,13 +61,13 @@ export function useBreathingDecode(
       const elapsed = now - startRef.current
       const phase = elapsed % CYCLE
 
-      let opacity: number
-      if (phase < FADE_IN) {
-        opacity = easeInOut(phase / FADE_IN)
-      } else if (phase < FADE_IN + HOLD) {
-        opacity = 1
+      let progress: number
+      if (phase < DECODE) {
+        progress = easeInOut(phase / DECODE)
+      } else if (phase < DECODE + HOLD) {
+        progress = 1
       } else {
-        opacity = 1 - easeInOut((phase - FADE_IN - HOLD) / FADE_OUT)
+        progress = 1 - easeInOut((phase - DECODE - HOLD) / ENCODE)
       }
 
       // At cycle boundary, pick next visible region
@@ -80,7 +78,7 @@ export function useBreathingDecode(
       }
 
       if (prevRegionRef.current) {
-        setState({ region: prevRegionRef.current, opacity })
+        setState({ region: prevRegionRef.current, progress })
       } else {
         setState(null)
       }

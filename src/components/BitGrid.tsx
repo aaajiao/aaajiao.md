@@ -148,12 +148,12 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     if (!canvas || containerWidth <= 0 || columnsPerRow === 0) return
 
     const active = lockState ?? hoverState
-    if (active || !breathingState || breathingState.opacity <= 0) {
+    if (active || !breathingState || breathingState.progress <= 0) {
       canvas.style.opacity = '0'
       return
     }
 
-    const { region, opacity } = breathingState
+    const { region, progress } = breathingState
     const FLOW_LINE_HEIGHT = 18
     const FLOW_FONT = '13px "IBM Plex Sans", sans-serif'
     const bitCellWidth = pixelSize
@@ -176,91 +176,118 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const regionText = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
     const prepared = prepareWithSegments(regionText, FLOW_FONT)
 
-    // Position the flow canvas over the bitmap area corresponding to windowStart
+    // How many segments are decoded based on progress
+    const totalSegs = prepared.segments.length
+    const decodedSegs = Math.round(progress * totalSegs)
+
+    // Build a byte→segment mapping so we know which bytes each segment covers
+    // Segments map sequentially to the region's UTF-8 bytes
+    // For undecoded segments, we render their bytes as bits instead
+
+    // Position the flow canvas
     const windowStartBit = windowStart * 8
     const windowStartRow = Math.floor(windowStartBit / columnsPerRow)
     const canvasTopCss = windowStartRow * pixelSize
 
-    // Get colors
     const style = getComputedStyle(document.documentElement)
     const fg = parseCssHex(style.getPropertyValue('--text-primary').trim())
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
     const accent = style.getPropertyValue('--accent').trim()
 
-    // Pass 1: calculate actual content height (dry run)
-    let cx = (windowStartBit % columnsPerRow) * bitCellWidth
-    let cy = 0
-    let regionTextDone = false
-
-    for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
-      if (byteIdx >= region.start && byteIdx < region.end) {
-        if (!regionTextDone) {
-          for (let s = 0; s < prepared.segments.length; s++) {
-            const segWidth = prepared.widths[s]
-            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
-            cx += segWidth
-          }
-          regionTextDone = true
-        }
-        continue
-      }
+    // Helper: render bits for a byte
+    const renderBits = (b: number, cursor: { x: number; y: number }) => {
       for (let bit = 7; bit >= 0; bit--) {
-        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
-        cx += bitCellWidth
+        if (cursor.x + bitCellWidth > containerWidth + 0.5) { cursor.x = 0; cursor.y += FLOW_LINE_HEIGHT }
+        const val = (b >> bit) & 1
+        const c = val ? fg : bg
+        return { val, c } // used in pass 2
       }
     }
+    void renderBits // suppress unused
 
-    const contentHeight = cy + FLOW_LINE_HEIGHT
+    // Flow render function (used for both passes)
+    const flowPass = (draw: boolean, ctx?: CanvasRenderingContext2D) => {
+      let cx = (windowStartBit % columnsPerRow) * bitCellWidth
+      let cy = 0
+      let regionDone = false
+
+      for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
+        if (byteIdx >= region.start && byteIdx < region.end) {
+          if (!regionDone) {
+            // Render each segment: decoded text or its bits
+            for (let s = 0; s < totalSegs; s++) {
+              if (s < decodedSegs) {
+                // This segment is decoded → render as text
+                const seg = prepared.segments[s]
+                const segWidth = prepared.widths[s]
+                if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
+                if (draw && ctx) {
+                  ctx.fillStyle = accent
+                  ctx.font = FLOW_FONT
+                  ctx.textBaseline = 'middle'
+                  ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
+                }
+                cx += segWidth
+              } else {
+                // This segment is still bits → render char bytes as bit cells
+                const seg = prepared.segments[s]
+                const segBytes = new TextEncoder().encode(seg)
+                for (let bi = 0; bi < segBytes.length; bi++) {
+                  const b = segBytes[bi]
+                  for (let bit = 7; bit >= 0; bit--) {
+                    if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
+                    if (draw && ctx) {
+                      const val = (b >> bit) & 1
+                      const c = val ? fg : bg
+                      ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+                      ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
+                    }
+                    cx += bitCellWidth
+                  }
+                }
+              }
+            }
+            regionDone = true
+          }
+          continue
+        }
+
+        // Non-region bytes: always bits
+        const b = bytes[byteIdx]
+        for (let bit = 7; bit >= 0; bit--) {
+          if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
+          if (draw && ctx) {
+            const val = (b >> bit) & 1
+            const c = val ? fg : bg
+            ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+            ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
+          }
+          cx += bitCellWidth
+        }
+      }
+      return cy + FLOW_LINE_HEIGHT
+    }
+
+    // Pass 1: measure
+    const contentHeight = flowPass(false)
+
     const dpr = window.devicePixelRatio || 1
     canvas.width = Math.ceil(containerWidth * dpr)
     canvas.height = Math.ceil(contentHeight * dpr)
     canvas.style.top = `${canvasTopCss}px`
     canvas.style.width = `${containerWidth}px`
     canvas.style.height = `${contentHeight}px`
-    canvas.style.opacity = String(opacity)
+    canvas.style.opacity = '1'
 
     const ctx = canvas.getContext('2d')!
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.scale(dpr, dpr)
 
-    // Fill bg for exact content area
     ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`
     ctx.fillRect(0, 0, containerWidth, contentHeight)
 
-    // Pass 2: render
-    cx = (windowStartBit % columnsPerRow) * bitCellWidth
-    cy = 0
-    regionTextDone = false
-
-    for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
-      if (byteIdx >= region.start && byteIdx < region.end) {
-        if (!regionTextDone) {
-          ctx.fillStyle = accent
-          ctx.font = FLOW_FONT
-          ctx.textBaseline = 'middle'
-
-          for (let s = 0; s < prepared.segments.length; s++) {
-            const seg = prepared.segments[s]
-            const segWidth = prepared.widths[s]
-            if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
-            ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
-            cx += segWidth
-          }
-          regionTextDone = true
-        }
-        continue
-      }
-
-      const b = bytes[byteIdx]
-      for (let bit = 7; bit >= 0; bit--) {
-        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
-        const val = (b >> bit) & 1
-        const c = val ? fg : bg
-        ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
-        ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
-        cx += bitCellWidth
-      }
-    }
+    // Pass 2: draw
+    flowPass(true, ctx)
   }, [breathingState, hoverState, lockState, bytes, containerWidth, columnsPerRow, pixelSize])
 
   // Overlay card (tooltip) for hover/click/breathing
@@ -270,7 +297,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const breathing = !active ? breathingState : null
     const region = active?.region ?? breathing?.region
     if (!region) return null
-    if (breathing && breathing.opacity <= 0) return null
+    if (breathing && breathing.progress <= 0) return null
 
     const byteIndex = active?.byteIndex ?? region.start
     const displayValue = region.value.length > 80 ? region.value.slice(0, 77) + '...' : region.value
@@ -290,7 +317,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       path: `works${region.path}`,
       left: Math.max(margin, Math.min(posX, containerWidth - margin)),
       top: posY - 8,
-      opacity: active ? 1 : breathing?.opacity ?? 0,
+      opacity: active ? 1 : breathing?.progress ?? 0,
       locked: !!lockState, byteIndex, region, displayValue,
     }
   }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, pixelSize])

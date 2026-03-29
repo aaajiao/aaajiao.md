@@ -158,18 +158,10 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const FLOW_FONT = '13px "IBM Plex Sans", sans-serif'
     const bitCellWidth = pixelSize
 
-    // Window = entire visible viewport (all visible bytes participate in reflow)
-    const el = containerRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const viewTop = Math.max(0, -rect.top)
-    const viewBottom = Math.min(rect.height, window.innerHeight - rect.top)
-    if (viewBottom <= viewTop) return
-
-    const viewStartRow = Math.floor(viewTop / pixelSize)
-    const viewEndRow = Math.ceil(viewBottom / pixelSize)
-    const windowStart = Math.max(0, Math.floor((viewStartRow * columnsPerRow) / 8))
-    const windowEnd = Math.min(bytes.length, Math.ceil((viewEndRow * columnsPerRow) / 8))
+    // Small window around the region (~40 bytes context each side)
+    const contextBytes = 40
+    const windowStart = Math.max(0, region.start - contextBytes)
+    const windowEnd = Math.min(bytes.length, region.end + contextBytes)
 
     // Decode region text + prepare with Pretext
     const regionBytes = bytes.slice(region.start, region.end)
@@ -194,34 +186,17 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const bg = parseCssHex(style.getPropertyValue('--bg').trim())
     const accent = style.getPropertyValue('--accent').trim()
 
-    // Flow render: bits at pixelSize, text at FLOW_LINE_HEIGHT, continuous inline flow.
-    // Row height = max element height on that row. No forced breaks between text/bits.
+    // Flow render: uniform FLOW_LINE_HEIGHT for all content.
+    // Bits = vertical strips (bitCellWidth × FLOW_LINE_HEIGHT).
+    // Decoded text = Pretext segments at readable size.
+    // Everything flows inline, same line height.
     const flowPass = (draw: boolean, ctx?: CanvasRenderingContext2D) => {
       let cx = (windowStartBit % columnsPerRow) * bitCellWidth
       let cy = 0
-      let rowH = bitCellWidth // max height of current row
       let regionDone = false
 
-      const wrap = (w: number, h: number) => {
-        if (cx + w > containerWidth + 0.5) {
-          cx = 0
-          cy += rowH
-          rowH = h
-        } else {
-          if (h > rowH) rowH = h
-        }
-      }
-
-      const drawBit = (val: number) => {
-        wrap(bitCellWidth, bitCellWidth)
-        if (draw && ctx) {
-          const c = val ? fg : bg
-          ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
-          // Vertically center bit cell in row
-          const yOff = (rowH - bitCellWidth) / 2
-          ctx.fillRect(cx, cy + yOff, Math.ceil(bitCellWidth), Math.ceil(bitCellWidth))
-        }
-        cx += bitCellWidth
+      const wrapBit = () => {
+        if (cx + bitCellWidth > containerWidth + 0.5) { cx = 0; cy += FLOW_LINE_HEIGHT }
       }
 
       for (let byteIdx = windowStart; byteIdx < windowEnd; byteIdx++) {
@@ -229,24 +204,29 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           if (!regionDone) {
             for (let s = 0; s < totalSegs; s++) {
               if (s < decodedSegs) {
-                // Decoded → text segment
                 const seg = prepared.segments[s]
                 const segWidth = prepared.widths[s]
-                wrap(segWidth, FLOW_LINE_HEIGHT)
+                if (cx + segWidth > containerWidth) { cx = 0; cy += FLOW_LINE_HEIGHT }
                 if (draw && ctx) {
                   ctx.fillStyle = accent
                   ctx.font = FLOW_FONT
                   ctx.textBaseline = 'middle'
-                  ctx.fillText(seg, cx, cy + rowH / 2)
+                  ctx.fillText(seg, cx, cy + FLOW_LINE_HEIGHT / 2)
                 }
                 cx += segWidth
               } else {
-                // Undecoded → bit cells
                 const segBytes = new TextEncoder().encode(prepared.segments[s])
                 for (let bi = 0; bi < segBytes.length; bi++) {
                   const b = segBytes[bi]
                   for (let bit = 7; bit >= 0; bit--) {
-                    drawBit((b >> bit) & 1)
+                    wrapBit()
+                    if (draw && ctx) {
+                      const val = (b >> bit) & 1
+                      const c = val ? fg : bg
+                      ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+                      ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
+                    }
+                    cx += bitCellWidth
                   }
                 }
               }
@@ -256,13 +236,19 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
           continue
         }
 
-        // Non-region bytes
         const b = bytes[byteIdx]
         for (let bit = 7; bit >= 0; bit--) {
-          drawBit((b >> bit) & 1)
+          wrapBit()
+          if (draw && ctx) {
+            const val = (b >> bit) & 1
+            const c = val ? fg : bg
+            ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`
+            ctx.fillRect(cx, cy, Math.ceil(bitCellWidth), FLOW_LINE_HEIGHT)
+          }
+          cx += bitCellWidth
         }
       }
-      return cy + rowH
+      return cy + FLOW_LINE_HEIGHT
     }
 
     // Pass 1: measure

@@ -150,8 +150,6 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const active = lockState ?? hoverState
     if (active || !breathingState || breathingState.progress <= 0) {
       canvas.style.opacity = '0'
-      canvas.style.maskImage = ''
-      canvas.style.webkitMaskImage = ''
       return
     }
 
@@ -259,13 +257,10 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const dpr = window.devicePixelRatio || 1
     canvas.width = Math.ceil(containerWidth * dpr)
     canvas.height = Math.ceil(contentHeight * dpr)
-    const fadeZone = 36 // px of fade at each edge
     canvas.style.top = `${canvasTopCss}px`
     canvas.style.width = `${containerWidth}px`
     canvas.style.height = `${contentHeight}px`
     canvas.style.opacity = '1'
-    canvas.style.maskImage = `linear-gradient(to bottom, transparent, black ${fadeZone}px, black calc(100% - ${fadeZone}px), transparent)`
-    canvas.style.webkitMaskImage = canvas.style.maskImage
 
     const ctx = canvas.getContext('2d')!
     ctx.setTransform(1, 0, 0, 1, 0, 0)

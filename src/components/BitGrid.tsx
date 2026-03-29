@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
-import { prepareWithSegments, layoutWithLines } from '@chenglou/pretext'
 import type { FieldRegion } from '../lib/byteOffsetMap'
 import { findRegion } from '../lib/byteOffsetMap'
 import { useContainerWidth } from '../hooks/useContainerWidth'
@@ -14,9 +13,6 @@ interface BitGridProps {
   onVisibleRangeChange?: (startByte: number, endByte: number) => void
 }
 
-const TEXT_FONT = '13px "IBM Plex Sans", sans-serif'
-const TEXT_LINE_HEIGHT = 19
-
 function parseCssHex(hex: string): [number, number, number] {
   const h = hex.replace('#', '')
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
@@ -25,27 +21,21 @@ function parseCssHex(hex: string): [number, number, number] {
 interface InteractionState {
   region: FieldRegion
   byteIndex: number
+  pos: { x: number; y: number }
 }
 
 interface OverlayCard {
-  lines: string[]
   path: string
+  left: number
   top: number
   opacity: number
-  maxWidth: number
   locked: boolean
-  // Decode rows
   byteIndex: number
   region: FieldRegion
 }
 
-function buildCardText(region: FieldRegion): string {
-  let displayValue = region.value
-  if (displayValue.startsWith('"') && displayValue.endsWith('"')) {
-    displayValue = displayValue.slice(1, -1)
-  }
-  if (displayValue.length > 120) displayValue = displayValue.slice(0, 117) + '...'
-  return `${region.key}: ${displayValue}`
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
@@ -193,7 +183,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
-  // Unified overlay card
+  // Unified overlay card — positioned like old DecodeOverlay (above the point)
   const overlayCard = useMemo((): OverlayCard | null => {
     if (containerWidth <= 0 || columnsPerRow === 0) return null
 
@@ -206,28 +196,32 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const byteIndex = active?.byteIndex ?? region.start
 
-    const displayText = buildCardText(region)
-    const prepared = prepareWithSegments(displayText, TEXT_FONT)
-    const layout = layoutWithLines(prepared, containerWidth - 32, TEXT_LINE_HEIGHT)
-    const textBlockHeight = layout.height
+    // Position: for hover/click use cursor pos; for breathing use region top-center
+    let posX: number
+    let posY: number
+    if (active) {
+      posX = active.pos.x
+      posY = active.pos.y
+    } else {
+      const { yStart } = regionToY(region)
+      posX = containerWidth / 2
+      posY = yStart
+    }
 
-    const { yStart, yEnd } = regionToY(region)
-    const regionHeight = yEnd - yStart
-
-    let textY = yStart + (regionHeight - textBlockHeight) / 2
-    textY = Math.max(4, Math.min(textY, displayHeight - textBlockHeight - 4))
+    const margin = 140
+    const left = Math.max(margin, Math.min(posX, containerWidth - margin))
+    const top = posY - 8
 
     return {
-      lines: layout.lines.map((l) => l.text),
       path: `works${region.path}`,
-      top: textY,
+      left,
+      top,
       opacity: active ? 1 : breathing?.opacity ?? 0,
-      maxWidth: layout.lines.reduce((max, l) => Math.max(max, l.width), 0),
       locked: !!lockState,
       byteIndex,
       region,
     }
-  }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, displayHeight, regionToY])
+  }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, regionToY])
 
   // Build decode rows for the card
   const decodeRows = useMemo(() => {
@@ -268,7 +262,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       const region = findRegion(regions, byteIndex)
       if (!region) return null
 
-      return { region, byteIndex }
+      return { region, byteIndex, pos: { x, y } }
     },
     [bytes, regions, columnsPerRow],
   )
@@ -360,17 +354,22 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       />
       {overlayCard && decodeRows && (
         <div
-          className="absolute left-0 right-0 pointer-events-none z-10"
-          style={{ top: overlayCard.top, opacity: overlayCard.opacity }}
+          className="absolute z-50 pointer-events-none"
+          style={{
+            left: overlayCard.left,
+            top: overlayCard.top,
+            opacity: overlayCard.opacity,
+            transform: 'translate(-50%, -100%)',
+            maxWidth: 340,
+          }}
         >
           <div
-            className={`mx-4 px-4 py-3 rounded-sm bg-surface/90 border shadow-sm backdrop-blur-sm ${
-              overlayCard.locked ? 'border-accent/60' : 'border-border/50'
+            className={`bg-surface-elevated border rounded-sm px-3 py-2 shadow-sm ${
+              overlayCard.locked ? 'border-accent/60' : 'border-border'
             }`}
-            style={{ maxWidth: Math.max(overlayCard.maxWidth + 32, 340) }}
+            style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
           >
-            {/* Decode rows: binary / hex / UTF-8 */}
-            <div className="font-display text-[0.7rem] leading-[1.7] mb-2">
+            <div className="font-display text-[0.7rem] leading-[1.7]">
               <div className="flex gap-[0.6ch] whitespace-nowrap">
                 {decodeRows.binaryParts.map((p, i) => (
                   <span key={i} className={p.active ? 'text-accent font-medium' : 'text-subtle'}>
@@ -387,19 +386,20 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
               </div>
               <div className="text-foreground whitespace-nowrap">{decodeRows.decoded}</div>
             </div>
-            {/* Separator + field info */}
             <div className="border-t border-border my-2" />
-            <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em] mb-1">
+            <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em]">
               {overlayCard.path}
             </div>
-            {overlayCard.lines.map((line, i) => (
-              <div
-                key={i}
-                className="font-body text-[13px] leading-[19px] text-foreground"
-              >
-                {line}
-              </div>
-            ))}
+            <div
+              className="font-display text-[0.72rem] mt-1 break-all leading-[1.5]"
+              dangerouslySetInnerHTML={{
+                __html: `<span class="json-key">"${overlayCard.region.key}"</span>: <span class="text-muted">${escapeHtml(
+                  overlayCard.region.value.length > 80
+                    ? overlayCard.region.value.slice(0, 77) + '...'
+                    : overlayCard.region.value,
+                )}</span>`,
+              }}
+            />
           </div>
         </div>
       )}

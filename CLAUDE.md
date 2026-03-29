@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Portfolio website for contemporary artist aaajiao. One URL, three views of the same data:
+Portfolio website for contemporary artist aaajiao. One URL, four views of the same data:
 - **`.md` tab** — Markdown rendered via Streamdown (human-readable)
 - **`curl` tab** — interactive API explorer (structured JSON, Markdown, and binary examples)
+- **`txt` tab** — text-as-texture canvas visualization (Pretext proportional layout)
 - **`bin` tab** — bit-pixel bitmap visualization (binary representation)
 - **AI agents** hit `/api/*` endpoints and get raw JSON
 
@@ -49,30 +50,35 @@ Browser (/)                          AI (curl /api/*)
 App.tsx                       │
   → sort works by year desc   │
   → SiteHeader: .md / curl /  │
-    bin tab switch + theme    │
+    txt / bin tab switch +    │
+    theme                     │
   → .md tab: Streamdown +     │
     JSON overlay + download   │
   → curl tab: interactive     │
     API explorer + content    │
     negotiation examples      │
+  → txt tab: Pretext canvas   │
+    text texture + decode     │
   → bin tab: bit-pixel bitmap │
     + hover/click decode      │
 ```
 
-**Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → negotiateFormat(Accept) → JSON / Markdown / bytes → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses + negotiation demos) or bin tab (binary bitmap)`
+**Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → negotiateFormat(Accept) → JSON / Markdown / bytes → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses + negotiation demos) or txt tab (Pretext canvas text texture) or bin tab (binary bitmap)`
 
 ### Frontend (`src/`)
 
-- `App.tsx` — fetches `/api/works`, sorts works newest-first, manages `.md`/`curl`/`bin` tab state and theme, passes `Work[]` to active tab
-- `components/SiteHeader.tsx` — site title, `.md`/`curl`/`bin` tab switcher, theme toggle button
+- `App.tsx` — fetches `/api/works`, sorts works newest-first, manages `.md`/`curl`/`txt`/`bin` tab state and theme, passes `Work[]` to active tab
+- `components/SiteHeader.tsx` — site title, `.md`/`curl`/`txt`/`bin` tab switcher, theme toggle button
 - `components/ThemeToggle.tsx` — light/dark mode toggle (sun/moon icon)
 - `components/MdTab.tsx` — Markdown view container: JSON overlay toggle (`{ }` button), download button, wraps Portfolio
 - `components/CurlTab.tsx` — interactive API explorer: lists all endpoints with live responses, copy-to-clipboard curl commands, JSON syntax highlighting. Includes content negotiation examples (Markdown and Binary endpoints with custom `Accept` headers)
 - `components/Portfolio.tsx` — chunked Streamdown rendering with fade-in animation; receives `showJson` prop for JSON overlay mode
 - `components/WorkLayered.tsx` — single work card: Streamdown markdown foreground with optional semi-transparent JSON background overlay (via `mix-blend-multiply`/`screen`)
+- `components/TxtTab.tsx` — txt tab container: serializes works to compact JSON, builds byte offset map, renders TextGrid
+- `components/TextGrid.tsx` — Pretext-powered canvas text renderer: uses `prepareWithSegments()` for one-time measurement and `layoutWithLines()` for fast relayout on resize. Renders proportional-font text (IBM Plex Sans, 9px) to canvas with DPR scaling, overlay canvas for field highlights. Character-level hit testing via binary search with `measureText()`. Reuses DecodeOverlay for hover/click decode
 - `components/BinTab.tsx` — bin tab container: serializes works to JSON, encodes to bytes, builds byte offset map, renders BitGrid
 - `components/BitGrid.tsx` — dual-canvas bit-pixel renderer: base canvas (1:1 ratio with CSS `image-rendering: pixelated` scaling) + overlay canvas for field highlights. Handles mouse hover (RAF-throttled), click lock/unlock, touch, and Escape key. Reads theme colors from CSS variables
-- `components/DecodeOverlay.tsx` — three-layer decode tooltip: Layer 2 (hover) shows binary bits, hex bytes, decoded UTF-8 with active byte highlighted; Layer 3 (click/locked) adds JSON path and key-value display
+- `components/DecodeOverlay.tsx` — three-layer decode tooltip: Layer 2 (hover) shows binary bits, hex bytes, decoded UTF-8 with active byte highlighted; Layer 3 (click/locked) adds JSON path and key-value display. Shared by both TextGrid and BitGrid
 - `lib/jsonToMarkdown.ts` — re-export shim: forwards all exports from `shared/jsonToMarkdown.ts` so frontend imports remain unchanged
 - `lib/jsonHighlight.ts` — lightweight JSON syntax highlighter (regex-based, returns HTML with `<span>` classes for keys, strings, numbers, booleans, null)
 - `lib/byteOffsetMap.ts` — JSON string → byte offset field mapping:

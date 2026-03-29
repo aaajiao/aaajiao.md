@@ -1,17 +1,18 @@
 # aaajiao.md
 
-One URL, three views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at three levels of abstraction.
+One URL, four views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at four levels of abstraction.
 
 - **`.md`** — human-readable Markdown via [Streamdown](https://github.com/vercel/streamdown)
 - **`curl`** — interactive API explorer with live JSON, Markdown, and binary responses
+- **`txt`** — text-as-texture: compact JSON laid out by [Pretext](https://github.com/chenglou/pretext) on canvas, hover/click to decode
 - **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode
 - **AI agents** hit `/api/*` and get structured JSON
 
-From Markdown to structured data to raw binary — the same information, three ways of seeing.
+From Markdown to structured data to text texture to raw binary — the same information, four ways of seeing.
 
-| `.md` tab | `curl` tab | `bin` tab |
-|-----------|------------|-----------|
-| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) | ![bin tab](public/screenshot-bin.png) |
+| `.md` tab | `curl` tab | `txt` tab | `bin` tab |
+|-----------|------------|-----------|-----------|
+| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) | ![txt tab](public/screenshot-txt.png) | ![bin tab](public/screenshot-bin.png) |
 
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 
@@ -51,7 +52,7 @@ All responses include CORS headers and `Content-Signal: ai-input=yes, ai-train=y
 
 ## Stack
 
-- **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown
+- **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown + [Pretext](https://github.com/chenglou/pretext)
 - **API**: Vercel Serverless Functions (Node.js)
 - **Data**: GitHub raw JSON (cached 5 min, no redeploy needed)
 - **Runtime**: Bun
@@ -85,6 +86,9 @@ Browser (/)                          AI (curl /api/*)
     -> curl tab: live API   |
        explorer + content   |
        negotiation demos    |
+    -> txt tab: Pretext     |
+       canvas text texture  |
+       + decode             |
     -> bin tab: bit-pixel   |
        bitmap + decode      |
 ```

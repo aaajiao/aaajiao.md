@@ -4,6 +4,7 @@ import { jsonToMarkdown } from './lib/jsonToMarkdown'
 import { MdTab } from './components/MdTab'
 import { CurlTab } from './components/CurlTab'
 import { BinTab } from './components/BinTab'
+import { TxtTab } from './components/TxtTab'
 import { SiteHeader } from './components/SiteHeader'
 import { useTheme } from './hooks/useTheme'
 
@@ -22,7 +23,7 @@ export default function App() {
   const [works, setWorks] = useState<Work[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'.md' | 'curl' | 'bin'>('.md')
+  const [activeTab, setActiveTab] = useState<'.md' | 'curl' | 'txt' | 'bin'>('.md')
   const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export default function App() {
         />
         {activeTab === '.md' && <MdTab works={works} onDownload={() => downloadMarkdown(works)} />}
         {activeTab === 'curl' && <CurlTab works={works} />}
+        {activeTab === 'txt' && <TxtTab works={works} theme={theme} />}
         {activeTab === 'bin' && <BinTab works={works} theme={theme} />}
       </div>
     </div>

@@ -33,10 +33,7 @@ interface OverlayCard {
   locked: boolean
   byteIndex: number
   region: FieldRegion
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  valueLines: string[]
 }
 
 export function BitGrid({ bytes, regions, theme, breathingState, onInteractionChange, onVisibleRangeChange }: BitGridProps) {
@@ -223,6 +220,17 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     const byteIndex = active?.byteIndex ?? region.start
 
+    // Pretext layout for value text
+    let val = region.value
+    if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1)
+    if (val.length > 300) val = val.slice(0, 297) + '...'
+    const prepared = prepareWithSegments(val, '12px "IBM Plex Sans", sans-serif')
+    const layout = layoutWithLines(prepared, 300, 17)
+    const valueLines = layout.lines.slice(0, 6).map((l) => l.text)
+    if (layout.lines.length > 6) {
+      valueLines[5] = valueLines[5] + '...'
+    }
+
     // Position: for hover/click use cursor pos; for breathing use region top-center
     let posX: number
     let posY: number
@@ -247,6 +255,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       locked: !!lockState,
       byteIndex,
       region,
+      valueLines,
     }
   }, [hoverState, lockState, breathingState, containerWidth, columnsPerRow, regionToY])
 
@@ -441,16 +450,15 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
             <div className="font-display text-[0.65rem] text-subtle tracking-[0.02em]">
               {overlayCard.path}
             </div>
-            <div
-              className="font-display text-[0.72rem] mt-1 break-all leading-[1.5]"
-              dangerouslySetInnerHTML={{
-                __html: `<span class="json-key">"${overlayCard.region.key}"</span>: <span class="text-muted">${escapeHtml(
-                  overlayCard.region.value.length > 80
-                    ? overlayCard.region.value.slice(0, 77) + '...'
-                    : overlayCard.region.value,
-                )}</span>`,
-              }}
-            />
+            <div className="mt-1">
+              <span className="json-key font-display text-[0.72rem]">"{overlayCard.region.key}"</span>
+              <span className="text-muted font-display text-[0.72rem]">: </span>
+              {overlayCard.valueLines.map((line, i) => (
+                <div key={i} className="font-body text-[0.78rem] leading-[1.45] text-muted">
+                  {line}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

@@ -185,7 +185,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     }
   }, [hoverState, lockState, breathingState, columnsPerRow])
 
-  // Pretext watermark: decoded text floating over muted binary during breathing
+  // Pretext watermark: binary region transforms into readable text in-place
   const watermark = useMemo(() => {
     const active = lockState ?? hoverState
     if (active || !breathingState || breathingState.opacity <= 0) return null
@@ -194,22 +194,24 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const { region, opacity } = breathingState
     const { yStart, yEnd } = regionToY(region)
     const regionHeight = yEnd - yStart
-    if (regionHeight < 20) return null
 
     let text = region.value
     if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1)
+    if (text.startsWith('[')) text = text.slice(0, 120)
     if (text.length > 400) text = text.slice(0, 400)
 
-    const font = '14px "IBM Plex Sans", sans-serif'
-    const lineHeight = 20
-    const padding = 12
-    const textWidth = containerWidth - padding * 2
+    const font = '13px "IBM Plex Sans", sans-serif'
+    const lineHeight = 18
+    const pad = 6
+    const minHeight = lineHeight + pad * 2
+    const effectiveHeight = Math.max(regionHeight, minHeight)
+    const textWidth = containerWidth - pad * 2
     const prepared = prepareWithSegments(text, font)
-    const maxLines = Math.max(1, Math.floor((regionHeight - padding * 2) / lineHeight))
+    const maxLines = Math.max(1, Math.floor((effectiveHeight - pad * 2) / lineHeight))
     const layout = layoutWithLines(prepared, textWidth, lineHeight)
     const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
 
-    return { lines, yStart, regionHeight, opacity, font, lineHeight, padding }
+    return { lines, yStart, effectiveHeight, opacity, font, lineHeight, pad }
   }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, regionToY])
 
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
@@ -388,33 +390,26 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       />
       {watermark && (
         <div
-          className="absolute left-0 right-0 pointer-events-none"
+          className="absolute left-0 right-0 pointer-events-none overflow-hidden bg-surface"
           style={{
             top: watermark.yStart,
-            height: watermark.regionHeight,
+            height: watermark.effectiveHeight,
             opacity: watermark.opacity,
+            padding: watermark.pad,
           }}
         >
-          <div
-            className="absolute inset-0 bg-surface/75 backdrop-blur-[1px]"
-          />
-          <div
-            className="relative overflow-hidden"
-            style={{ padding: watermark.padding, height: watermark.regionHeight }}
-          >
-            {watermark.lines.map((line, i) => (
-              <div
-                key={i}
-                className="text-foreground/70"
-                style={{
-                  font: watermark.font,
-                  lineHeight: `${watermark.lineHeight}px`,
-                }}
-              >
-                {line}
-              </div>
-            ))}
-          </div>
+          {watermark.lines.map((line, i) => (
+            <div
+              key={i}
+              className="text-foreground"
+              style={{
+                font: watermark.font,
+                lineHeight: `${watermark.lineHeight}px`,
+              }}
+            >
+              {line}
+            </div>
+          ))}
         </div>
       )}
       {overlayCard && decodeRows && (

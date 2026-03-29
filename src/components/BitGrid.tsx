@@ -158,10 +158,18 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const FLOW_FONT = '13px "IBM Plex Sans", sans-serif'
     const bitCellWidth = pixelSize
 
-    // Small window around the region (~40 bytes context each side)
-    const contextBytes = 40
-    const windowStart = Math.max(0, region.start - contextBytes)
-    const windowEnd = Math.min(bytes.length, region.end + contextBytes)
+    // Window = entire visible viewport
+    const el = containerRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const viewTop = Math.max(0, -rect.top)
+    const viewBottom = Math.min(rect.height, window.innerHeight - rect.top)
+    if (viewBottom <= viewTop) return
+
+    const viewStartRow = Math.floor(viewTop / pixelSize)
+    const viewEndRow = Math.ceil(viewBottom / pixelSize)
+    const windowStart = Math.max(0, Math.floor((viewStartRow * columnsPerRow) / 8))
+    const windowEnd = Math.min(bytes.length, Math.ceil((viewEndRow * columnsPerRow) / 8))
 
     // Decode region text + prepare with Pretext
     const regionBytes = bytes.slice(region.start, region.end)

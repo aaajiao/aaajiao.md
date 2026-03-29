@@ -200,18 +200,33 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     if (text.startsWith('[')) text = text.slice(0, 120)
     if (text.length > 400) text = text.slice(0, 400)
 
+    const pixelSize = containerWidth / columnsPerRow
+    const startBit = region.start * 8
+    const endBit = region.end * 8
+    const startRow = Math.floor(startBit / columnsPerRow)
+    const endRow = Math.floor(Math.max(0, endBit - 1) / columnsPerRow)
+
+    let xStart: number
+    let width: number
+    if (startRow === endRow) {
+      xStart = (startBit % columnsPerRow) * pixelSize
+      width = (endBit - startBit) * pixelSize
+    } else {
+      xStart = 0
+      width = containerWidth
+    }
+
     const font = '13px "IBM Plex Sans", sans-serif'
     const lineHeight = 18
-    const pad = 6
-    const minHeight = lineHeight + pad * 2
-    const effectiveHeight = Math.max(regionHeight, minHeight)
-    const textWidth = containerWidth - pad * 2
+    const pad = 4
+    const effectiveHeight = Math.max(regionHeight, lineHeight + pad * 2)
+    const textWidth = Math.max(width - pad * 2, 60)
     const prepared = prepareWithSegments(text, font)
     const maxLines = Math.max(1, Math.floor((effectiveHeight - pad * 2) / lineHeight))
     const layout = layoutWithLines(prepared, textWidth, lineHeight)
     const lines = layout.lines.slice(0, maxLines).map((l) => l.text)
 
-    return { lines, yStart, effectiveHeight, opacity, font, lineHeight, pad }
+    return { lines, yStart, xStart, width, effectiveHeight, opacity, font, lineHeight, pad }
   }, [breathingState, hoverState, lockState, containerWidth, columnsPerRow, regionToY])
 
   // Unified overlay card — positioned like old DecodeOverlay (above the point)
@@ -390,9 +405,11 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       />
       {watermark && (
         <div
-          className="absolute left-0 right-0 pointer-events-none overflow-hidden bg-surface"
+          className="absolute pointer-events-none overflow-hidden bg-surface"
           style={{
             top: watermark.yStart,
+            left: watermark.xStart,
+            width: watermark.width,
             height: watermark.effectiveHeight,
             opacity: watermark.opacity,
             padding: watermark.pad,

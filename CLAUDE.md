@@ -4,13 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Portfolio website for contemporary artist aaajiao. One URL, three views of the same data:
+Portfolio website and agent skill for contemporary artist aaajiao. Two components:
+
+### Website (aaajiao.md)
+One URL, three views of the same data:
 - **`.md` tab** — Markdown rendered via Streamdown (human-readable)
 - **`curl` tab** — interactive API explorer (structured JSON, Markdown, and binary examples)
 - **`bin` tab** — bit-pixel bitmap visualization with breathing decode animation (Pretext sequential bit→text reflow)
 - **AI agents** hit `/api/*` endpoints and get raw JSON
 
 The API supports HTTP content negotiation — the same URL returns JSON, Markdown, or raw bytes depending on the `Accept` header. A `Content-Signal` header declares data usage rights (`ai-input=yes, ai-train=yes, search=yes`).
+
+### Agent Skill (`skills/aaajiao/`)
+A distillation of aaajiao's conceptual framework into the [Agent Skills](https://agentskills.io) standard. `SKILL.md` contains the core identity, methodology, and voice rules. Reference documents live in `docs/` — interviews, project documents, media coverage (58 MD articles + 40 PDFs), letters, and exhibition applications. The skill reads `docs/` via GitHub raw URLs so external users can access them without cloning the repo.
 
 All work data is fetched from GitHub (`aaajiao/aaajiao_scraper` repo → `aaajiao_works.json`) with in-memory caching and ETag-based conditional requests.
 
@@ -121,6 +127,23 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 ### Vercel Config
 
 `vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`. Framework is set to `vite`.
+
+### Agent Skill (`skills/aaajiao/`)
+
+- `skills/aaajiao/SKILL.md` — core distillation (~4k tokens): identity, double helix framework, concept-as-filter methodology, voice rules, key works, knowledge base pointers
+
+### Knowledge Base (`docs/`)
+
+- `docs/interview/` — podcast transcripts and artist interviews (primary sources for voice and thinking)
+- `docs/letter/` — personal correspondence (private voice)
+- `docs/opencall/` — exhibition applications (public voice)
+- `docs/project/symbiosis/` — ongoing project documentation
+- `docs/media/articles/` — 58 media articles as Markdown (critical reception, 2010-2023)
+- `docs/media/pdf/` — 40 print media PDFs (original magazine layouts)
+- `docs/media/print-index.md` — print coverage index
+- `docs/media/online-index.md` — online coverage index
+
+These files are not part of the Vite build. They serve as reference material for the agent skill, accessed via GitHub raw URLs.
 
 ## Key Data Source
 

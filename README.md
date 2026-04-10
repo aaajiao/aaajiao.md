@@ -15,6 +15,23 @@ From Markdown to structured data to raw binary — the same information, three w
 
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 
+## Agent Skill
+
+This repo also contains an **aaajiao agent skill** — a distillation of the artist's conceptual framework, critical methodology, and voice into a format that AI agents can load and use.
+
+- **`skills/aaajiao/SKILL.md`** — the core distillation: identity, double helix framework, concept-as-filter methodology, vocabulary, voice rules, and pointers to reference documents
+- **`docs/`** — the knowledge base: interview transcripts, project documents, letters, media coverage (58 articles + 40 PDFs), and exhibition applications
+
+The skill follows the [Agent Skills](https://agentskills.io) open standard. To use it, copy `skills/aaajiao/` to your agent's skill directory:
+
+```
+~/.claude/skills/aaajiao/    # Claude Code
+~/.codex/skills/aaajiao/     # Codex
+~/.openclaw/skills/aaajiao/  # OpenClaw
+```
+
+The skill reads reference documents from this public repo via GitHub raw URLs. See [SKILL.md](skills/aaajiao/SKILL.md) for details.
+
 ## API
 
 ```bash

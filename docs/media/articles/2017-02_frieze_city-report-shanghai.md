@@ -1,0 +1,71 @@
+# City Report: Shanghai
+
+## Is the city stepping out of Beijing's shadow as China's art capital?
+
+**来源**: Frieze Magazine
+**作者**: Daniel Szehin Ho, Alvin Li, Arthur Solway
+**日期**: 2017年2月15日
+**原文链接**: https://frieze.com/article/city-report-shanghai
+**期刊**: Frieze Issue 185
+
+---
+
+## Arthur Solway
+
+When I first landed in Shanghai back in 2005, I came as a wide-eyed, wet-behind-the-ears visitor. The city was already beginning to get a bit of a global buzz. Once known as 'The Pearl of the East' (or 'The Whore of the Orient' – take your pick), Shanghai was referred to in the popular press, and by those I encountered who had fallen helplessly under its spell, as the hottest, hippest place on the planet. I had lived and worked in New York for some 30 years and felt it was time for a radical change as I entered my 50s. My Mandarin-speaking skills were elementary at best, but I moved to Shanghai two years later.
+
+During that first visit in 2005, I attended the inaugural exhibition at the Museum of Contemporary Art Shanghai (MoCA), the city's first privately funded contemporary art institution. Located in the middle of People's Park, MoCA was the brainchild of Samuel Kung, a Hong Kong businessman and entrepreneur. The show – a mini retrospective by the flamboyant French photography duo Pierre et Gilles – was a brash, outrageous and somewhat disastrous opening statement. The work's overtly homoerotic content apparently caused significant controversy internally: rumour was that most of the curatorial department and senior staff walked from their jobs only days after the opening. Many felt that the exhibition was a huge misstep, that it should have engaged with the city at a more grassroots level and, even, that it was downright unpatriotic. But this didn't deter Kung, who quickly retrenched and managed to keep the institution running with hugely successful blockbuster travelling exhibitions, especially those geared toward the fashion world and luxury brands such as Salvatore Ferragamo and Chanel.
+
+In many ways, this is a revealing case study for the commingling of art, commerce and fashion (as well as mass appeal and cultural soft power) particular to Shanghai: Paris may have the Fondation Louis Vuitton, but Shanghai has the K11 Art Mall, opened in 2013 by Hong Kong developer and billionaire Adrian Cheng. The newest addition to the city's cultural landscape is the Fosun Foundation and Art Centre, which opened in November as part of the larger Bund Finance Centre, spearheaded by the Shanghai-based multibillion-dollar conglomerate Fosun International Ltd. Situated in a stunning multilevel edifice, designed by Foster + Partners and Heatherwick Studio, the building's facade is a revolving, motorized spectacle of golden bamboo rods.
+
+I came to Shanghai to set up James Cohan, the first New York gallery to establish itself in the city. It was a wildly ambitious idea: many thought I had completely lost my mind; others believed that perhaps I was ahead of the curve. We secured a beautiful 1936, art-deco garden villa in the former French Concession where we mounted exhibitions by the artists from the gallery's roster and others, many of whom had never previously shown in China. After eight years there, however, it was time for me to step back, take stock and see what was happening.
+
+Jokingly, I've said it either takes the proverbial 5,000 years for things to change in China or they happen in the blink of an eye. In the decade or so since MoCA opened its doors, the institution has been joined by a growing number of other privately owned and funded museums, seeded by prominent, über-wealthy and successful players in the Shanghai business world. Wang Wei and her husband Liu Yiqian, whose rags-to-riches tale was recently recounted in The New Yorker, have built not one but two branches of the Long Museum, while Budi Tek, the Chinese-Indonesian collector, philanthropist and founder of the Yuz Museum, has presented some of the most important international exhibitions to come to the city. These include last year's spectacular Alberto Giacometti retrospective – the largest presentation to date of the artist's work. There are also plans, already well underway, by the renowned Shanghai collector, Qiao Zhibing – a nightclub and entertainment tycoon – to transform a group of abandoned oil tanks into an art park with multiple museum spaces, scheduled to open next year.
+
+The bravado of the private sector in Shanghai is impressive, for sure, but it is also tied to the fact that virtually no state funding exists for the arts. The lone exception is Power Station of Art (PSA), the first state-run contemporary art museum in mainland China, which opened in 2012. A former power plant, it was renovated at a cost of over 400 million yuan. With a mix of regional and international programmes, its flagship exhibition is the Shanghai Biennale, currently in its 11th edition. While PSA is a state-run institution, it nevertheless continues to struggle with operating and programming costs. Public perception of government spending plays a role in all of this; there are sceptics. The artist Qiu Zhijie – who co-curated the 9th edition of the biennale in 2012, along with veteran dealer and curator Johnson Chang, Boris Groys and Jens Hoffmann – commented at the time that, while government funding was a step in the right direction, a real understanding of culture needs nurturing and cultivation. I am reminded of an old proverb, often applied to overzealous economic ambitions and rapid progress: 'The water that floats the boat can also sink it.'
+
+Much of this development is happening in the newly formed West Bund art district, which is quickly becoming Shanghai's cultural corridor along the Huangpu River. Lorenz Helbling, the Swiss-born founder of ShangART, celebrated the gallery's 20th anniversary in 2016 by relocating to a massive new building next to the site of the annual West Bund Art and Design Fair, which recently completed its third iteration. Few would dispute that Helbling's pioneering vision has been responsible not only for creating a market, but also for the fundamental understanding of what we know about contemporary Chinese art and artists today.
+
+You can still visit the cluster of galleries in the shabby former textile factories of the M50 art district, where ShangART was formerly located, though the area now caters mostly to tourists rather than aficionados. Meanwhile, in the former French Concession, Leo Xu Projects is gaining a solid reputation and BANK, another young commercial gallery, recently relocated nearby, having been abruptly evicted last year from a beautiful 1925 landmark building by the local district government. The days of guanxi (relationship building) with gifts or simple gestures of goodwill – such as my own experience of buying dozens of watermelons to give to neighbours who lived next to the gallery – are long gone. In the blink of an eye nowadays, you can find yourself out on the street.
+
+Where is it all heading? Only time will tell whether Shanghai can achieve its dream of becoming the nation's cultural capital. When I decided to make Shanghai my home, it partly stemmed from a desire to observe the city's evolution from the front row. And, from where I'm sitting, things don't look to be slowing down any time soon.
+
+---
+
+## Alvin Li
+
+When I moved back to Shanghai three years ago, after studying in the US, the city was producing more DJ wannabes than artists. I dived into the underground to run queer film screenings and parties; art came later. But a shift in power from Beijing – a city long acknowledged as China's art capital – to Shanghai has been well under way since the turn of the decade. This past November, which saw the simultaneous opening of a biennale, two art fairs and a dazzling number of gallery exhibitions, served to trumpet the city's ascendance. However, the news stories have tended to focus on sizes of buildings, sums of money and superstar curators, seemingly forgetting the artist's a priori role in any art scene. While my attempt here to sketch the city through the practice of three local artists is necessarily both personal and partial, I hope it will serve as a reminder that, without the artists, nothing could be written, curated or sold.
+
+Artist-run spaces may be everywhere in centres like New York, but they are only just coming into their own in Shanghai. Amongst the first of these was am art space, founded in 2008 by the artist Yu Ji and her partner, fellow artist Deng Yeming. Initially, am functioned as a kind of salon, in which young local artists like Lu Yang and Zhang Ruyi could test out their ideas. In 2010, it relocated to its current basement venue and has since housed international residencies – including artist-duo Amy Lien and Enzo Camacho – as well as more developed projects. Defining am as a 'room for introspection', Yu reflects that the revamped space has allowed her a more profound appreciation of artistic labour, which has fed back into her own sculptural and performance practices. These are often reflections on the durability of materials and memory, and the elasticity of time. A recent highlight is Etudes-Lento III (2016), an installation in the mountains surrounding the Sifang Art Museum in Nanjing, for which the artist spent a month hand painting pine resin on to a floating structure suspended in the upper branches of a tree. The piece will remain there indefinitely, until it degrades or is overgrown.
+
+Although aaajiao is not a Shanghai native, and now spends half of his time in Berlin, he so perfectly synchronizes with the tempo of the city that it would be an oversight not to include him here. aaajiao moved to Shanghai in 2007, after some fruitless attempts to navigate the then-booming Beijing art world, which tended to favour conventional media such as sculpture and painting. In comparison, Shanghai – historically more hybrid and perhaps, therefore, more sceptical of 'authenticity' – has provided new media artists, such as aaajiao, Hu Weiyi and Miao Ying, with the space and resources to experiment. From his early interactive installations through running Xindanwei (a short-lived 'innovative company' that was part social-media platform, part creative hub for startups) to his more recent projects, speculating on the future of human societies driven by technology, aaajiao is a cyber flâneur. His work addresses themes ranging from data processing and the country's internet usage to electronic music and medicine, to envision contemporary Chinese consciousness in a way that is both emblematic of artists of his generation and distinctly his own.
+
+Born in 1980 in Gansu Province, Zhang Ding is the oldest artist on my list; yet, he is arguably also the most engaged with the present. Having lived in Shanghai since 2004, Zhang has developed his artistic practice out of a documentary filmmaking career that focused on local marginal communities, such as migrants and homosexuals, and has since evolved into an elaborate maze of multimedia installations and happenings. His strand of institutional critique is particularly provocative: a recent project, Devouring Time (2016), saw him turn the Rockbund Art Museum into a jail where art world A-listers are locked in gilded cells and forced to finish a lunch typically served in Chinese prisons. Preferring the moniker of producer to artist, he has also been actively involved in Shanghai nightlife, organizing parties and live shows where he can observe the city's indefatigable youth culture.
+
+With museums mushrooming in Shanghai, the real question is whether artists will also establish themselves here; otherwise, there may soon be as many institutions as artists. But that in itself deserves a whirl as a thought experiment: Shanghai's skyline is made for dystopian fantasies.
+
+---
+
+## Daniel Szehin Ho
+
+Aptly enough for a city with the epithet of 'Modu' ('City of Magic/City of Demons'), perspectives on the Shanghai art scene can veer from one extreme to another. On the one hand, it is the worst of all possible worlds: authoritarian repression coupled with a money-trumps-all art market, in which museums burgeon as set pieces of a plutocratic yet spectacular culture industry. On the other hand, it represents the magic of everything possible: out of an ossified state system and an informal network of artists, a whole art ecology has evolved over the last 20 years.
+
+The Shanghai Biennale, now in its 11th edition, has become a significant platform for contemporary art in Asia. The fair's curatorial vision has shifted over the years, but it has consistently provided a space for artists to engage with pressing social and political issues. The West Bund Art and Design Fair, which takes place annually, has also become a major event on the international art calendar, attracting galleries and collectors from around the world.
+
+The city's art infrastructure has expanded dramatically in recent years. Beyond the major institutions and fairs, there are numerous smaller galleries, artist-run spaces, and independent curators who are shaping the contemporary art discourse in Shanghai. These smaller players often take more risks and engage with more experimental and politically engaged work than the larger institutions.
+
+The question of how Shanghai will continue to develop as an art capital remains open. Will it continue to be driven by private wealth and market forces, or will there be a shift towards more public funding and support for the arts? Will the city's art scene become more diverse and inclusive, or will it continue to be dominated by a small group of wealthy collectors and institutions? These are the questions that will shape Shanghai's future as an art capital.
+
+---
+
+## Author Bios
+
+**Arthur Solway** is based in Shanghai, China. His essays, reviews and poetry have appeared most recently in Art Asia Pacific, Artforum, TriQuarterly and BOMB.
+
+**Alvin Li** is a writer, translator and queer activist based in Shanghai, China.
+
+**Daniel Szehin Ho** is editor-in-chief of Ran Dian, a bilingual magazine of contemporary art based in China.
+
+---
+
+**标签**: #aaajiao #徐文恺 #Shanghai #City Report #Frieze #2017 #newmedia #contemporary-art

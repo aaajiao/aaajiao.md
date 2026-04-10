@@ -6,12 +6,13 @@ One URL, three views. A portfolio site for contemporary artist [aaajiao](https:/
 - **`curl`** — interactive API explorer with live JSON, Markdown, and binary responses
 - **`bin`** — bit-pixel bitmap: every byte of JSON rendered as 8 pixels, hover/click to decode, ambient breathing animation decodes fields sequentially using [Pretext](https://github.com/chenglou/pretext)
 - **AI agents** hit `/api/*` and get structured JSON
+- **`skill`** — agent skill: distilled conceptual framework for AI agents to load and think with
 
-From Markdown to structured data to raw binary — the same information, three ways of seeing.
+From Markdown to structured data to raw binary to cognition — the same information, four ways of seeing.
 
-| `.md` tab | `curl` tab | `bin` tab |
-|-----------|------------|-----------|
-| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) | ![bin tab](public/screenshot-bin.png) |
+| `.md` tab | `curl` tab | `bin` tab | `skill` tab |
+|-----------|------------|-----------|-------------|
+| ![.md tab](public/screenshot-md.png) | ![curl tab](public/screenshot-curl.png) | ![bin tab](public/screenshot-bin.png) | ![skill tab](public/screenshot-skill.png) |
 
 No local data copy. All work data is fetched at runtime from the [aaajiao_scraper](https://github.com/aaajiao/aaajiao_scraper) repo on GitHub.
 

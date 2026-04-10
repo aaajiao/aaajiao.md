@@ -1,6 +1,6 @@
 import { ThemeToggle } from './ThemeToggle'
 
-type TabId = '.md' | 'curl' | 'bin'
+type TabId = '.md' | 'curl' | 'bin' | 'skill'
 
 interface SiteHeaderProps {
   theme: string
@@ -45,6 +45,16 @@ export function SiteHeader({ theme, onToggleTheme, activeTab, onTabChange }: Sit
               onClick={() => onTabChange('bin')}
             >
               bin
+            </button>
+            <button
+              className={`font-display text-[0.8rem] tracking-[0.02em] px-[0.65rem] py-1 border rounded-sm cursor-pointer transition-colors duration-200 ${
+                activeTab === 'skill'
+                  ? 'text-foreground bg-code border-border'
+                  : 'text-subtle bg-transparent border-transparent hover:text-muted'
+              }`}
+              onClick={() => onTabChange('skill')}
+            >
+              skill
             </button>
           </nav>
         </div>

@@ -17,20 +17,57 @@ No local data copy. All work data is fetched at runtime from the [aaajiao_scrape
 
 ## Agent Skill
 
-This repo also contains an **aaajiao agent skill** — a distillation of the artist's conceptual framework, critical methodology, and voice into a format that AI agents can load and use.
+This repo contains an **aaajiao agent skill** — a distillation of the artist's conceptual framework, critical methodology, and voice into a format that AI agents can load and use. It follows the [Agent Skills](https://agentskills.io) open standard.
 
-- **`skills/aaajiao/SKILL.md`** — the core distillation: identity, double helix framework, concept-as-filter methodology, vocabulary, voice rules, and pointers to reference documents
-- **`docs/`** — the knowledge base: interview transcripts, project documents, letters, media coverage (58 articles + 40 PDFs), and exhibition applications
+- **[`skills/aaajiao/SKILL.md`](skills/aaajiao/SKILL.md)** — core distillation: identity, double helix framework, concept-as-filter methodology, vocabulary, voice rules
+- **`docs/`** — knowledge base: interview transcripts, project documents, letters, media coverage (58 articles + 40 PDFs)
 
-The skill follows the [Agent Skills](https://agentskills.io) open standard. To use it, copy `skills/aaajiao/` to your agent's skill directory:
+All reference documents are public in this repo. The skill reads them via GitHub raw URLs — no local files needed.
+
+### Install
+
+**Quick start** — tell your agent to read the skill directly:
 
 ```
-~/.claude/skills/aaajiao/    # Claude Code
-~/.codex/skills/aaajiao/     # Codex
-~/.openclaw/skills/aaajiao/  # OpenClaw
+Read https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md
+and use it to understand aaajiao's practice.
 ```
 
-The skill reads reference documents from this public repo via GitHub raw URLs. See [SKILL.md](skills/aaajiao/SKILL.md) for details.
+**Add to a project** — clone into your project's skill directory:
+
+```bash
+# Claude Code
+git clone https://github.com/aaajiao/aaajiao.md.git /tmp/aaajiao-skill
+cp -r /tmp/aaajiao-skill/skills/aaajiao .claude/skills/aaajiao
+
+# Codex
+cp -r /tmp/aaajiao-skill/skills/aaajiao .codex/skills/aaajiao
+
+# OpenClaw
+cp -r /tmp/aaajiao-skill/skills/aaajiao .openclaw/skills/aaajiao
+```
+
+**Install globally** — available in all your projects:
+
+```bash
+# Claude Code
+cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.claude/skills/aaajiao
+
+# Codex
+cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.codex/skills/aaajiao
+
+# OpenClaw
+cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.openclaw/skills/aaajiao
+```
+
+**Stay updated** — the skill evolves as new works and interviews are added. Pull the latest:
+
+```bash
+cd /tmp/aaajiao-skill && git pull
+cp skills/aaajiao/SKILL.md ~/.claude/skills/aaajiao/SKILL.md  # or your tool's path
+```
+
+The `docs/` knowledge base lives on GitHub and is always fetched fresh — no need to update locally.
 
 ## API
 

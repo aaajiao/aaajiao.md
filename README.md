@@ -26,48 +26,39 @@ All reference documents are public in this repo. The skill reads them via GitHub
 
 ### Install
 
-**Quick start** — tell your agent to read the skill directly:
+**One command** — installs to all your AI agents (Claude Code, Codex, OpenClaw, Cursor, etc.):
+
+```bash
+npx skills add aaajiao/aaajiao.md --all
+```
+
+Or pick a specific agent:
+
+```bash
+npx skills add aaajiao/aaajiao.md -a claude-code
+npx skills add aaajiao/aaajiao.md -a codex
+npx skills add aaajiao/aaajiao.md -a openclaw
+```
+
+Install globally (`-g`) to make it available across all your projects:
+
+```bash
+npx skills add aaajiao/aaajiao.md --all -g
+```
+
+**Update** — the skill evolves as new works and interviews are added:
+
+```bash
+npx skills update
+```
+
+**Without CLI** — you can also tell your agent to read the skill directly:
 
 ```
 Read https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md
-and use it to understand aaajiao's practice.
 ```
 
-**Add to a project** — clone into your project's skill directory:
-
-```bash
-# Claude Code
-git clone https://github.com/aaajiao/aaajiao.md.git /tmp/aaajiao-skill
-cp -r /tmp/aaajiao-skill/skills/aaajiao .claude/skills/aaajiao
-
-# Codex
-cp -r /tmp/aaajiao-skill/skills/aaajiao .codex/skills/aaajiao
-
-# OpenClaw
-cp -r /tmp/aaajiao-skill/skills/aaajiao .openclaw/skills/aaajiao
-```
-
-**Install globally** — available in all your projects:
-
-```bash
-# Claude Code
-cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.claude/skills/aaajiao
-
-# Codex
-cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.codex/skills/aaajiao
-
-# OpenClaw
-cp -r /tmp/aaajiao-skill/skills/aaajiao ~/.openclaw/skills/aaajiao
-```
-
-**Stay updated** — the skill evolves as new works and interviews are added. Pull the latest:
-
-```bash
-cd /tmp/aaajiao-skill && git pull
-cp skills/aaajiao/SKILL.md ~/.claude/skills/aaajiao/SKILL.md  # or your tool's path
-```
-
-The `docs/` knowledge base lives on GitHub and is always fetched fresh — no need to update locally.
+The `docs/` knowledge base lives on GitHub and is always fetched fresh by the agent at runtime.
 
 ## API
 

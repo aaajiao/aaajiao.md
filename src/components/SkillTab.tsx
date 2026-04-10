@@ -66,9 +66,7 @@ export function SkillTab() {
 // interviews are added to the repository.
 //
 // docs/ is fetched fresh from GitHub at
-// runtime — always up to date.
-//
-// Source: ${repoUrl}`,
+// runtime — always up to date.`,
     },
   ]
 
@@ -90,6 +88,14 @@ export function SkillTab() {
         <p className="mt-2 text-subtle">
           .md → human reads text / curl → machine reads structure / bin → machine reads bytes / <span className="text-foreground">skill → agent reads cognition</span>
         </p>
+      </div>
+
+      <div className="flex items-center gap-3 font-display text-[0.72rem] text-subtle">
+        <a href={repoUrl} className="text-foreground underline decoration-border hover:decoration-foreground transition-colors duration-200" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <span>·</span>
+        <a href={`${repoUrl}/tree/main/skills/aaajiao`} className="text-foreground underline decoration-border hover:decoration-foreground transition-colors duration-200" target="_blank" rel="noopener noreferrer">SKILL.md</a>
+        <span>·</span>
+        <a href={`${repoUrl}/tree/main/docs`} className="text-foreground underline decoration-border hover:decoration-foreground transition-colors duration-200" target="_blank" rel="noopener noreferrer">Knowledge Base</a>
       </div>
 
       {sections.map((section, idx) => (

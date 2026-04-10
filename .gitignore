@@ -3,3 +3,7 @@ dist
 .vercel
 *.local
 .env*.local
+.DS_Store
+.claude/
+Icon?
+*.icns

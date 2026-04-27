@@ -13,6 +13,11 @@ export default function handler(_req: VercelRequest, res: VercelResponse) {
       single_work: '/api/works/{slug}',
       search: '/api/works?year=2024&type=Installation',
     },
+    llms_txt: {
+      description: 'AI-friendly site index following the llmstxt.org standard',
+      index: '/llms.txt',
+      full: '/llms-full.txt',
+    },
     content_negotiation: {
       description: 'All /api/works endpoints support content negotiation via Accept header',
       formats: {

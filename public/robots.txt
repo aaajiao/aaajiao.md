@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.aaajiao.md/sitemap.xml
+
+# LLM-friendly site index (llmstxt.org)
+# https://www.aaajiao.md/llms.txt
+# https://www.aaajiao.md/llms-full.txt

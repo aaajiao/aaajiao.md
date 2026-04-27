@@ -1,0 +1,35 @@
+# aaajiao — Contemporary artist, works archive
+
+> aaajiao (徐文恺, Xu Wenkai) is a media artist based between Berlin and Shanghai. Born 1984 in Wuhan, CS background. His practice uses concepts from technology as filters to reveal patterns in society — algorithmic governance, platform politics, digital identity, trade infrastructure.
+
+This site is the canonical works archive plus a portable agent skill. The same URLs serve JSON, Markdown, or raw bytes via HTTP `Accept` content negotiation. All endpoints declare `Content-Signal: ai-input=yes, ai-train=yes, search=yes`.
+
+## API
+
+- [API index](https://aaajiao.md/api): JSON map of all endpoints and content-negotiation formats
+- [All works (JSON)](https://aaajiao.md/api/works): default `Accept: application/json`
+- [All works (Markdown)](https://aaajiao.md/api/works): use `Accept: text/markdown`
+- [Single work](https://aaajiao.md/api/works/guard-i): pattern is `/api/works/{slug}` where slug is the last segment of the work URL, lowercased
+- Filters: append `?year=2024` or `?type=Installation` to `/api/works`
+
+## Agent skill
+
+- [SKILL.md](https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md): identity, double-helix framework, methodology, voice rules
+- [Repo](https://github.com/aaajiao/aaajiao.md): source for site and skill
+
+## Knowledge base (primary sources)
+
+- [Interviews](https://github.com/aaajiao/aaajiao.md/tree/main/docs/interview): podcast transcripts and artist interviews — primary source for voice and thinking
+- [Letters](https://github.com/aaajiao/aaajiao.md/tree/main/docs/letter): personal correspondence (private voice)
+- [Open call applications](https://github.com/aaajiao/aaajiao.md/tree/main/docs/opencall): exhibition applications (public voice)
+- [Project documents](https://github.com/aaajiao/aaajiao.md/tree/main/docs/project): ongoing project documentation including Symbiosis
+- [Media articles](https://github.com/aaajiao/aaajiao.md/tree/main/docs/media/articles): 58 Markdown articles, critical reception 2010–2023
+- [Media PDFs](https://github.com/aaajiao/aaajiao.md/tree/main/docs/media/pdf): 40 print magazine layouts
+- [Print index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/print-index.md) | [Online index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/online-index.md)
+
+## Optional
+
+- [llms-full.txt](https://aaajiao.md/llms-full.txt): full works archive as a single Markdown file
+- [Source data](https://github.com/aaajiao/aaajiao_scraper): upstream scraper repo with raw JSON
+- [robots.txt](https://aaajiao.md/robots.txt)
+- [sitemap.xml](https://aaajiao.md/sitemap.xml)

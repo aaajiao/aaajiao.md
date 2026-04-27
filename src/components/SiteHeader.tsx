@@ -11,11 +11,11 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ theme, onToggleTheme, activeTab, onTabChange }: SiteHeaderProps) {
   return (
-    <header className="flex items-end justify-between pb-8 mb-8 border-b border-border">
-      <div>
-        <div className="flex items-baseline gap-[1.2rem]">
-          <h1 className="font-display text-[2.5rem] font-medium tracking-[-0.02em] leading-none text-foreground">aaajiao</h1>
-          <nav className="flex gap-[0.15rem]">
+    <header className="flex items-end justify-between gap-3 pb-8 mb-8 border-b border-border">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-[1.2rem] gap-y-2">
+          <h1 className="font-display text-[2rem] sm:text-[2.5rem] font-medium tracking-[-0.02em] leading-none text-foreground">aaajiao</h1>
+          <nav className="flex flex-wrap gap-[0.15rem]">
             <button
               className={`font-display text-[0.8rem] tracking-[0.02em] px-[0.65rem] py-1 border rounded-sm cursor-pointer transition-colors duration-200 ${
                 activeTab === '.md'
@@ -60,7 +60,7 @@ export function SiteHeader({ theme, onToggleTheme, activeTab, onTabChange }: Sit
         </div>
         <p className="font-display text-[0.8rem] text-subtle mt-[0.4rem] tracking-[0.04em]">作品档案 / Works Archive</p>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center shrink-0">
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
       </div>
     </header>

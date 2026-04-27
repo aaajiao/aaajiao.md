@@ -95,6 +95,18 @@ curl -H "Accept: text/markdown" https://aaajiao.md/api/works/guard-i
 
 All responses include CORS headers and `Content-Signal: ai-input=yes, ai-train=yes, search=yes`.
 
+### LLM Discoverability
+
+The site implements the [llmstxt.org](https://llmstxt.org/) standard so AI agents can find and consume the archive without scraping HTML.
+
+```bash
+# Curated site index (static)
+curl https://aaajiao.md/llms.txt
+
+# Full works archive as a single Markdown file (dynamic, cached 60s)
+curl https://aaajiao.md/llms-full.txt
+```
+
 ## Stack
 
 - **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown + [Pretext](https://github.com/chenglou/pretext)

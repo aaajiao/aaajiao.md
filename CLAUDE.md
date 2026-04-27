@@ -97,9 +97,10 @@ Styling: Tailwind CSS v4 via `@tailwindcss/vite` plugin. Streamdown requires `@s
 
 Vercel Node.js functions (not part of the Vite build; `tsconfig.json` only covers `src/`).
 
-- `api/index.ts` — `GET /api` → API index/navigation JSON with `content_negotiation` field describing supported formats
+- `api/index.ts` — `GET /api` → API index/navigation JSON with `content_negotiation` and `llms_txt` fields describing supported formats and AI-discovery endpoints
 - `api/works/index.ts` — `GET /api/works` → all works, supports `?year=` and `?type=` query filters. Uses `sendNegotiated()` for content negotiation
 - `api/works/[slug].ts` — `GET /api/works/:slug` → single work lookup by URL slug. Uses `sendNegotiated()` for content negotiation
+- `api/llms-full.ts` — `GET /llms-full.txt` (via vercel.json rewrite) → full works archive as a single Markdown file. Reuses `fetchWorks()` (60s cache) + `buildFrontMatter` + `jsonToMarkdown`. Always returns `text/markdown; charset=utf-8` with `Content-Signal` header
 
 All API responses include `Cache-Control: s-maxage=300, stale-while-revalidate=600`, CORS headers, `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and `Vary: Accept`.
 
@@ -126,7 +127,15 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 
 ### Vercel Config
 
-`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`. Framework is set to `vite`.
+`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`, `/llms-full.txt` → `api/llms-full`. Framework is set to `vite`.
+
+### LLM Discoverability ([llmstxt.org](https://llmstxt.org/))
+
+- `public/llms.txt` — static curated site index (navigation, what's where). Built into `dist/` and served as `text/plain` by Vercel.
+- `/llms-full.txt` — dynamic full Markdown dump (handled by `api/llms-full.ts` via vercel.json rewrite). Stays in sync with scraper data; never becomes a stale snapshot.
+- `public/robots.txt` — points to both files in comments.
+
+Rule of thumb: **`llms.txt` static, `llms-full.txt` dynamic.** Static index almost never changes; full content must reflect current data or it rots.
 
 ### Agent Skill (`skills/aaajiao/`)
 

@@ -27,6 +27,13 @@ This site is the canonical works archive plus a portable agent skill. The same U
 - [Media PDFs](https://github.com/aaajiao/aaajiao.md/tree/main/docs/media/pdf): 40 print magazine layouts
 - [Print index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/print-index.md) | [Online index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/online-index.md)
 
+## Agent discovery
+
+- [API catalog](https://aaajiao.md/.well-known/api-catalog): RFC 9727 / 9264 linkset of all API endpoints (`application/linkset+json`)
+- [Agent Skills index](https://aaajiao.md/.well-known/agent-skills/index.json): Agent Skills Discovery v0.2.0 index, sha256-pinned to the canonical SKILL.md
+- Homepage `Link` headers (`/`): RFC 8288 entries pointing to the above plus `/api`, `/llms.txt`, `/llms-full.txt`
+- Homepage Markdown: `curl -H "Accept: text/markdown" https://aaajiao.md/` returns the full Markdown archive
+
 ## Optional
 
 - [llms-full.txt](https://aaajiao.md/llms-full.txt): full works archive as a single Markdown file

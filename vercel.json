@@ -4,6 +4,25 @@
     { "source": "/api", "destination": "/api/index" },
     { "source": "/api/works", "destination": "/api/works/index" },
     { "source": "/api/works/:slug", "destination": "/api/works/[slug]" },
-    { "source": "/llms-full.txt", "destination": "/api/llms-full" }
+    { "source": "/llms-full.txt", "destination": "/api/llms-full" },
+    { "source": "/.well-known/api-catalog", "destination": "/api/api-catalog" },
+    { "source": "/.well-known/agent-skills/index.json", "destination": "/api/agent-skills" },
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "destination": "/api/llms-full"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </.well-known/agent-skills/index.json>; rel=\"https://agentskills.io/rels/skills-index\"; type=\"application/json\", </api>; rel=\"service-doc\"; type=\"application/json\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt site index\", </llms-full.txt>; rel=\"alternate\"; type=\"text/markdown\"; title=\"Full works archive\""
+        },
+        { "key": "Vary", "value": "Accept" }
+      ]
+    }
   ]
 }

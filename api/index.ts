@@ -18,6 +18,12 @@ export default function handler(_req: VercelRequest, res: VercelResponse) {
       index: '/llms.txt',
       full: '/llms-full.txt',
     },
+    agent_discovery: {
+      description: 'Well-known endpoints for AI agent discovery',
+      api_catalog: '/.well-known/api-catalog',
+      agent_skills_index: '/.well-known/agent-skills/index.json',
+      homepage_markdown: 'curl -H "Accept: text/markdown" /',
+    },
     content_negotiation: {
       description: 'All /api/works endpoints support content negotiation via Accept header',
       formats: {

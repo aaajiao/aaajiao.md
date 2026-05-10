@@ -107,6 +107,23 @@ curl https://aaajiao.md/llms.txt
 curl https://aaajiao.md/llms-full.txt
 ```
 
+### Agent-readiness
+
+Discovery endpoints for AI agents and crawlers:
+
+```bash
+# API catalog (RFC 9727 / 9264 linkset)
+curl https://aaajiao.md/.well-known/api-catalog
+
+# Agent Skills Discovery v0.2.0 index
+curl https://aaajiao.md/.well-known/agent-skills/index.json
+
+# Homepage Markdown content negotiation
+curl -H "Accept: text/markdown" https://aaajiao.md/
+```
+
+The homepage `/` also returns RFC 8288 `Link` response headers pointing to the entries above. `robots.txt` declares `Content-Signal: ai-train=yes, search=yes, ai-input=yes`.
+
 ## Stack
 
 - **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown + [Pretext](https://github.com/chenglou/pretext)

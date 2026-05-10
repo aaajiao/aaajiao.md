@@ -101,6 +101,8 @@ Vercel Node.js functions (not part of the Vite build; `tsconfig.json` only cover
 - `api/works/index.ts` — `GET /api/works` → all works, supports `?year=` and `?type=` query filters. Uses `sendNegotiated()` for content negotiation
 - `api/works/[slug].ts` — `GET /api/works/:slug` → single work lookup by URL slug. Uses `sendNegotiated()` for content negotiation
 - `api/llms-full.ts` — `GET /llms-full.txt` (via vercel.json rewrite) → full works archive as a single Markdown file. Reuses `fetchWorks()` (60s cache) + `buildFrontMatter` + `jsonToMarkdown`. Always returns `text/markdown; charset=utf-8` with `Content-Signal` header
+- `api/api-catalog.ts` — `GET /.well-known/api-catalog` (via vercel.json rewrite) → linkset (RFC 9264) describing all API endpoints, their service-doc, and alternate representations. Returns `application/linkset+json` per RFC 9727
+- `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes sha256 (5-min cache), returns `{$schema, skills: [{name, type, description, url, sha256}]}`
 
 All API responses include `Cache-Control: s-maxage=300, stale-while-revalidate=600`, CORS headers, `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and `Vary: Accept`.
 
@@ -127,15 +129,28 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 
 ### Vercel Config
 
-`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`, `/llms-full.txt` → `api/llms-full`. Framework is set to `vite`.
+`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`, `/llms-full.txt` → `api/llms-full`, `/.well-known/api-catalog` → `api/api-catalog`, `/.well-known/agent-skills/index.json` → `api/agent-skills`. Framework is set to `vite`.
+
+It also defines a **conditional rewrite** on `/`: when the request `Accept` header matches `.*text/markdown.*`, `/` is rewritten to `/api/llms-full` so the homepage itself answers content negotiation. Browsers (which send `Accept: text/html,…`) still get the SPA.
+
+A `headers` block on `/` adds an RFC 8288 `Link` response header pointing to `/.well-known/api-catalog`, `/.well-known/agent-skills/index.json`, `/api`, `/llms.txt`, and `/llms-full.txt`, plus `Vary: Accept`. This is what agent-readiness scanners look for as the entry point.
 
 ### LLM Discoverability ([llmstxt.org](https://llmstxt.org/))
 
 - `public/llms.txt` — static curated site index (navigation, what's where). Built into `dist/` and served as `text/plain` by Vercel.
 - `/llms-full.txt` — dynamic full Markdown dump (handled by `api/llms-full.ts` via vercel.json rewrite). Stays in sync with scraper data; never becomes a stale snapshot.
-- `public/robots.txt` — points to both files in comments.
+- `public/robots.txt` — declares `Content-Signal: ai-train=yes, search=yes, ai-input=yes`, sitemap, and points to llms.txt / llms-full.txt in comments.
 
 Rule of thumb: **`llms.txt` static, `llms-full.txt` dynamic.** Static index almost never changes; full content must reflect current data or it rots.
+
+### Agent-readiness discovery (`.well-known/`)
+
+Endpoints aimed at automated discovery by AI agents and scanners (e.g. [isitagentready.com](https://isitagentready.com/)):
+
+- `/.well-known/api-catalog` — RFC 9727 / RFC 9264 linkset of all API endpoints
+- `/.well-known/agent-skills/index.json` — Agent Skills Discovery v0.2.0 index pointing to `skills/aaajiao/SKILL.md` with sha256
+- Homepage `Link` response header lists the entries above so agents can discover them without crawling
+- Homepage content negotiation: `curl -H "Accept: text/markdown" https://aaajiao.md/` returns the full Markdown archive (rewrites to `/llms-full.txt`)
 
 ### Agent Skill (`skills/aaajiao/`)
 

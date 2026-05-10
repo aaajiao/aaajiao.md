@@ -131,9 +131,11 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 
 `vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`, `/llms-full.txt` → `api/llms-full`, `/.well-known/api-catalog` → `api/api-catalog`, `/.well-known/agent-skills/index.json` → `api/agent-skills`. Framework is set to `vite`.
 
-It also defines a **conditional rewrite** on `/`: when the request `Accept` header matches `.*text/markdown.*`, `/` is rewritten to `/api/llms-full` so the homepage itself answers content negotiation. Browsers (which send `Accept: text/html,…`) still get the SPA.
-
 A `headers` block on `/` adds an RFC 8288 `Link` response header pointing to `/.well-known/api-catalog`, `/.well-known/agent-skills/index.json`, `/api`, `/llms.txt`, and `/llms-full.txt`, plus `Vary: Accept`. This is what agent-readiness scanners look for as the entry point.
+
+### Edge Middleware (`middleware.ts`)
+
+Vercel rewrites with `has` (header conditions) **don't fire when a static file matches `/`** — the SPA's `index.html` is served before the conditional rewrite is evaluated. To negotiate Markdown on the homepage, `middleware.ts` runs at the edge before static serving. When `Accept: text/markdown` is present (and `text/html` isn't), it rewrites `/` to `/llms-full.txt`. Browsers (which send `Accept: text/html,...`) fall through to `next()` and get the SPA.
 
 ### LLM Discoverability ([llmstxt.org](https://llmstxt.org/))
 

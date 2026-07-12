@@ -7,10 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Portfolio website and agent skill for contemporary artist aaajiao. Two components:
 
 ### Website (aaajiao.md)
-One URL, three views of the same data:
+One URL, four views of the same data:
 - **`.md` tab** — Markdown rendered via Streamdown (human-readable)
 - **`curl` tab** — interactive API explorer (structured JSON, Markdown, and binary examples)
 - **`bin` tab** — bit-pixel bitmap visualization with breathing decode animation (Pretext sequential bit→text reflow)
+- **`skill` tab** — agent skill install/quick-start cards (`npx skills add`, direct SKILL.md read, knowledge base overview)
 - **AI agents** hit `/api/*` endpoints and get raw JSON
 
 The API supports HTTP content negotiation — the same URL returns JSON, Markdown, or raw bytes depending on the `Accept` header. A `Content-Signal` header declares data usage rights (`ai-input=yes, ai-train=yes, search=yes`).
@@ -55,9 +56,13 @@ Browser (/)                          AI (curl /api/*)
 App.tsx                       │
   → sort works by year desc   │
   → SiteHeader: .md / curl /  │
-    bin tab switch + theme    │
+    bin / skill tab switch    │
+    + theme                   │
   → .md tab: Streamdown +     │
     JSON overlay + download   │
+    (static import, default)  │
+  → curl / bin / skill tabs:  │
+    React.lazy + Suspense     │
   → curl tab: interactive     │
     API explorer + content    │
     negotiation examples      │
@@ -65,30 +70,36 @@ App.tsx                       │
     + hover/click decode      │
     + breathing decode (Pretext│
       sequential bit→text)    │
+  → skill tab: agent skill    │
+    install/quick-start cards │
 ```
 
-**Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → negotiateFormat(Accept) → JSON / Markdown / bytes → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses + negotiation demos) or bin tab (binary bitmap)`
+**Data flow**: `GitHub raw URL → fetchWorks() (cached) → api/works/ → negotiateFormat(Accept) → JSON / Markdown / bytes → App.tsx (sort) → .md tab (Portfolio chunks + Streamdown) or curl tab (live API responses + negotiation demos) or bin tab (binary bitmap) or skill tab (agent skill install cards)`
 
 ### Frontend (`src/`)
 
-- `App.tsx` — fetches `/api/works`, sorts works newest-first, manages `.md`/`curl`/`bin` tab state and theme, passes `Work[]` to active tab
-- `components/SiteHeader.tsx` — site title, `.md`/`curl`/`bin` tab switcher, theme toggle button
+- `App.tsx` — fetches `/api/works`, sorts works newest-first, manages `.md`/`curl`/`bin`/`skill` tab state and theme, passes `Work[]` to active tab. `curl`/`bin`/`skill` are `React.lazy()`-loaded behind a single `Suspense` (`MdTab` stays a static import as the default tab)
+- `components/SiteHeader.tsx` — site title, `.md`/`curl`/`bin`/`skill` tab switcher, theme toggle button
 - `components/ThemeToggle.tsx` — light/dark mode toggle (sun/moon icon)
 - `components/MdTab.tsx` — Markdown view container: JSON overlay toggle (`{ }` button), download button, wraps Portfolio
-- `components/CurlTab.tsx` — interactive API explorer: lists all endpoints with live responses, copy-to-clipboard curl commands, JSON syntax highlighting. Includes content negotiation examples (Markdown and Binary endpoints with custom `Accept` headers)
+- `components/CurlTab.tsx` — interactive API explorer: lists all endpoints with live responses, copy-to-clipboard curl commands (falls back to a hidden textarea + `execCommand('copy')` if `navigator.clipboard` rejects), JSON syntax highlighting via `jsonHighlight.ts` and Markdown syntax highlighting via `mdHighlight.ts`. Includes content negotiation examples (Markdown and Binary endpoints with custom `Accept` headers). Responses are cached in a module-level `Map` keyed by endpoint so switching tabs away and back doesn't reset to "loading" or refetch
 - `components/Portfolio.tsx` — chunked Streamdown rendering with fade-in animation; receives `showJson` prop for JSON overlay mode
-- `components/WorkLayered.tsx` — single work card: Streamdown markdown foreground with optional semi-transparent JSON background overlay (via `mix-blend-multiply`/`screen`)
+- `components/WorkLayered.tsx` — single work card: Streamdown markdown foreground with optional semi-transparent JSON background overlay (via `mix-blend-multiply`/`screen`); wrapped in `React.memo` so unchanged works skip re-render when new chunks mount
 - `components/BinTab.tsx` — bin tab container: serializes works to JSON, encodes to bytes, builds byte offset map, manages breathing decode animation via `useBreathingDecode`, renders BitGrid
 - `components/BitGrid.tsx` — triple-canvas bit-pixel renderer: base canvas (1:1 pixelated bitmap) + overlay canvas (hover/click highlights) + flow canvas (breathing decode: mixed bit-strips + Pretext text at CSS resolution). Unified tooltip card for all interaction states. Handles mouse hover (RAF-throttled), click lock/unlock, touch, Escape key, and breathing pause/resume
+- `components/SkillTab.tsx` — skill tab: install/quick-start/content/update command cards for the aaajiao agent skill (`npx skills add`, direct SKILL.md read via GitHub raw URL, knowledge base overview), copy-to-clipboard per card, previews highlighted via `skillHighlight.ts`
 - `hooks/useBreathingDecode.ts` — RAF-based animation hook: cycles through visible field regions with decode (progress 0→1, segments appear one by one) → hold → encode (1→0, segments revert to bits). Picks regions from visible viewport via scroll-reported byte range. Exposes pause/resume for interaction override
 - `lib/jsonToMarkdown.ts` — re-export shim: forwards all exports from `shared/jsonToMarkdown.ts` so frontend imports remain unchanged
-- `lib/jsonHighlight.ts` — lightweight JSON syntax highlighter (regex-based, returns HTML with `<span>` classes for keys, strings, numbers, booleans, null)
+- `lib/streamdown.ts` — exports `LINK_SAFETY`, a shared module-level `{ enabled: false }` config object passed to every Streamdown call site (`Portfolio.tsx`, `WorkLayered.tsx`) — see the `linkSafety` gotcha below
+- `lib/jsonHighlight.ts` — lightweight JSON syntax highlighter: HTML-escapes the stringified input before wrapping matches in `<span>` classes (keys, strings, numbers, booleans, null), so scraped work data can't inject markup via the `dangerouslySetInnerHTML` call sites that render it
+- `lib/mdHighlight.ts` — lightweight Markdown syntax highlighter for the curl tab's Markdown content-negotiation preview (YAML front-matter, headings, `//` comments, bold, links)
+- `lib/skillHighlight.ts` — lightweight syntax highlighter for the skill tab's command-card previews (numbers, file paths, agent tool names, CLI flags); reuses the `json-*` CSS classes from `index.css`
 - `lib/byteOffsetMap.ts` — JSON string → byte offset field mapping:
   - `FieldRegion` interface (start/end byte offsets, JSON path, key, value, work index)
   - `buildByteOffsetMap(jsonString)` — character-level parser with UTF-8 byte offset computation
   - `findRegion(regions, byteOffset)` — O(log n) binary search for field lookup
-- `hooks/useChunkedWorks.ts` — progressive loading hook: renders 10 works at a time, IntersectionObserver triggers next chunk with `rootMargin: '200px'`
-- `hooks/useTheme.ts` — dark/light theme hook: reads from `localStorage` (key `aaajiao-theme`), falls back to `prefers-color-scheme`, sets `data-theme` attribute on `<html>`
+- `hooks/useChunkedWorks.ts` — progressive loading hook: renders 10 works at a time, IntersectionObserver triggers next chunk with `rootMargin: '200px'`; visible count is held in a module-level variable so it survives tab-switch unmount/remount instead of resetting to the first chunk
+- `hooks/useTheme.ts` — dark/light theme hook: reads from `localStorage` (key `aaajiao-theme`), falls back to `prefers-color-scheme`, sets `data-theme` attribute on `<html>`. `localStorage` reads/writes are wrapped in try/catch (falls back to system theme / stays in-memory if storage is blocked); a `matchMedia` `change` listener live-updates the theme on OS changes, but only until the user makes an explicit choice
 - `hooks/useContainerWidth.ts` — ResizeObserver-based container width hook, used by BitGrid for responsive layout
 
 Styling: Tailwind CSS v4 via `@tailwindcss/vite` plugin. Streamdown requires `@source` directive in `src/index.css` to pick up its utility classes.
@@ -104,7 +115,12 @@ Vercel Node.js functions (not part of the Vite build; `tsconfig.json` only cover
 - `api/api-catalog.ts` — `GET /.well-known/api-catalog` (via vercel.json rewrite) → linkset (RFC 9264) describing all API endpoints, their service-doc, and alternate representations. Returns `application/linkset+json` per RFC 9727
 - `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes the `digest` (`sha256:{hex}`) and parses `name`/`description`/`metadata.version` from its frontmatter (5-min cache, no hardcoded copy), returns `{$schema, skills: [{name, type: "skill-md", description, version, url, digest}]}`. `$schema` must be the exact URI `https://schemas.agentskills.io/discovery/0.2.0/schema.json` and `type` must be `"skill-md"` or `"archive"` — clients reject/skip unrecognized values; `version` is an extension field (clients ignore unknown fields)
 
-All API responses include `Cache-Control: s-maxage=300, stale-while-revalidate=600`, CORS headers, `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and `Vary: Accept`.
+All 6 handlers set `Access-Control-Allow-Origin: *` and `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and call `handleOptions(req, res)` first to short-circuit CORS preflight (`OPTIONS` → 204 + `Access-Control-Allow-Methods: GET, HEAD, OPTIONS` + `Access-Control-Allow-Headers: Accept, Content-Type`) before any other handler logic runs. `Cache-Control` and `Vary` differ per endpoint:
+- `api/works/index.ts`, `api/works/[slug].ts` (via `sendNegotiated`): `Cache-Control: s-maxage=300, stale-while-revalidate=600`, `Vary: Accept`, `Content-Type` per negotiated format
+- `api/index.ts`: same `Cache-Control` as above, no `Vary` (it doesn't negotiate), `Content-Type: application/json`
+- `api/llms-full.ts`: same `Cache-Control`, no `Vary` (always Markdown), `Content-Type: text/markdown; charset=utf-8`
+- `api/api-catalog.ts`: `Cache-Control: s-maxage=86400, stale-while-revalidate=604800` (intentionally longer — the catalog changes rarely), no `Vary`, `Content-Type: application/linkset+json`
+- `api/agent-skills.ts`: `Cache-Control: s-maxage=300, stale-while-revalidate=86400`, no `Vary`, `Content-Type: application/json`
 
 Content negotiation on `/api/works` and `/api/works/:slug`:
 - `Accept: application/json` (default) → JSON
@@ -116,8 +132,8 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
 ### Shared (`shared/`)
 
 - `shared/types.ts` — `Work` interface (canonical type) and `GITHUB_RAW_URL` constant, used by both frontend and API
-- `shared/fetchWorks.ts` — cached data fetcher used by all API handlers. In-memory cache with 60s TTL; uses ETag (`If-None-Match`) for conditional requests so GitHub returns 304 when data hasn't changed. Falls back to stale cache if GitHub is unreachable
-- `shared/negotiate.ts` — `Accept` header parser: `negotiateFormat(header) → 'json' | 'markdown' | 'binary'`. Parses media types with quality factors
+- `shared/fetchWorks.ts` — cached data fetcher used by all API handlers. In-memory cache with 60s TTL; uses ETag (`If-None-Match`) for conditional requests so GitHub returns 304 when data hasn't changed. Falls back to stale cache if GitHub is unreachable. Concurrent callers hitting a stale/empty cache share a single in-flight promise instead of issuing duplicate GitHub fetches
+- `shared/negotiate.ts` — `Accept` header parser: `negotiateFormat(header) → 'json' | 'markdown' | 'binary'`, matching exact types, partial wildcards (`text/*` → markdown, `application/*` → json), and `*/*` (→ json); sorted by quality then RFC 9110 specificity (exact > partial wildcard > `*/*`). Also exports `prefersMarkdown(header)` — true only when `text/markdown`'s effective quality is >0 and strictly greater than `text/html`'s; used by `middleware.ts`
 - `shared/jsonToMarkdown.ts` — markdown conversion functions (moved from `src/lib/`):
   - `headerMarkdown()` — title + separator
   - `workToMarkdown(work)` — single work → markdown
@@ -125,17 +141,17 @@ Slug derivation: last segment of the eventstructure.com URL, lowercased (e.g. `h
   - `jsonToMarkdown(works)` — full markdown (header + all works), used for download
   - `buildFrontMatter(worksCount)` — YAML front-matter block
   - `workToMarkdownWithFrontMatter(work)` — single work markdown with YAML front-matter
-- `shared/respond.ts` — `sendNegotiated({ res, acceptHeader, data })`: dispatches response based on negotiated format. Sets `Content-Signal`, `Vary: Accept`, CORS, and Cache-Control headers on all responses
+- `shared/respond.ts` — `sendNegotiated({ res, acceptHeader, data })`: dispatches response based on negotiated format. Sets `Content-Signal`, `Vary: Accept`, CORS, and Cache-Control headers on all responses. Also exports `handleOptions(req, res)` — short-circuits CORS preflight; called first in all six `api/` handlers
 
 ### Vercel Config
 
-`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]`, `/llms-full.txt` → `api/llms-full`, `/.well-known/api-catalog` → `api/api-catalog`, `/.well-known/agent-skills/index.json` → `api/agent-skills`. Framework is set to `vite`.
+`vercel.json` maps routes: `/api` → `api/index`, `/api/works` → `api/works/index`, `/api/works/:slug` → `api/works/[slug]` (plus a trailing-slash variant `/api/works/:slug/`), `/llms-full.txt` → `api/llms-full`, `/.well-known/api-catalog` → `api/api-catalog`, `/.well-known/agent-skills/index.json` → `api/agent-skills`. Framework is set to `vite`.
 
 A `headers` block on `/` adds an RFC 8288 `Link` response header pointing to `/.well-known/api-catalog`, `/.well-known/agent-skills/index.json`, `/api`, `/llms.txt`, and `/llms-full.txt`, plus `Vary: Accept`. This is what agent-readiness scanners look for as the entry point.
 
 ### Edge Middleware (`middleware.ts`)
 
-Vercel rewrites with `has` (header conditions) **don't fire when a static file matches `/`** — the SPA's `index.html` is served before the conditional rewrite is evaluated. To negotiate Markdown on the homepage, `middleware.ts` runs at the edge before static serving. When `Accept: text/markdown` is present (and `text/html` isn't), it rewrites `/` to `/llms-full.txt`. Browsers (which send `Accept: text/html,...`) fall through to `next()` and get the SPA.
+Vercel rewrites with `has` (header conditions) **don't fire when a static file matches `/`** — the SPA's `index.html` is served before the conditional rewrite is evaluated. To negotiate Markdown on the homepage, `middleware.ts` runs at the edge before static serving, calling `prefersMarkdown()` (`shared/negotiate.ts`) — quality-aware, so it rewrites `/` to `/llms-full.txt` only when `text/markdown`'s effective quality is >0 and strictly greater than `text/html`'s. Browsers (which send `Accept: text/html,...`) fall through to `next()` and get the SPA.
 
 ### LLM Discoverability ([llmstxt.org](https://llmstxt.org/))
 
@@ -181,7 +197,7 @@ When the scraper pushes new data, the site reflects it within ~60s (in-memory TT
 ## Gotchas
 
 - **API imports must use `.js` extension**: The project uses `"type": "module"` (ESM). Imports in `api/` files from `shared/types` must use `../../shared/types.js` or Vercel serverless functions crash at runtime with `Cannot find module`.
-- **Streamdown `linkSafety`**: Streamdown defaults `linkSafety: { enabled: true }`, which converts `<a>` tags to `<button>` elements with a confirmation modal. Always pass `linkSafety={{ enabled: false }}` to make links directly clickable.
+- **Streamdown `linkSafety`**: Streamdown defaults `linkSafety: { enabled: true }`, which converts `<a>` tags to `<button>` elements with a confirmation modal. Always pass `linkSafety={{ enabled: false }}` to make links directly clickable — and pass a **module-level constant** (`src/lib/streamdown.ts`'s `LINK_SAFETY`), never a fresh object literal per render: Streamdown's internal `memo()` compares `linkSafety` by reference, so a new `{ enabled: false }` object every render defeats the memoization.
 - **Markdown links**: Use standard markdown link syntax `[text](url)` and `[![](img)](img)` instead of raw HTML `<a>` tags — Streamdown may sanitize raw HTML.
 - **Year sorting**: Works have year strings like `"2024"` or `"2018-2021"`. Sort by the end year (last segment after `-`) for correct chronological ordering.
 - **`tsconfig.json` only covers `src/`**: API functions in `api/` are compiled separately by Vercel's build pipeline, not by the project's `tsc`.

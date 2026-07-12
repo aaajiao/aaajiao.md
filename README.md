@@ -1,6 +1,6 @@
 # aaajiao.md
 
-One URL, three views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at three levels of abstraction.
+One URL, four views. A portfolio site for contemporary artist [aaajiao](https://eventstructure.com) that presents the same artwork data at four levels of abstraction.
 
 - **`.md`** — human-readable Markdown via [Streamdown](https://github.com/vercel/streamdown)
 - **`curl`** — interactive API explorer with live JSON, Markdown, and binary responses
@@ -129,9 +129,10 @@ The homepage `/` also returns RFC 8288 `Link` response headers pointing to the e
 - **Frontend**: React 19 + Vite + Tailwind CSS v4 + Streamdown + [Pretext](https://github.com/chenglou/pretext)
 - **API**: Vercel Serverless Functions (Node.js)
 - **Data**: GitHub raw JSON (cached 5 min, no redeploy needed)
-- **Runtime**: Bun
 
 ## Development
+
+Local package manager and dev scripts run on [Bun](https://bun.sh); the deployed API itself runs on Node.js via Vercel Serverless Functions (see Stack above).
 
 ```bash
 bun install          # install dependencies
@@ -163,6 +164,8 @@ Browser (/)                          AI (curl /api/*)
     -> bin tab: bit-pixel   |
        bitmap + decode      |
        + breathing (Pretext) |
+    -> skill tab: agent     |
+       skill install cards  |
 ```
 
 ## License

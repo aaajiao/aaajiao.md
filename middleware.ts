@@ -1,19 +1,14 @@
 import { next, rewrite } from '@vercel/edge'
+import { prefersMarkdown } from './shared/negotiate'
 
 export const config = {
   matcher: '/',
 }
 
 export default function middleware(request: Request) {
-  const accept = (request.headers.get('accept') || '').toLowerCase()
+  const accept = request.headers.get('accept') || ''
 
-  if (!accept.includes('text/markdown')) {
-    return next()
-  }
-
-  // If markdown is asked alongside html, only re-route when markdown is explicit
-  // and html is absent (or lower quality). Cheap heuristic: html absent => markdown wins.
-  if (accept.includes('text/html')) {
+  if (!prefersMarkdown(accept)) {
     return next()
   }
 

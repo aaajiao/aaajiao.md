@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { fetchWorks } from '../../shared/fetchWorks.js'
-import { sendNegotiated } from '../../shared/respond.js'
+import { sendNegotiated, handleOptions } from '../../shared/respond.js'
 
 function slugFromUrl(url: string): string {
   const parts = url.replace(/\/$/, '').split('/')
@@ -8,6 +8,8 @@ function slugFromUrl(url: string): string {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (handleOptions(req, res)) return
+
   res.setHeader('Access-Control-Allow-Origin', '*')
 
   const { slug } = req.query

@@ -1,10 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { fetchWorks } from '../shared/fetchWorks.js'
 import { jsonToMarkdown, buildFrontMatter } from '../shared/jsonToMarkdown.js'
+import { handleOptions } from '../shared/respond.js'
 
 const CONTENT_SIGNAL = 'ai-input=yes, ai-train=yes, search=yes'
 
-export default async function handler(_req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (handleOptions(req, res)) return
+
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600')
   res.setHeader('Content-Signal', CONTENT_SIGNAL)

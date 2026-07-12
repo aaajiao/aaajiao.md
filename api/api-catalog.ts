@@ -1,8 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { handleOptions } from '../shared/respond.js'
 
 const ORIGIN = 'https://aaajiao.md'
 
-export default function handler(_req: VercelRequest, res: VercelResponse) {
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  if (handleOptions(req, res)) return
+
   res.setHeader('Content-Type', 'application/linkset+json')
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800')
@@ -41,6 +44,21 @@ export default function handler(_req: VercelRequest, res: VercelResponse) {
         anchor: `${ORIGIN}/llms-full.txt`,
         describes: [{ href: `${ORIGIN}/api/works`, type: 'application/json' }],
         type: 'text/markdown',
+      },
+      {
+        anchor: `${ORIGIN}/llms.txt`,
+        describes: [{ href: `${ORIGIN}/`, type: 'text/html' }],
+        type: 'text/plain',
+      },
+      {
+        anchor: `${ORIGIN}/.well-known/api-catalog`,
+        describes: [{ href: `${ORIGIN}/api`, type: 'application/json' }],
+        type: 'application/linkset+json',
+      },
+      {
+        anchor: `${ORIGIN}/.well-known/agent-skills/index.json`,
+        describes: [{ href: `${ORIGIN}/`, type: 'text/html' }],
+        type: 'application/json',
       },
     ],
   })

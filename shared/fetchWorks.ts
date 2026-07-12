@@ -6,6 +6,11 @@ let cachedWorks: Work[] | null = null
 let cachedEtag: string | null = null
 let cachedAt = 0
 
+// In-flight request, shared by concurrent callers so a burst of requests
+// (e.g. cold start, or /api/works + several /api/works/:slug at once)
+// triggers one GitHub fetch instead of one per caller.
+let inFlight: Promise<Work[]> | null = null
+
 export async function fetchWorks(): Promise<Work[]> {
   const now = Date.now()
 
@@ -14,28 +19,41 @@ export async function fetchWorks(): Promise<Work[]> {
     return cachedWorks
   }
 
-  // Conditional request: send ETag so GitHub can return 304
-  const headers: Record<string, string> = {}
-  if (cachedEtag) {
-    headers['If-None-Match'] = cachedEtag
+  // A fetch is already in flight — await it instead of issuing a duplicate
+  if (inFlight) {
+    return inFlight
   }
 
-  const response = await fetch(GITHUB_RAW_URL, { headers })
+  inFlight = (async () => {
+    try {
+      // Conditional request: send ETag so GitHub can return 304
+      const headers: Record<string, string> = {}
+      if (cachedEtag) {
+        headers['If-None-Match'] = cachedEtag
+      }
 
-  if (response.status === 304 && cachedWorks) {
-    // Not modified — reuse cache, refresh timestamp
-    cachedAt = now
-    return cachedWorks
-  }
+      const response = await fetch(GITHUB_RAW_URL, { headers })
 
-  if (!response.ok) {
-    // If we have stale cache, return it rather than failing
-    if (cachedWorks) return cachedWorks
-    throw new Error(`GitHub fetch failed: ${response.status}`)
-  }
+      if (response.status === 304 && cachedWorks) {
+        // Not modified — reuse cache, refresh timestamp
+        cachedAt = Date.now()
+        return cachedWorks
+      }
 
-  cachedWorks = await response.json() as Work[]
-  cachedEtag = response.headers.get('etag')
-  cachedAt = now
-  return cachedWorks
+      if (!response.ok) {
+        // If we have stale cache, return it rather than failing
+        if (cachedWorks) return cachedWorks
+        throw new Error(`GitHub fetch failed: ${response.status}`)
+      }
+
+      cachedWorks = await response.json() as Work[]
+      cachedEtag = response.headers.get('etag')
+      cachedAt = Date.now()
+      return cachedWorks
+    } finally {
+      inFlight = null
+    }
+  })()
+
+  return inFlight
 }

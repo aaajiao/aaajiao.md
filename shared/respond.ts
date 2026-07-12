@@ -1,4 +1,4 @@
-import type { VercelResponse } from '@vercel/node'
+import type { VercelRequest, VercelResponse } from '@vercel/node'
 import type { Work } from './types.js'
 import type { Format } from './negotiate.js'
 import { negotiateFormat } from './negotiate.js'
@@ -9,6 +9,17 @@ import {
 } from './jsonToMarkdown.js'
 
 const CONTENT_SIGNAL = 'ai-input=yes, ai-train=yes, search=yes'
+
+// Short-circuits CORS preflight requests. Call first in every handler;
+// returns true if the request was an OPTIONS preflight (already responded to).
+export function handleOptions(req: VercelRequest, res: VercelResponse): boolean {
+  if (req.method !== 'OPTIONS') return false
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type')
+  res.status(204).end()
+  return true
+}
 
 function setCommonHeaders(res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*')

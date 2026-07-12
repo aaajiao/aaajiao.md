@@ -1,8 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { handleOptions } from '../shared/respond.js'
 
-export default function handler(_req: VercelRequest, res: VercelResponse) {
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  if (handleOptions(req, res)) return
+
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600')
   res.setHeader('Content-Signal', 'ai-input=yes, ai-train=yes, search=yes')
 
   res.json({

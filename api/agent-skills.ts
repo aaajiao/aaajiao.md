@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createHash } from 'node:crypto'
+import { handleOptions } from '../shared/respond.js'
 
 const SKILL_RAW_URL =
   'https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md'
@@ -55,7 +56,9 @@ async function getSkillMeta(): Promise<CacheEntry> {
   return cache
 }
 
-export default async function handler(_req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (handleOptions(req, res)) return
+
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=86400')
   res.setHeader('Content-Signal', 'ai-input=yes, ai-train=yes, search=yes')

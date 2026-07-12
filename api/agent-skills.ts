@@ -5,16 +5,21 @@ const SKILL_RAW_URL =
   'https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md'
 
 interface CacheEntry {
-  sha256: string
+  digest: string
   name: string
   description: string
+  version?: string
   fetchedAt: number
 }
 
 const TTL_MS = 5 * 60 * 1000
 let cache: CacheEntry | null = null
 
-export function parseFrontMatter(body: string): { name: string; description: string } {
+export function parseFrontMatter(body: string): {
+  name: string
+  description: string
+  version?: string
+} {
   const fm = body.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? ''
   const name = fm.match(/^name:[ \t]*(\S.*)$/m)?.[1].trim() ?? 'aaajiao'
   // description is either inline (`description: text`) or a folded
@@ -27,7 +32,12 @@ export function parseFrontMatter(body: string): { name: string; description: str
         .filter(Boolean)
         .join(' ')
     : (fm.match(/^description:[ \t]*(\S.*)$/m)?.[1].trim() ?? '')
-  return { name, description }
+  // version lives in the indented `metadata:` block
+  const metadataBlock = fm.match(/^metadata:[ \t]*\n((?:[ \t]+\S.*\n?)+)/m)?.[1] ?? ''
+  const version = metadataBlock
+    .match(/^[ \t]+version:[ \t]*["']?([^"'\n]+?)["']?[ \t]*$/m)?.[1]
+    .trim()
+  return { name, description, version }
 }
 
 async function getSkillMeta(): Promise<CacheEntry> {
@@ -39,9 +49,9 @@ async function getSkillMeta(): Promise<CacheEntry> {
     throw new Error(`Upstream returned ${response.status}`)
   }
   const body = await response.text()
-  const sha256 = createHash('sha256').update(body, 'utf8').digest('hex')
-  const { name, description } = parseFrontMatter(body)
-  cache = { sha256, name, description, fetchedAt: Date.now() }
+  const digest = `sha256:${createHash('sha256').update(body, 'utf8').digest('hex')}`
+  const { name, description, version } = parseFrontMatter(body)
+  cache = { digest, name, description, version, fetchedAt: Date.now() }
   return cache
 }
 
@@ -52,17 +62,19 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
   res.setHeader('Content-Type', 'application/json')
 
   try {
-    const { sha256, name, description } = await getSkillMeta()
+    const { digest, name, description, version } = await getSkillMeta()
     res.json({
-      $schema:
-        'https://raw.githubusercontent.com/cloudflare/agent-skills-discovery-rfc/main/schema/agent-skills-index.schema.json',
+      $schema: 'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
       skills: [
         {
           name,
-          type: 'agent-skill',
+          type: 'skill-md',
           description,
+          // extension field (spec-compliant clients ignore unknown fields);
+          // parsed from metadata.version in the SKILL.md frontmatter
+          version,
           url: SKILL_RAW_URL,
-          sha256,
+          digest,
         },
       ],
     })

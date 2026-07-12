@@ -102,7 +102,7 @@ Vercel Node.js functions (not part of the Vite build; `tsconfig.json` only cover
 - `api/works/[slug].ts` — `GET /api/works/:slug` → single work lookup by URL slug. Uses `sendNegotiated()` for content negotiation
 - `api/llms-full.ts` — `GET /llms-full.txt` (via vercel.json rewrite) → full works archive as a single Markdown file. Reuses `fetchWorks()` (60s cache) + `buildFrontMatter` + `jsonToMarkdown`. Always returns `text/markdown; charset=utf-8` with `Content-Signal` header
 - `api/api-catalog.ts` — `GET /.well-known/api-catalog` (via vercel.json rewrite) → linkset (RFC 9264) describing all API endpoints, their service-doc, and alternate representations. Returns `application/linkset+json` per RFC 9727
-- `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes sha256 and parses `name`/`description` from its frontmatter (5-min cache, no hardcoded copy), returns `{$schema, skills: [{name, type, description, url, sha256}]}`
+- `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes the `digest` (`sha256:{hex}`) and parses `name`/`description`/`metadata.version` from its frontmatter (5-min cache, no hardcoded copy), returns `{$schema, skills: [{name, type: "skill-md", description, version, url, digest}]}`. `$schema` must be the exact URI `https://schemas.agentskills.io/discovery/0.2.0/schema.json` and `type` must be `"skill-md"` or `"archive"` — clients reject/skip unrecognized values; `version` is an extension field (clients ignore unknown fields)
 
 All API responses include `Cache-Control: s-maxage=300, stale-while-revalidate=600`, CORS headers, `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and `Vary: Accept`.
 
@@ -150,7 +150,7 @@ Rule of thumb: **`llms.txt` static, `llms-full.txt` dynamic.** Static index almo
 Endpoints aimed at automated discovery by AI agents and scanners (e.g. [isitagentready.com](https://isitagentready.com/)):
 
 - `/.well-known/api-catalog` — RFC 9727 / RFC 9264 linkset of all API endpoints
-- `/.well-known/agent-skills/index.json` — Agent Skills Discovery v0.2.0 index pointing to `skills/aaajiao/SKILL.md` with sha256
+- `/.well-known/agent-skills/index.json` — Agent Skills Discovery v0.2.0 index pointing to `skills/aaajiao/SKILL.md` with digest and version
 - Homepage `Link` response header lists the entries above so agents can discover them without crawling
 - Homepage content negotiation: `curl -H "Accept: text/markdown" https://aaajiao.md/` returns the full Markdown archive (rewrites to `/llms-full.txt`)
 

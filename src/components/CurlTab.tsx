@@ -15,6 +15,33 @@ interface CurlTabProps {
   works: Work[]
 }
 
+// Survives CurlTab unmount/remount (e.g. switching tabs and back) so already
+// fetched endpoints don't reset to "// loading..." and refetch every time.
+const responseCache = new Map<string, string>()
+
+// navigator.clipboard can reject or be unavailable (e.g. iframes, denied
+// permission); fall back to the classic textarea + execCommand trick.
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    try {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      const ok = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      return ok
+    } catch {
+      return false
+    }
+  }
+}
+
 export function CurlTab({ works }: CurlTabProps) {
   const origin = window.location.origin
   const slug = works.length > 0
@@ -31,14 +58,20 @@ export function CurlTab({ works }: CurlTabProps) {
     { label: 'Binary', description: '原始字节 / Raw bytes', path: '/api/works', acceptHeader: 'application/octet-stream' },
   ]
 
-  const [responses, setResponses] = useState<Record<string, string>>({})
-  const [copiedPath, setCopiedPath] = useState<string | null>(null)
+  const [responses, setResponses] = useState<Record<string, string>>(() => Object.fromEntries(responseCache))
+  const [copiedPath, setCopiedPath] = useState<{ key: string; failed: boolean } | null>(null)
 
   const endpointKey = (ep: Endpoint) => ep.acceptHeader ? `${ep.path}@${ep.acceptHeader}` : ep.path
 
   useEffect(() => {
+    const setResponse = (key: string, display: string) => {
+      responseCache.set(key, display)
+      setResponses((prev) => ({ ...prev, [key]: display }))
+    }
+
     endpoints.forEach((ep) => {
       const key = endpointKey(ep)
+      if (responseCache.has(key)) return
       const headers: HeadersInit = ep.acceptHeader ? { Accept: ep.acceptHeader } : {}
 
       fetch(ep.path, { headers })
@@ -46,7 +79,7 @@ export function CurlTab({ works }: CurlTabProps) {
           if (ep.acceptHeader === 'application/octet-stream') {
             return res.arrayBuffer().then((buf) => {
               const display = `// ${buf.byteLength.toLocaleString()} bytes received\n// Content-Type: application/octet-stream\n// UTF-8 encoded JSON as raw bytes`
-              setResponses((prev) => ({ ...prev, [key]: display }))
+              setResponse(key, display)
             })
           }
           if (ep.acceptHeader === 'text/markdown') {
@@ -62,7 +95,7 @@ export function CurlTab({ works }: CurlTabProps) {
                 suffix += `\n// x-markdown-tokens: ${tokens}`
               }
               const display = highlightMarkdown(preview) + highlightMarkdown(suffix)
-              setResponses((prev) => ({ ...prev, [key]: display }))
+              setResponse(key, display)
             })
           }
           return res.json().then((data) => {
@@ -76,11 +109,11 @@ export function CurlTab({ works }: CurlTabProps) {
             } else {
               display = highlightJson(data)
             }
-            setResponses((prev) => ({ ...prev, [key]: display }))
+            setResponse(key, display)
           })
         })
         .catch((err) => {
-          setResponses((prev) => ({ ...prev, [key]: `// Error: ${err.message}` }))
+          setResponse(key, `// Error: ${err.message}`)
         })
     })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -94,8 +127,8 @@ export function CurlTab({ works }: CurlTabProps) {
   const copyCommand = useCallback((ep: Endpoint) => {
     const cmd = curlCommand(ep)
     const key = endpointKey(ep)
-    navigator.clipboard.writeText(cmd).then(() => {
-      setCopiedPath(key)
+    copyToClipboard(cmd).then((ok) => {
+      setCopiedPath({ key, failed: !ok })
       setTimeout(() => setCopiedPath(null), 2000)
     })
   }, [origin]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -118,7 +151,7 @@ export function CurlTab({ works }: CurlTabProps) {
                 className="font-display text-[0.68rem] tracking-[0.04em] px-2 py-[0.2rem] border border-border rounded-sm bg-transparent text-muted cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-foreground shrink-0 ml-3"
                 onClick={() => copyCommand(ep)}
               >
-                {copiedPath === key ? 'copied' : 'copy'}
+                {copiedPath?.key === key ? (copiedPath.failed ? 'copy failed' : 'copied') : 'copy'}
               </button>
             </div>
             {ep.acceptHeader === 'application/octet-stream' ? (

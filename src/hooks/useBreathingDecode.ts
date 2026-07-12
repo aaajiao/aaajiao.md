@@ -22,9 +22,25 @@ export function useBreathingDecode(
 ) {
   const [state, setState] = useState<BreathingState | null>(null)
   const pausedRef = useRef(false)
+  const pauseAtRef = useRef(0)
   const prevRegionRef = useRef<FieldRegion | null>(null)
   const startRef = useRef(0)
   const rafRef = useRef(0)
+  const lastEmittedRef = useRef<{ region: FieldRegion | null; progress: number }>({
+    region: null,
+    progress: 0,
+  })
+
+  // Only push a new state object when the meaningful values actually change,
+  // so the constant HOLD phase (progress stays 1) and the paused state don't
+  // re-render 60×/sec.
+  const emit = useCallback((region: FieldRegion | null, progress: number) => {
+    const last = lastEmittedRef.current
+    const p = region ? progress : 0
+    if (last.region === region && Object.is(last.progress, p)) return
+    lastEmittedRef.current = { region, progress: p }
+    setState(region ? { region, progress } : null)
+  }, [])
 
   const pickRegion = useCallback(() => {
     if (regions.length === 0) return null
@@ -47,7 +63,7 @@ export function useBreathingDecode(
       if (regions.length === 0) return
 
       if (pausedRef.current) {
-        setState(null)
+        emit(null, 0)
         rafRef.current = requestAnimationFrame(tick)
         return
       }
@@ -77,32 +93,38 @@ export function useBreathingDecode(
         if (picked) prevRegionRef.current = picked
       }
 
-      if (prevRegionRef.current) {
-        setState({ region: prevRegionRef.current, progress })
-      } else {
-        setState(null)
-      }
+      emit(prevRegionRef.current, progress)
 
       rafRef.current = requestAnimationFrame(tick)
     },
-    [regions, pickRegion],
+    [regions, pickRegion, emit],
   )
 
   useEffect(() => {
     if (regions.length === 0) return
     startRef.current = 0
     prevRegionRef.current = null
+    pauseAtRef.current = 0
+    lastEmittedRef.current = { region: null, progress: 0 }
     rafRef.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafRef.current)
   }, [tick, regions])
 
   const pause = useCallback(() => {
+    if (pausedRef.current) return
     pausedRef.current = true
+    pauseAtRef.current = performance.now()
   }, [])
 
+  // Resume from where the cycle paused (same region), rather than restarting
+  // the whole cycle with a freshly-picked region.
   const resume = useCallback(() => {
+    if (!pausedRef.current) return
     pausedRef.current = false
-    startRef.current = 0
+    if (startRef.current !== 0 && pauseAtRef.current !== 0) {
+      startRef.current += performance.now() - pauseAtRef.current
+    }
+    pauseAtRef.current = 0
   }, [])
 
   return { state, pause, resume }

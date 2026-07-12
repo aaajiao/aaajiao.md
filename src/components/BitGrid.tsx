@@ -26,7 +26,6 @@ function escapeHtml(s: string): string {
 interface InteractionState {
   region: FieldRegion
   byteIndex: number
-  pos: { x: number; y: number }
 }
 
 interface OverlayCard {
@@ -46,6 +45,12 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null)
   const flowCanvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef(0)
+  const flowCacheRef = useRef<{
+    region: FieldRegion
+    bytes: Uint8Array
+    prepared: ReturnType<typeof prepareWithSegments>
+    segBytes: Uint8Array[]
+  } | null>(null)
 
   const [hoverState, setHoverState] = useState<InteractionState | null>(null)
   const [lockState, setLockState] = useState<InteractionState | null>(null)
@@ -163,10 +168,18 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
     const windowStart = Math.max(0, region.start - contextBytes)
     const windowEnd = Math.min(bytes.length, region.end + contextBytes)
 
-    // Decode region text + prepare with Pretext
-    const regionBytes = bytes.slice(region.start, region.end)
-    const regionText = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
-    const prepared = prepareWithSegments(regionText, FLOW_FONT)
+    // Decode region text + prepare with Pretext — cached per region so only
+    // the progress-dependent drawing runs each animation frame
+    let cache = flowCacheRef.current
+    if (!cache || cache.region !== region || cache.bytes !== bytes) {
+      const regionBytes = bytes.slice(region.start, region.end)
+      const regionText = new TextDecoder('utf-8', { fatal: false }).decode(regionBytes)
+      const prepared = prepareWithSegments(regionText, FLOW_FONT)
+      const segBytes = prepared.segments.map((s) => new TextEncoder().encode(s))
+      cache = { region, bytes, prepared, segBytes }
+      flowCacheRef.current = cache
+    }
+    const { prepared, segBytes } = cache
 
     // How many segments are decoded based on progress
     const totalSegs = prepared.segments.length
@@ -215,9 +228,9 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
                 }
                 cx += segWidth
               } else {
-                const segBytes = new TextEncoder().encode(prepared.segments[s])
-                for (let bi = 0; bi < segBytes.length; bi++) {
-                  const b = segBytes[bi]
+                const segEncoded = segBytes[s]
+                for (let bi = 0; bi < segEncoded.length; bi++) {
+                  const b = segEncoded[bi]
                   for (let bit = 7; bit >= 0; bit--) {
                     wrapBit()
                     if (draw && ctx) {
@@ -287,7 +300,13 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
 
     let posX: number, posY: number
     if (active) {
-      posX = active.pos.x; posY = active.pos.y
+      // Derive from the byte offset + CURRENT layout so the tooltip tracks the
+      // highlight rectangle when the container resizes (both recompute together).
+      const bit = active.byteIndex * 8
+      const col = bit % columnsPerRow
+      const row = Math.floor(bit / columnsPerRow)
+      posX = col * pixelSize + pixelSize / 2
+      posY = row * pixelSize
     } else {
       const startBit = region.start * 8
       const startRow = Math.floor(startBit / columnsPerRow)
@@ -309,8 +328,12 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
   const decodeRows = useMemo(() => {
     if (!overlayCard) return null
     const { byteIndex, region } = overlayCard
-    const start = Math.max(region.start, byteIndex - 1)
-    const end = Math.min(region.end, start + 4)
+    // Snap the window to UTF-8 character boundaries so the decoded preview never
+    // slices a multi-byte character into replacement garbage (data is mostly CJK).
+    let start = Math.max(region.start, byteIndex - 1)
+    while (start > region.start && (bytes[start] & 0xc0) === 0x80) start--
+    let end = Math.min(region.end, start + 4)
+    while (end < region.end && (bytes[end] & 0xc0) === 0x80) end++
     const binaryParts: { text: string; active: boolean }[] = []
     const hexParts: { text: string; active: boolean }[] = []
     for (let i = start; i < end; i++) {
@@ -333,7 +356,7 @@ export function BitGrid({ bytes, regions, theme, breathingState, onInteractionCh
       if (byteIndex < 0 || byteIndex >= bytes.length) return null
       const region = findRegion(regions, byteIndex)
       if (!region) return null
-      return { region, byteIndex, pos: { x, y } }
+      return { region, byteIndex }
     },
     [bytes, regions, columnsPerRow],
   )

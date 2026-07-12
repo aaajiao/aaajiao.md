@@ -2,8 +2,12 @@
  * Lightweight JSON syntax highlighter.
  * Returns an HTML string with <span> wrappers for keys, strings, numbers, booleans, and null.
  */
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 export function highlightJson(obj: unknown): string {
-  const raw = JSON.stringify(obj, null, 2)
+  const raw = escapeHtml(JSON.stringify(obj, null, 2))
   return raw.replace(
     /("(?:\\.|[^"\\])*")\s*(:)|("(?:\\.|[^"\\])*")|([-+]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)|(\btrue\b|\bfalse\b)|(\bnull\b)/g,
     (match, key, colon, str, num, bool, nil) => {

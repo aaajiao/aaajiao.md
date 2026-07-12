@@ -1,6 +1,7 @@
 import { Streamdown } from 'streamdown'
 import { useChunkedWorks } from '../hooks/useChunkedWorks'
 import { headerMarkdown } from '../lib/jsonToMarkdown'
+import { LINK_SAFETY } from '../lib/streamdown'
 import { WorkLayered } from './WorkLayered'
 import type { Work } from '../../shared/types'
 
@@ -16,7 +17,7 @@ export function Portfolio({ works, showJson }: PortfolioProps) {
   return (
     <div>
       <div className="prose max-w-none">
-        <Streamdown mode="static" linkSafety={{ enabled: false }}>{headerMarkdown()}</Streamdown>
+        <Streamdown mode="static" linkSafety={LINK_SAFETY}>{headerMarkdown()}</Streamdown>
         {chunks.map((chunk, i) => (
           <div
             key={i}

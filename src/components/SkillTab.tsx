@@ -8,8 +8,31 @@ interface SkillSection {
   content: string
 }
 
+// navigator.clipboard can reject or be unavailable (e.g. iframes, denied
+// permission); fall back to the classic textarea + execCommand trick.
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    try {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      const ok = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      return ok
+    } catch {
+      return false
+    }
+  }
+}
+
 export function SkillTab() {
-  const [copiedIdx, setCopiedIdx] = useState<number | null>(null)
+  const [copiedIdx, setCopiedIdx] = useState<{ idx: number; failed: boolean } | null>(null)
 
   const repoUrl = 'https://github.com/aaajiao/aaajiao.md'
   const rawUrl = 'https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md'
@@ -71,8 +94,8 @@ export function SkillTab() {
   ]
 
   const copy = useCallback((idx: number, text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedIdx(idx)
+    copyToClipboard(text).then((ok) => {
+      setCopiedIdx({ idx, failed: !ok })
       setTimeout(() => setCopiedIdx(null), 2000)
     })
   }, [])
@@ -112,7 +135,7 @@ export function SkillTab() {
               className="font-display text-[0.68rem] tracking-[0.04em] px-2 py-[0.2rem] border border-border rounded-sm bg-transparent text-muted cursor-pointer transition-colors duration-200 hover:text-foreground hover:border-foreground shrink-0 ml-3"
               onClick={() => copy(idx, section.command)}
             >
-              {copiedIdx === idx ? 'copied' : 'copy'}
+              {copiedIdx?.idx === idx ? (copiedIdx.failed ? 'copy failed' : 'copied') : 'copy'}
             </button>
           </div>
           <pre

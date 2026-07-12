@@ -3,8 +3,10 @@ import type { Work } from '../../shared/types'
 
 const CHUNK_SIZE = 10
 
+let persistedVisibleCount = CHUNK_SIZE
+
 export function useChunkedWorks(works: Work[]) {
-  const [visibleCount, setVisibleCount] = useState(CHUNK_SIZE)
+  const [visibleCount, setVisibleCount] = useState(() => Math.max(CHUNK_SIZE, persistedVisibleCount))
   const sentinelRef = useRef<HTMLDivElement | null>(null)
 
   const hasMore = visibleCount < works.length
@@ -19,7 +21,11 @@ export function useChunkedWorks(works: Work[]) {
   const handleIntersect = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       if (entries[0]?.isIntersecting) {
-        setVisibleCount((prev) => Math.min(prev + CHUNK_SIZE, works.length))
+        setVisibleCount((prev) => {
+          const next = Math.min(prev + CHUNK_SIZE, works.length)
+          persistedVisibleCount = Math.max(persistedVisibleCount, next)
+          return next
+        })
       }
     },
     [works.length]

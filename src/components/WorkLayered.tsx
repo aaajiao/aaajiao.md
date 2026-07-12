@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Streamdown } from 'streamdown'
 import { workToMarkdown } from '../lib/jsonToMarkdown'
 import { highlightJson } from '../lib/jsonHighlight'
+import { LINK_SAFETY } from '../lib/streamdown'
 import type { Work } from '../../shared/types'
 
 interface WorkLayeredProps {
@@ -9,7 +10,7 @@ interface WorkLayeredProps {
   showJson: boolean
 }
 
-export function WorkLayered({ work, showJson }: WorkLayeredProps) {
+export const WorkLayered = memo(function WorkLayered({ work, showJson }: WorkLayeredProps) {
   const jsonHtml = useMemo(() => showJson ? highlightJson(work) : '', [work, showJson])
 
   return (
@@ -23,10 +24,10 @@ export function WorkLayered({ work, showJson }: WorkLayeredProps) {
         </div>
       )}
       <div className="relative z-[1] mix-blend-multiply dark:mix-blend-screen">
-        <Streamdown mode="static" linkSafety={{ enabled: false }}>
+        <Streamdown mode="static" linkSafety={LINK_SAFETY}>
           {workToMarkdown(work)}
         </Streamdown>
       </div>
     </div>
   )
-}
+})

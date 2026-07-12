@@ -7,8 +7,11 @@ interface MdTabProps {
   onDownload: () => void
 }
 
+// survives tab-switch unmount/remount, same pattern as useChunkedWorks
+let persistedShowJson = false
+
 export function MdTab({ works, onDownload }: MdTabProps) {
-  const [showJson, setShowJson] = useState(false)
+  const [showJson, setShowJson] = useState(persistedShowJson)
 
   return (
     <div>
@@ -19,7 +22,10 @@ export function MdTab({ works, onDownload }: MdTabProps) {
               ? 'text-foreground bg-code border-border dark:text-[#F0EDE8] dark:bg-[#1E1E1E] dark:border-[#4A4A4A]'
               : 'text-muted border-border hover:text-foreground hover:border-foreground'
           }`}
-          onClick={() => setShowJson(!showJson)}
+          onClick={() => {
+            persistedShowJson = !showJson
+            setShowJson(persistedShowJson)
+          }}
           aria-label={showJson ? 'Hide JSON background' : 'Show JSON background'}
           title={showJson ? 'Hide JSON background' : 'Show JSON background'}
         >

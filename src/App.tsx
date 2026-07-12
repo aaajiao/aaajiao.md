@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { Work } from './lib/jsonToMarkdown'
 import { jsonToMarkdown } from './lib/jsonToMarkdown'
 import { MdTab } from './components/MdTab'
-import { CurlTab } from './components/CurlTab'
-import { BinTab } from './components/BinTab'
-import { SkillTab } from './components/SkillTab'
 import { SiteHeader } from './components/SiteHeader'
 import { useTheme } from './hooks/useTheme'
+
+const CurlTab = lazy(() => import('./components/CurlTab').then((m) => ({ default: m.CurlTab })))
+const BinTab = lazy(() => import('./components/BinTab').then((m) => ({ default: m.BinTab })))
+const SkillTab = lazy(() => import('./components/SkillTab').then((m) => ({ default: m.SkillTab })))
 
 function downloadMarkdown(works: Work[]) {
   const markdown = jsonToMarkdown(works)
@@ -72,9 +73,11 @@ export default function App() {
           onTabChange={setActiveTab}
         />
         {activeTab === '.md' && <MdTab works={works} onDownload={() => downloadMarkdown(works)} />}
-        {activeTab === 'curl' && <CurlTab works={works} />}
-        {activeTab === 'bin' && <BinTab works={works} theme={theme} />}
-        {activeTab === 'skill' && <SkillTab />}
+        <Suspense fallback={<div className="font-display text-[0.75rem] text-subtle">&hellip;</div>}>
+          {activeTab === 'curl' && <CurlTab works={works} />}
+          {activeTab === 'bin' && <BinTab works={works} theme={theme} />}
+          {activeTab === 'skill' && <SkillTab />}
+        </Suspense>
       </div>
     </div>
   )

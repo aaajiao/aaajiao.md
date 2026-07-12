@@ -102,7 +102,7 @@ Vercel Node.js functions (not part of the Vite build; `tsconfig.json` only cover
 - `api/works/[slug].ts` — `GET /api/works/:slug` → single work lookup by URL slug. Uses `sendNegotiated()` for content negotiation
 - `api/llms-full.ts` — `GET /llms-full.txt` (via vercel.json rewrite) → full works archive as a single Markdown file. Reuses `fetchWorks()` (60s cache) + `buildFrontMatter` + `jsonToMarkdown`. Always returns `text/markdown; charset=utf-8` with `Content-Signal` header
 - `api/api-catalog.ts` — `GET /.well-known/api-catalog` (via vercel.json rewrite) → linkset (RFC 9264) describing all API endpoints, their service-doc, and alternate representations. Returns `application/linkset+json` per RFC 9727
-- `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes sha256 (5-min cache), returns `{$schema, skills: [{name, type, description, url, sha256}]}`
+- `api/agent-skills.ts` — `GET /.well-known/agent-skills/index.json` (via vercel.json rewrite) → Agent Skills Discovery v0.2.0 index. Fetches `skills/aaajiao/SKILL.md` from GitHub raw, computes sha256 and parses `name`/`description` from its frontmatter (5-min cache, no hardcoded copy), returns `{$schema, skills: [{name, type, description, url, sha256}]}`
 
 All API responses include `Cache-Control: s-maxage=300, stale-while-revalidate=600`, CORS headers, `Content-Signal: ai-input=yes, ai-train=yes, search=yes`, and `Vary: Accept`.
 

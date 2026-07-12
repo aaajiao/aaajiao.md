@@ -6,15 +6,33 @@ const SKILL_RAW_URL =
 
 interface CacheEntry {
   sha256: string
+  name: string
+  description: string
   fetchedAt: number
 }
 
 const TTL_MS = 5 * 60 * 1000
 let cache: CacheEntry | null = null
 
-async function getSkillDigest(): Promise<string> {
+export function parseFrontMatter(body: string): { name: string; description: string } {
+  const fm = body.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? ''
+  const name = fm.match(/^name:[ \t]*(\S.*)$/m)?.[1].trim() ?? 'aaajiao'
+  // description is either inline (`description: text`) or a folded
+  // block scalar (`description: >` followed by indented lines)
+  const folded = fm.match(/^description:[ \t]*>-?[ \t]*\n((?:[ \t]+\S.*\n?)+)/m)?.[1]
+  const description = folded
+    ? folded
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join(' ')
+    : (fm.match(/^description:[ \t]*(\S.*)$/m)?.[1].trim() ?? '')
+  return { name, description }
+}
+
+async function getSkillMeta(): Promise<CacheEntry> {
   if (cache && Date.now() - cache.fetchedAt < TTL_MS) {
-    return cache.sha256
+    return cache
   }
   const response = await fetch(SKILL_RAW_URL)
   if (!response.ok) {
@@ -22,8 +40,9 @@ async function getSkillDigest(): Promise<string> {
   }
   const body = await response.text()
   const sha256 = createHash('sha256').update(body, 'utf8').digest('hex')
-  cache = { sha256, fetchedAt: Date.now() }
-  return sha256
+  const { name, description } = parseFrontMatter(body)
+  cache = { sha256, name, description, fetchedAt: Date.now() }
+  return cache
 }
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
@@ -33,16 +52,15 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
   res.setHeader('Content-Type', 'application/json')
 
   try {
-    const sha256 = await getSkillDigest()
+    const { sha256, name, description } = await getSkillMeta()
     res.json({
       $schema:
         'https://raw.githubusercontent.com/cloudflare/agent-skills-discovery-rfc/main/schema/agent-skills-index.schema.json',
       skills: [
         {
-          name: 'aaajiao',
+          name,
           type: 'agent-skill',
-          description:
-            'Understand and think like aaajiao (Xu Wenkai), a media artist working between Berlin and Shanghai. Use when writing as/about aaajiao, analyzing digital culture through his critical lens, applying his conceptual framework (Internet Void, Double Helix, Absorption/Trance), or engaging with algorithmic governance, platform politics, and trade infrastructure.',
+          description,
           url: SKILL_RAW_URL,
           sha256,
         },

@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # aaajiao
@@ -163,8 +163,8 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 |----------|------|---------|
 | 58 media articles (MD) | `docs/media/articles/` | Text extracts from Frieze, Artforum, Ocula, Vice, NYT, etc. (2010-2023) |
 | 40 print media (PDF) | `docs/media/pdf/` | Original magazine layouts with images |
-| Print media index | `docs/media/print-index.md` | Index of all print coverage with source URLs |
-| Online media index | `docs/media/online-index.md` | Index of all online coverage with URLs |
+| Print media index | `docs/media/print-index.md` | Index of all print coverage with source URLs and in-repo PDF paths (`Repo:` lines) |
+| Online media index | `docs/media/online-index.md` | Index of all online coverage with URLs and in-repo article paths (`Repo:` lines) |
 
 ### Works Database
 
@@ -179,7 +179,7 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 1. For **voice and thinking**: read interview transcripts first — they capture how aaajiao actually speaks and reasons
 2. For **conceptual framework**: read Symbiosis project doc and Matsutake framework
 3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (Symbiosis, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/opencall/`, and media articles instead
-4. For **critical context**: search media articles by keyword
+4. For **critical context**: start from the media indexes (`docs/media/online-index.md`, `docs/media/print-index.md`) — each entry's `Repo:` line gives the in-repo file path to fetch
 5. For **visual reference**: use image URLs from the works database
 6. For **print layouts**: download PDFs from `docs/media/pdf/` when visual context matters
 

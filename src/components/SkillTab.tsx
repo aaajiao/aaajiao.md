@@ -1,34 +1,12 @@
 import { useState, useCallback } from 'react'
 import { highlightSkill } from '../lib/skillHighlight'
+import { copyToClipboard } from '../lib/clipboard'
 
 interface SkillSection {
   label: string
   description: string
   command: string
   content: string
-}
-
-// navigator.clipboard can reject or be unavailable (e.g. iframes, denied
-// permission); fall back to the classic textarea + execCommand trick.
-async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    try {
-      const textarea = document.createElement('textarea')
-      textarea.value = text
-      textarea.style.position = 'fixed'
-      textarea.style.opacity = '0'
-      document.body.appendChild(textarea)
-      textarea.select()
-      const ok = document.execCommand('copy')
-      document.body.removeChild(textarea)
-      return ok
-    } catch {
-      return false
-    }
-  }
 }
 
 export function SkillTab() {
@@ -66,13 +44,13 @@ export function SkillTab() {
       label: 'What It Contains',
       description: '内容 / Distillation + knowledge base',
       command: `curl -s ${rawUrl} | head -20`,
-      content: `// SKILL.md — the distillation (~2100 words)
+      content: `// SKILL.md — the distillation (~2200 words)
 //   Identity, double helix framework,
 //   concept-as-filter methodology,
 //   core stances, voice rules, 18 key works,
 //   critical lens checklist
 //
-// docs/ — the knowledge base (112 files)
+// docs/ — the knowledge base (108 files)
 //   interviews/    4 transcripts (podcast + Ocula)
 //   letter/        personal writing
 //   opencall/      exhibition applications

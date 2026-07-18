@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { highlightJson } from '../lib/jsonHighlight'
 import { highlightMarkdown } from '../lib/mdHighlight'
+import { copyToClipboard } from '../lib/clipboard'
 import type { Work } from '../../shared/types'
 
 interface Endpoint {
@@ -18,29 +19,6 @@ interface CurlTabProps {
 // Survives CurlTab unmount/remount (e.g. switching tabs and back) so already
 // fetched endpoints don't reset to "// loading..." and refetch every time.
 const responseCache = new Map<string, string>()
-
-// navigator.clipboard can reject or be unavailable (e.g. iframes, denied
-// permission); fall back to the classic textarea + execCommand trick.
-async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    try {
-      const textarea = document.createElement('textarea')
-      textarea.value = text
-      textarea.style.position = 'fixed'
-      textarea.style.opacity = '0'
-      document.body.appendChild(textarea)
-      textarea.select()
-      const ok = document.execCommand('copy')
-      document.body.removeChild(textarea)
-      return ok
-    } catch {
-      return false
-    }
-  }
-}
 
 export function CurlTab({ works }: CurlTabProps) {
   const origin = window.location.origin

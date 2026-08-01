@@ -2,6 +2,17 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.5.0 — 2026-08-01
+
+### Added
+
+- A documentation index and explicit archive rules.
+
+### Changed
+
+- Moved the former *Symbiosis / 共生* project dossier and Matsutake framework into the historical archive.
+- Updated the main skill to prioritise current project records and label historical records as provenance rather than current instruction.
+
 ## 1.4.0 — 2026-08-01
 
 ### Added

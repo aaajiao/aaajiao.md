@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # aaajiao
@@ -174,7 +174,7 @@ When writing as aaajiao:
 | Deep Simulator | 2020 | Video game | Bardo × computation power; 6 levels = 6 intermediate states |
 | Guard, I... | 2024-25 | Silicone sculpture | Hyperreal sleeping security guard; governance at body scale |
 | Pinky Swear | 2025 | Digital | Cyber-nationalism; echo chambers of Simplified Chinese internet |
-| Symbiosis | 2015-present | Documentary, data viz, game, sculpture | Factory collaboration; Absorption vs Trance; trade warfare |
+| The Eve of Parasitism / 寄生前夜 | 2015-present | Four-screen video installation, games, data visualisation | Formerly *Symbiosis*; factory, youth culture, global labour, and the Void as shelter |
 | 1bit | ongoing | Web game | Explorable "Chimera Ruin"; press SHIFT to resist |
 | 404 | 2017 | Installation | Censorship error message in analog form |
 | User, Love, High-Frequency Trading | 2017 | Exhibition | Every person is a User; daily life as interface |
@@ -189,7 +189,7 @@ When writing as aaajiao:
 | The Screen Generation | 2013-14 | Installation/Performance | Meta-data as visual language; "the screen generation" as identity category |
 | 010000.org | 2008 | Website | 10,000-year contract; 0=10000; Buddhism × digital |
 
-Not every entry above is in the works database: exhibitions (User, Love, High-Frequency Trading; The Observer; I Was Dead on the Internet) and ongoing projects (Symbiosis, 1bit, Pinky Swear) are documented in `docs/` instead — see Knowledge Base below.
+Not every entry above is in the works database: exhibitions (User, Love, High-Frequency Trading; The Observer; I Was Dead on the Internet) and ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) are documented in `docs/` instead — see Knowledge Base below.
 
 ## Knowledge Base
 
@@ -205,6 +205,8 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |
+| Documentation index | `docs/INDEX.md` | Current status, role, and replacement relationship for key documents |
+| Historical archive | `docs/archive/` | Superseded project formulations and contextual records; never read as current instruction without checking status |
 | Changelog | `CHANGELOG.md` | Version history for the skill |
 
 When a dialogue changes the practice, create or update its project dossier first, then add a dated deposit and changelog entry. For a recurring concept, run a Concept Return and update its card. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
@@ -221,8 +223,9 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 | Ocula: Metagame (2021, CN summary) | `docs/interview/2021_ocula_metagame.md` | Chinese version with key excerpts |
 | Letter to Luyang | `docs/letter/to_luyang_2026jan.md` | Personal voice; domestication, memory, transmission |
 | Overgaden Application | `docs/opencall/overgaden_2027_v4.md` | Public voice; double helix in exhibition proposal form |
-| Symbiosis Project Doc | `docs/project/symbiosis/project.md` | Full project: factory, Absorption/Trance, trade data, 1bit game |
-| Symbiosis × Matsutake | `docs/project/symbiosis/matsutake_framework.md` | Tsing resonance; salvage accumulation; three symbioses; formal strategy |
+| The Eve of Parasitism | `docs/project/the-eve-of-parasitism.md` | Current project dossier: four screens, parasitism, Void as shelter |
+| Symbiosis Project Doc | `docs/archive/projects/symbiosis/project.md` | Historical project formulation; read for provenance, not as current position |
+| Symbiosis × Matsutake | `docs/archive/projects/symbiosis/matsutake_framework.md` | Historical conceptual framework; read for provenance, not as current position |
 
 ### Critical Reception (others writing about aaajiao)
 
@@ -244,8 +247,8 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 ### Reading Strategy
 
 1. For **voice and thinking**: read interview transcripts first — they capture how aaajiao actually speaks and reasons
-2. For **conceptual framework**: read Symbiosis project doc and Matsutake framework
-3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (Symbiosis, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/opencall/`, and media articles instead
+2. For **current project framework**: read the active dossier in `docs/project/` first; consult `docs/archive/` only to trace a concept's history or contradiction
+3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/opencall/`, and media articles instead
 4. For **critical context**: start from the media indexes (`docs/media/online-index.md`, `docs/media/print-index.md`) — each entry's `Repo:` line gives the in-repo file path to fetch
 5. For **visual reference**: use image URLs from the works database
 6. For **print layouts**: download PDFs from `docs/media/pdf/` when visual context matters

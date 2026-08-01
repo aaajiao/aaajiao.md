@@ -180,7 +180,11 @@ Endpoints aimed at automated discovery by AI agents and scanners (e.g. [isitagen
 - `docs/interview/` — podcast transcripts and artist interviews (primary sources for voice and thinking)
 - `docs/letter/` — personal correspondence (private voice)
 - `docs/opencall/` — exhibition applications (public voice)
-- `docs/project/symbiosis/` — ongoing project documentation
+- `docs/project/` — current active project dossiers
+- `docs/dialogues/` — curated dialogue deposits and their template
+- `docs/concepts/` — Concept Return cards and their template
+- `docs/archive/` — superseded project formulations and historical frameworks; read as provenance, not current instruction
+- `docs/INDEX.md` — documentation status, replacement relationships, and archive rules
 - `docs/media/articles/` — 58 media articles as Markdown (critical reception, 2010-2023)
 - `docs/media/pdf/` — 40 print media PDFs (original magazine layouts)
 - `docs/media/print-index.md` — print coverage index

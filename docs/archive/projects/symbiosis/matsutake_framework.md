@@ -1,9 +1,11 @@
 # Symbiosis × Matsutake: A Conceptual Framework
 # 共生 × 松茸：概念框架
 
-**Version:** V3 | **Date:** 2026-01-22  
-**Status:** Working Document  
+**Version:** V3 | **Date:** 2026-01-22
+**Status:** Archived historical framework (2026-08)
 **Related:** `aaajiao_symbiosis_project.md`, NotebookLM notebook `bd6a3a6e` (末日松茸)
+
+> **Archive notice:** This framework belongs to the earlier *Symbiosis / 共生* formulation. It remains useful for tracing the project's intellectual history, but should not be treated as the current framework for *The Eve of Parasitism / 寄生前夜*. Consult `docs/project/the-eve-of-parasitism.md` first.
 
 **V2 Changes:** Rewrote Part I in third person; corrected artist's structural position (lives in Berlin, studio operates in Shanghai factory); reframed matsutake as resonance, not framework; added "third symbiosis" (distant artist / local production).
 

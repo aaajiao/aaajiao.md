@@ -2,6 +2,17 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.8.0 — 2026-08-01
+
+### Added
+
+- A concept card for **Player / 玩家**, **Void-Seeker / 虚空探索者**, and **Void / 虚空**.
+- A second dialogue deposit for *The Eve of Parasitism* on exhibition language, the China–EU low-value parcel study, artificial flowers, and ALL.
+
+### Changed
+
+- Expanded the current project dossier with the spatial-installation logic, the artificial-flower supply-chain relation, the parcel research, and the confirmed game term **grazing / 擦弹 / グレイズ**.
+
 ## 1.7.0 — 2026-08-01
 
 ### Changed

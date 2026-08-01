@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.7.0"
+  version: "1.8.0"
 ---
 
 # aaajiao
@@ -67,6 +67,14 @@ This skill should not only instruct an AI how to use established knowledge about
 The current project dossier is `docs/project/the-eve-of-parasitism.md`. Its first dialogue deposit is `docs/dialogues/2026-08-the-eve-of-parasitism.md`.
 
 **Open questions:** How will the bullet-hell game make the shelter legible without explaining it? Which relations between the four screens should remain unsynchronised or unresolved?
+
+#### 2026-08 — Exhibition language becomes a test of the project
+
+**Status:** testing
+
+The exhibition text is not a neutral explanation added after the work. It clarifies the project’s operative relations: the four screens form an infrastructural field rather than four illustrations; artificial flowers are readymades and supply-chain evidence; the China–EU low-value parcel study turns logistics into a visible political mechanism. Player, Void-Seeker, and Void are now recorded as a linked conceptual sequence, with the bullet-hell mechanic of **grazing / 擦弹 / グレイズ** giving the Void its material form as a temporary shelter.
+
+**Open question:** How can these terms remain perceptible in the exhibition without becoming a glossary that closes the work?
 
 ## Who
 

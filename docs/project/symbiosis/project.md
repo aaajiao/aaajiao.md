@@ -1,6 +1,8 @@
 # Symbiosis 共生
 ## aaajiao 正在进行的项目（2015-present）
 
+> **Historical working-title notice (2026-08):** The active project is now titled *The Eve of Parasitism / 寄生前夜*. This document remains as a record of the earlier *Symbiosis / 共生* formulation. For the current dossier, see `docs/project/the-eve-of-parasitism.md`.
+
 ---
 
 ## 一、项目概述

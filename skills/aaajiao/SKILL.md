@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # aaajiao
@@ -52,21 +52,7 @@ This skill should not only instruct an AI how to use established knowledge about
 
 **Status:** testing
 
-The project formerly called *Symbiosis* is now *The Eve of Parasitism* / 寄生前夜. “Symbiosis” became too peaceful a name for relationships that are intimate and interdependent but structurally unequal. The title keeps a resonance with the game *Parasite Eve* while remaining distinct and searchable. “The Eve” is not a countdown to one event but a long condition that envelops daily life: a change that has not arrived but has already shaped bodies, labour, consumption, and imagination. Parasitism is not the opposite of symbiosis, but the unequal relation hidden by its language.
-
-The project holds three related but non-equivalent relations:
-
-- the factory and a national industrial chain, where ordinary skill and goodwill can be converted into geopolitical force;
-- the artist's studio and the craftsmen who produce works with it, linked by genuine trust and shared creativity but separated by class, social recognition, knowledge, wealth, and future possibility;
-- young people and Shanghai's club culture, where desire, energy, and cultural investment sustain the city while the promise of a global life does not alter their historical predicament.
-
-The factory and studio are physically and visually hard to separate. Their social value and their inhabitants' life trajectories are not. The project does not resolve this contradiction or speak for the craftsmen; it makes the scene in which their creativity can be seen and the contradiction can remain.
-
-Its four-screen video installation brings together: factory footage of craftsmen at work; documentation of the final two nights of Shanghai club ALL; a first-person game; and a screen of data visualisation, industrial histories and global labour flows, plus 3D scans of the studio-factory. These screens do not deliver a single thesis. They form a field in which material labour, urban affect, game agency, logistics, and information systems pressure one another.
-
-The project continues the User → Bot → Player → Void-Seeker line in a more concrete reality-political situation. A Player has agency within rules and can find a bug; a Void-Seeker looks for what a system does not name or cannot fully absorb. Here, the Void is a shelter: a temporary refuge that appears in the moment of passing through danger. The bullet-hell game mechanic of grazing a bullet without dying gives this a form. It is not escape from the system but a practiced moment of courage, self-recognition, and self-authorization.
-
-The work keeps this possibility partly hidden in its details. A viewer may arrive at a thought close to the artist's, which creates a meaningful relation; they may not, and the work remains open. What matters is that the materials initiate thought without imposing a final answer.
+The current project dossier is `docs/project/the-eve-of-parasitism.md`. Its first dialogue deposit is `docs/dialogues/2026-08-the-eve-of-parasitism.md`.
 
 **Open questions:** How will the bullet-hell game make the shelter legible without explaining it? Which relations between the four screens should remain unsynchronised or unresolved?
 
@@ -197,6 +183,17 @@ Not every entry above is in the works database: exhibitions (User, Love, High-Fr
 
 All reference documents are in the `aaajiao.md` repository on GitHub:
 `https://github.com/aaajiao/aaajiao.md`
+
+### Living Records
+
+| Record | Path | Use |
+|--------|------|-----|
+| Project dossiers | `docs/project/` | Current, structured descriptions of active projects; historical names remain as redirects or archival records |
+| Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts |
+| Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
+| Changelog | `CHANGELOG.md` | Version history for the skill |
+
+When a dialogue changes the practice, create or update its project dossier first, then add a dated deposit and changelog entry. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
 
 Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 

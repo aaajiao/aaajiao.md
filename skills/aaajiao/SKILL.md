@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # aaajiao
@@ -221,8 +221,8 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 | Podcast: AI, Power & Reality (EN) | `docs/interview/2025_secondhand-experience_podcast_en.md` | English version of the above |
 | Ocula: Metagame (2021, full EN) | `docs/interview/2021_ocula_metagame_full.md` | Stephanie Bailey interview: User→Bot→Player trilogy, Deep Simulator, bardo × computation, Poor Mining, Xindanwei, NFTs |
 | Ocula: Metagame (2021, CN summary) | `docs/interview/2021_ocula_metagame.md` | Chinese version with key excerpts |
-| Letter to Luyang | `docs/letter/to_luyang_2026jan.md` | Personal voice; domestication, memory, transmission |
-| Overgaden Application | `docs/opencall/overgaden_2027_v4.md` | Public voice; double helix in exhibition proposal form |
+| Letter to Luyang | `docs/archive/letters/to_luyang_2026jan.md` | Historical personal voice; domestication, memory, transmission |
+| Overgaden Application | `docs/archive/opencall/overgaden_2027_v4.md` | Historical public voice; double helix in exhibition proposal form |
 | The Eve of Parasitism | `docs/project/the-eve-of-parasitism.md` | Current project dossier: four screens, parasitism, Void as shelter |
 | Symbiosis Project Doc | `docs/archive/projects/symbiosis/project.md` | Historical project formulation; read for provenance, not as current position |
 | Symbiosis × Matsutake | `docs/archive/projects/symbiosis/matsutake_framework.md` | Historical conceptual framework; read for provenance, not as current position |
@@ -248,7 +248,7 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 
 1. For **voice and thinking**: read interview transcripts first — they capture how aaajiao actually speaks and reasons
 2. For **current project framework**: read the active dossier in `docs/project/` first; consult `docs/archive/` only to trace a concept's history or contradiction
-3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/opencall/`, and media articles instead
+3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/archive/`, and media articles instead
 4. For **critical context**: start from the media indexes (`docs/media/online-index.md`, `docs/media/print-index.md`) — each entry's `Repo:` line gives the in-repo file path to fetch
 5. For **visual reference**: use image URLs from the works database
 6. For **print layouts**: download PDFs from `docs/media/pdf/` when visual context matters

@@ -1,4 +1,7 @@
 # aaajiao × Overgaden Open Call 2027
+
+> **Archive notice (2026-08):** This is a time-bound application document and historical public formulation. It may be consulted for provenance, but it is not the current project or practice statement.
+
 ## 申请材料 V4（Oracle 审阅修订版）
 
 ---

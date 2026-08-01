@@ -2,6 +2,8 @@
 
 # aaajiao 给 Luyang 的信
 
+> **Archive notice (2026-08):** This is a dated personal letter and historical record of voice. It may be consulted as evidence of the position and circumstances in which it was written, but not as a current statement without further confirmation.
+
 ## 关于五十岁、书、与母亲
 
 **日期**：2026年1月

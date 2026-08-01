@@ -2,6 +2,13 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.6.0 — 2026-08-01
+
+### Changed
+
+- Moved the dated Luyang letter and Overgaden open-call application into the historical archive.
+- Marked both documents as time-bound evidence rather than current practice statements.
+
 ## 1.5.0 — 2026-08-01
 
 ### Added

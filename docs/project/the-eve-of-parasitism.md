@@ -30,6 +30,8 @@ The work does not resolve these contradictions or claim to speak for the craftsm
 
 The screens are not four explanations of the same thesis. They form an unstable field in which labour, urban affect, game agency, logistics, and information systems pressure one another.
 
+The game and data layers have their own project repositories: [Danmaku](https://github.com/aaajiao/Danmaku) is the original browser bullet-hell work; [1bit](https://github.com/aaajiao/1bit) is the first-person 3D work; and [CHINA-EU-FLOW-ASCII](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII) is the 1-bit ASCII visualisation of China–EU e-commerce parcel flows. They are not supplementary illustrations but working media through which the project’s digital and material tracks meet.
+
 ### Artificial flowers and the logistics field
 
 All floral elements are purchased artificial flowers. They enter the installation as readymades rather than simulations of nature: cheap, bright, repeatable goods whose material history leads through a plastic-flower industry connected to Hong Kong, China’s manufacturing system, and global trade. They make circulation, replication, and the transfer of value physically present in the installation.
@@ -66,3 +68,4 @@ The work keeps this possibility partly hidden. A viewer may reach a thought clos
 - `docs/dialogues/2026-08-the-eve-of-parasitism.md` — first dialogue deposit
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` — exhibition-language deposit
 - `docs/concepts/player-void-seeker-void.md` — concept card for the Player → Void-Seeker → Void sequence
+- `docs/research/the-eve-of-parasitism-source-ledger.md` — evidence, provenance, and verification status for public claims

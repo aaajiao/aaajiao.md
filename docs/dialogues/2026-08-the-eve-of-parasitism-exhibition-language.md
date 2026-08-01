@@ -16,7 +16,7 @@ Purchased artificial flowers are clarified as readymades and material evidence: 
 
 The data screen now explicitly includes a study of China–EU low-value, duty-exempt parcels before and during COVID, with attention to subsequent customs-regime adjustments. Parcel volume is treated as a way to make platform pricing, tax thresholds, cross-border fulfilment, deflationary competition, and trade friction visible together. Cheapness is a produced condition, not a neutral characteristic of goods.
 
-The project’s terms **Player**, **Void-Seeker**, and **Void** are now accompanied by an accessible conceptual annotation. The game term was confirmed as **grazing / 擦弹 / グレイズ**. Grazing supplies the Void with a formal mechanism: a temporary shelter reached through proximity to danger, without a promise of external escape or total transformation.
+The project’s terms **Player**, **Void-Seeker**, and **Void** are now accompanied by an accessible conceptual annotation. The game term was confirmed as **grazing / 擦弹 / グレイズ**. Grazing supplies the Void with a formal mechanism: a temporary shelter reached through proximity to danger, without a promise of external escape or total transformation. The project repositories for [Danmaku](https://github.com/aaajiao/Danmaku), [1bit](https://github.com/aaajiao/1bit), and [CHINA-EU-FLOW-ASCII](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII) are the relevant primary technical records.
 
 ## Relation to practice
 

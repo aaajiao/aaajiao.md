@@ -2,6 +2,13 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.9.0 — 2026-08-01
+
+### Added
+
+- A source-ledger layer for active projects requiring public, historical, or legal claims.
+- The first source ledger for *The Eve of Parasitism*, including verification status for ALL, low-value EU consignments, artificial-flower history, and the game term grazing.
+
 ## 1.8.0 — 2026-08-01
 
 ### Added

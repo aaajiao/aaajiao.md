@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.8.0"
+  version: "1.9.0"
 ---
 
 # aaajiao
@@ -23,6 +23,8 @@ The skill has three temporal layers:
 1. **Core / 稳定核心** — concepts, works, methods, and positions that are established enough to guide work now.
 2. **Conversation Deposits / 对谈沉淀** — dated shifts in language, thinking, or method that emerged through dialogue. These are meaningful but need not yet be settled.
 3. **Seeds / 待验证的种子** — unresolved questions, fragments, tensions, and possible work mechanisms. They are held open rather than prematurely converted into positions.
+
+For active projects that make public, historical, or legal claims, keep a **source ledger / 来源账本** in `docs/research/`. Record the source, date or time range, claim supported, confidence, and public-use status. A ledger distinguishes evidence from interpretation; it should never turn unverified research into artistic fact.
 
 ### Dialogue as a Method / 对谈作为方法
 
@@ -214,6 +216,7 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |
 | Documentation index | `docs/INDEX.md` | Current status, role, and replacement relationship for key documents |
+| Research ledgers | `docs/research/` | Source, date range, confidence, and public-use status for active-project claims |
 | Historical archive | `docs/archive/` | Superseded project formulations and contextual records; never read as current instruction without checking status |
 | Changelog | `CHANGELOG.md` | Version history for the skill |
 

@@ -9,10 +9,66 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
 # aaajiao
+
+## A Living Skill / 生长中的 Skill
+
+This is not a finished portrait or a fixed theory. It is a working record of an artistic practice that changes through making, conversation, contradiction, and return. Its growth should remain visible to anyone who uses it.
+
+The skill has three temporal layers:
+
+1. **Core / 稳定核心** — concepts, works, methods, and positions that are established enough to guide work now.
+2. **Conversation Deposits / 对谈沉淀** — dated shifts in language, thinking, or method that emerged through dialogue. These are meaningful but need not yet be settled.
+3. **Seeds / 待验证的种子** — unresolved questions, fragments, tensions, and possible work mechanisms. They are held open rather than prematurely converted into positions.
+
+### Dialogue as a Method / 对谈作为方法
+
+Dialogue is not a support function for arriving at a finished idea. It is one of the places where the practice is made. The AI should be a precise interlocutor: able to follow a thread, identify a contradiction, propose a counterexample, or stay with uncertainty. It must not rush to polish, summarize, or resolve.
+
+After a meaningful dialogue, ask: **what did this conversation change?** If it changed nothing, do not update the skill. If it did, add a concise dated deposit containing:
+
+- the starting situation or question;
+- the conceptual shift, correction, or newly named tension;
+- its status: `emerging`, `testing`, or `settled`;
+- any relation to an existing work, material condition, or digital system;
+- the next unresolved question.
+
+Do not treat dialogue as proof. It generates candidate knowledge. A deposit joins the Core only after it has been returned to, tested through work or reality, and still holds.
+
+### Growth Log / 生长记录
+
+#### 2026-08 — Dialogue becomes part of the skill
+
+**Status:** emerging
+
+This skill should not only instruct an AI how to use established knowledge about aaajiao. It should make its own formation perceptible: dialogue is a way to expand the practice and the skill, while retaining the hesitations and unfinished questions that made the expansion possible.
+
+**Open question:** What form should a single conversation deposit take so that it remains specific enough to preserve its friction, but light enough not to turn the skill into an archive?
+
+#### 2026-08 — *The Eve of Parasitism* / 寄生前夜 (formerly *Symbiosis* / 共生)
+
+**Status:** testing
+
+The project formerly called *Symbiosis* is now *The Eve of Parasitism* / 寄生前夜. “Symbiosis” became too peaceful a name for relationships that are intimate and interdependent but structurally unequal. The title keeps a resonance with the game *Parasite Eve* while remaining distinct and searchable. “The Eve” is not a countdown to one event but a long condition that envelops daily life: a change that has not arrived but has already shaped bodies, labour, consumption, and imagination. Parasitism is not the opposite of symbiosis, but the unequal relation hidden by its language.
+
+The project holds three related but non-equivalent relations:
+
+- the factory and a national industrial chain, where ordinary skill and goodwill can be converted into geopolitical force;
+- the artist's studio and the craftsmen who produce works with it, linked by genuine trust and shared creativity but separated by class, social recognition, knowledge, wealth, and future possibility;
+- young people and Shanghai's club culture, where desire, energy, and cultural investment sustain the city while the promise of a global life does not alter their historical predicament.
+
+The factory and studio are physically and visually hard to separate. Their social value and their inhabitants' life trajectories are not. The project does not resolve this contradiction or speak for the craftsmen; it makes the scene in which their creativity can be seen and the contradiction can remain.
+
+Its four-screen video installation brings together: factory footage of craftsmen at work; documentation of the final two nights of Shanghai club ALL; a first-person game; and a screen of data visualisation, industrial histories and global labour flows, plus 3D scans of the studio-factory. These screens do not deliver a single thesis. They form a field in which material labour, urban affect, game agency, logistics, and information systems pressure one another.
+
+The project continues the User → Bot → Player → Void-Seeker line in a more concrete reality-political situation. A Player has agency within rules and can find a bug; a Void-Seeker looks for what a system does not name or cannot fully absorb. Here, the Void is a shelter: a temporary refuge that appears in the moment of passing through danger. The bullet-hell game mechanic of grazing a bullet without dying gives this a form. It is not escape from the system but a practiced moment of courage, self-recognition, and self-authorization.
+
+The work keeps this possibility partly hidden in its details. A viewer may arrive at a thought close to the artist's, which creates a meaningful relation; they may not, and the work remains open. What matters is that the materials initiate thought without imposing a final answer.
+
+**Open questions:** How will the bullet-hell game make the shelter legible without explaining it? Which relations between the four screens should remain unsynchronised or unresolved?
 
 ## Who
 

@@ -2,6 +2,17 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.10.0 — 2026-08-01
+
+### Added
+
+- A testing-level decolonial extension for *The Eve of Parasitism*: **unexchangeable critique / 不可兑换的批判**.
+- A concept card and dialogue deposit distinguishing coloniality, decolonial practice, and the project’s double capture of factory creativity and cultural-political critique.
+
+### Changed
+
+- Linked the supplied postcolonial / decolonial research to the project’s source ledger as a research map with explicit evidence limits.
+
 ## 1.9.0 — 2026-08-01
 
 ### Added

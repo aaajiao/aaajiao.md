@@ -54,12 +54,21 @@ Here, the Void is a **shelter**: a temporary refuge that appears in a moment of 
 - **Void-Seeker / 虚空探索者** — a method for locating behaviours, affects, and relations not fully named, quantified, or absorbed by a system. The task is not to possess the Void, but to keep it perceptible.
 - **Void / 虚空** — neither blankness, failure, nor utopia. In this project it is a momentary shelter. **Grazing** a bullet—Chinese: **擦弹**; Japanese: **グレイズ**—gives this shelter a concrete game form: proximity to danger without being hit.
 
+### Decolonial extension: unexchangeable critique
+
+The project does not claim the completed status of a decolonial work. It tests **coloniality** as the continuing distribution of logistics, knowledge, perception, and value after formal colonial rule. It refuses a moralised Global North / Global South binary: manufacturing power can be mobilised as national-industrial force without returning agency to workers, while Eurocentric art and knowledge institutions can confer international visibility without producing local material-political efficacy.
+
+This produces a double capture. Factory creativity is converted into productive capacity and then into industrial power. Cultural-political critique can be converted into exhibitable, circulating symbolic capital. Neither automatically produces emancipation. **Unexchangeable critique / 不可兑换的批判** names this gap: cultural capital can move through international institutions while remaining difficult to exchange for change in labour relations, rent, platform governance, or state mobilisation of supply chains.
+
+Decolonial practice here is not a return to a pure non-Western authenticity or a choice of correct camp. It is an ongoing inquiry into who has mobility, classificatory power, narrative authority, and the right to exit; and who bears the costs of cheapness, visibility, and silence. Player and Void-Seeker do not resolve this structure. They make its remaining fissures perceptible.
+
 The work keeps this possibility partly hidden. A viewer may reach a thought close to the artist's, or arrive elsewhere. The purpose is not a fixed answer but the thinking process activated by the encounter.
 
 ## Open questions
 
 - How can the bullet-hell game make shelter perceptible without explaining it?
 - Which relations between the four screens should remain unsynchronised or unresolved?
+- How can the work redistribute perceptual or authorial power rather than only diagnose its unequal distribution?
 
 ## Related records
 
@@ -69,3 +78,5 @@ The work keeps this possibility partly hidden. A viewer may reach a thought clos
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` — exhibition-language deposit
 - `docs/concepts/player-void-seeker-void.md` — concept card for the Player → Void-Seeker → Void sequence
 - `docs/research/the-eve-of-parasitism-source-ledger.md` — evidence, provenance, and verification status for public claims
+- `docs/dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` — provisional decolonial extension
+- `docs/concepts/decoloniality-and-unexchangeable-critique.md` — concept card for coloniality and unexchangeable critique

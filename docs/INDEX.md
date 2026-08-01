@@ -9,7 +9,9 @@ This index distinguishes active working knowledge from revision material, histor
 | `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜* | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism.md` | First curated dialogue deposit for the current project | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` | Curated deposit on exhibition language, logistics research, and concept annotations | 2026-08-01 |
+| `dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` | Curated deposit on coloniality and unexchangeable critique | 2026-08-01 |
 | `concepts/player-void-seeker-void.md` | Active concept card for the Player → Void-Seeker → Void sequence | 2026-08-01 |
+| `concepts/decoloniality-and-unexchangeable-critique.md` | Emerging concept card for the project’s decolonial extension | 2026-08-01 |
 | `research/the-eve-of-parasitism-source-ledger.md` | Evidence ledger for public claims and project research | 2026-08-01 |
 | `concepts/` | Concept cards for recurring ideas under active revision | 2026-08-01 |
 

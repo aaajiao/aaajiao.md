@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.9.0"
+  version: "1.10.0"
 ---
 
 # aaajiao
@@ -77,6 +77,14 @@ The current project dossier is `docs/project/the-eve-of-parasitism.md`. Its firs
 The exhibition text is not a neutral explanation added after the work. It clarifies the project’s operative relations: the four screens form an infrastructural field rather than four illustrations; artificial flowers are readymades and supply-chain evidence; the China–EU low-value parcel study turns logistics into a visible political mechanism. Player, Void-Seeker, and Void are now recorded as a linked conceptual sequence, with the bullet-hell mechanic of **grazing / 擦弹 / グレイズ** giving the Void its material form as a temporary shelter.
 
 **Open question:** How can these terms remain perceptible in the exhibition without becoming a glossary that closes the work?
+
+#### 2026-08 — Decoloniality and unexchangeable critique
+
+**Status:** emerging
+
+*The Eve of Parasitism* should not claim the completed position of a “decolonial work.” It tests coloniality as a continuing organisation of logistics, knowledge, perception, and value after formal colonial rule. The project names a double capture: factory creativity is converted into productive and national-industrial capacity, while cultural-political critique can be converted into internationally circulating symbolic capital without becoming effective in local material politics. The term **unexchangeable critique / 不可兑换的批判** holds this gap without making cultural work useless or treating the Global South as innocent.
+
+**Open question:** Can a decolonial extension redistribute authorial, classificatory, or perceptual power within the work, rather than merely describing their unequal distribution?
 
 ## Who
 

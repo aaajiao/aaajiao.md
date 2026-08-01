@@ -2,6 +2,13 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.7.0 — 2026-08-01
+
+### Changed
+
+- Flattened the historical archive into date-prefixed Markdown files.
+- Updated the skill, project dossier, and documentation index to use the simplified archive paths.
+
 ## 1.6.0 — 2026-08-01
 
 ### Changed

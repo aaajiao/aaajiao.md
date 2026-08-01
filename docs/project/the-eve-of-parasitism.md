@@ -45,6 +45,6 @@ The work keeps this possibility partly hidden. A viewer may reach a thought clos
 
 ## Related records
 
-- `docs/archive/projects/symbiosis/project.md` — historical project document under the former working title
-- `docs/archive/projects/symbiosis/matsutake_framework.md` — historical conceptual framework
+- `docs/archive/2026-01-project-symbiosis.md` — historical project document under the former working title
+- `docs/archive/2026-01-framework-symbiosis-matsutake.md` — historical conceptual framework
 - `docs/dialogues/2026-08-the-eve-of-parasitism.md` — first dialogue deposit

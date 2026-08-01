@@ -22,10 +22,10 @@ This index distinguishes active working knowledge from revision material, histor
 
 | Document | Former role | Current relationship |
 |---|---|---|
-| `archive/projects/symbiosis/project.md` | Former project dossier for *Symbiosis / 共生* | Superseded by `project/the-eve-of-parasitism.md`; retain for provenance |
-| `archive/projects/symbiosis/matsutake_framework.md` | Former conceptual framework | Archived with the *Symbiosis* formulation; retain for historical tensions and source trails |
-| `archive/letters/to_luyang_2026jan.md` | Dated personal letter | Historical voice and context; do not treat as a current statement without confirmation |
-| `archive/opencall/overgaden_2027_v4.md` | Time-bound exhibition application | Historical public formulation; not the current project statement |
+| `archive/2026-01-project-symbiosis.md` | Former project dossier for *Symbiosis / 共生* | Superseded by `project/the-eve-of-parasitism.md`; retain for provenance |
+| `archive/2026-01-framework-symbiosis-matsutake.md` | Former conceptual framework | Archived with the *Symbiosis* formulation; retain for historical tensions and source trails |
+| `archive/2026-01-letter-to-luyang.md` | Dated personal letter | Historical voice and context; do not treat as a current statement without confirmation |
+| `archive/2026-01-opencall-overgaden-v4.md` | Time-bound exhibition application | Historical public formulation; not the current project statement |
 
 ## Sources
 

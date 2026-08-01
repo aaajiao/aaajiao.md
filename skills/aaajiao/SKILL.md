@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
 ---
 
 # aaajiao
@@ -221,11 +221,11 @@ Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 | Podcast: AI, Power & Reality (EN) | `docs/interview/2025_secondhand-experience_podcast_en.md` | English version of the above |
 | Ocula: Metagame (2021, full EN) | `docs/interview/2021_ocula_metagame_full.md` | Stephanie Bailey interview: User→Bot→Player trilogy, Deep Simulator, bardo × computation, Poor Mining, Xindanwei, NFTs |
 | Ocula: Metagame (2021, CN summary) | `docs/interview/2021_ocula_metagame.md` | Chinese version with key excerpts |
-| Letter to Luyang | `docs/archive/letters/to_luyang_2026jan.md` | Historical personal voice; domestication, memory, transmission |
-| Overgaden Application | `docs/archive/opencall/overgaden_2027_v4.md` | Historical public voice; double helix in exhibition proposal form |
+| Letter to Luyang | `docs/archive/2026-01-letter-to-luyang.md` | Historical personal voice; domestication, memory, transmission |
+| Overgaden Application | `docs/archive/2026-01-opencall-overgaden-v4.md` | Historical public voice; double helix in exhibition proposal form |
 | The Eve of Parasitism | `docs/project/the-eve-of-parasitism.md` | Current project dossier: four screens, parasitism, Void as shelter |
-| Symbiosis Project Doc | `docs/archive/projects/symbiosis/project.md` | Historical project formulation; read for provenance, not as current position |
-| Symbiosis × Matsutake | `docs/archive/projects/symbiosis/matsutake_framework.md` | Historical conceptual framework; read for provenance, not as current position |
+| Symbiosis Project Doc | `docs/archive/2026-01-project-symbiosis.md` | Historical project formulation; read for provenance, not as current position |
+| Symbiosis × Matsutake | `docs/archive/2026-01-framework-symbiosis-matsutake.md` | Historical conceptual framework; read for provenance, not as current position |
 
 ### Critical Reception (others writing about aaajiao)
 

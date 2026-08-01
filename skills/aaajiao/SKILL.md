@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # aaajiao
@@ -37,6 +37,18 @@ After a meaningful dialogue, ask: **what did this conversation change?** If it c
 - the next unresolved question.
 
 Do not treat dialogue as proof. It generates candidate knowledge. A deposit joins the Core only after it has been returned to, tested through work or reality, and still holds.
+
+### Concept Return / 概念回访
+
+Use a Concept Return when a concept already has a history in the works but needs a present-tense response. The works archive is not a static database: it is a way for earlier works to question the current practice.
+
+1. **Retrieve / 回溯** — search the works database, project documents, and primary interviews for the concept. Identify concrete works, dates, mechanisms, and contradictory usages.
+2. **Map / 映射** — make a short concept card: its earlier definition, evidence, relations to other concepts, and unresolved tensions. Do not infer continuity where the record does not establish it.
+3. **Interview / 对谈** — ask questions grounded in those specific works. Ask what still holds, what has changed, and what present reality makes newly visible.
+4. **Deposit / 沉淀** — write a dated dialogue deposit. Separate established facts, the artist's current position, and still-open hypotheses.
+5. **Promote or retain / 升级或保留** — update the concept card; move only tested, durable changes into Core. Keep unresolved changes in the dialogue deposit or Seeds.
+
+The aim is neither to protect the past work from revision nor to overwrite it with the present. It is to make the transformation between them visible.
 
 ### Growth Log / 生长记录
 
@@ -191,9 +203,11 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Project dossiers | `docs/project/` | Current, structured descriptions of active projects; historical names remain as redirects or archival records |
 | Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
+| Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
+| Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |
 | Changelog | `CHANGELOG.md` | Version history for the skill |
 
-When a dialogue changes the practice, create or update its project dossier first, then add a dated deposit and changelog entry. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
+When a dialogue changes the practice, create or update its project dossier first, then add a dated deposit and changelog entry. For a recurring concept, run a Concept Return and update its card. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
 
 Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
 

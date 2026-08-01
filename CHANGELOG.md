@@ -2,6 +2,13 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.4.0 — 2026-08-01
+
+### Added
+
+- The Concept Return / 概念回访 workflow: retrieve historical work evidence, interview the present practice, and preserve the transformation between them.
+- A concept-card directory and template for recurring concepts.
+
 ## 1.3.0 — 2026-08-01
 
 ### Added

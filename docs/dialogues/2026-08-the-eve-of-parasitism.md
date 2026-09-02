@@ -6,7 +6,7 @@
 
 ## Starting situation
 
-The project had accumulated materials on a Shanghai acrylic factory, the closure of club ALL, first-person and bullet-hell game forms, global labour research, and data visualisation. Its earlier name, *Symbiosis*, no longer described the project with sufficient precision.
+The project had accumulated materials on a Shanghai acrylic factory, the closure of club ALL, *Danmaku* footage combined with the ALL material on Screen 2, a recording of *1bit* on Screen 3, global labour research, and data visualisation. Its earlier name, *Symbiosis*, no longer described the project with sufficient precision.
 
 ## What changed
 
@@ -16,7 +16,7 @@ The Void is clarified as a shelter rather than mere absence: a temporary and cou
 
 ## Relation to practice
 
-The project extends User → Bot → Player → Void-Seeker from primarily digital identity into filmed, embodied, reality-political scenes. Its four screens organise factory labour, club culture, first-person participation, and global logistical information without resolving their conflict.
+The project extends User → Bot → Player → Void-Seeker from primarily digital identity into filmed, embodied, reality-political scenes. Its four screens organise factory labour; club culture combined with *Danmaku*; recorded first-person traversal from *1bit*; and global logistical information without resolving their conflict.
 
 ## What remains open
 

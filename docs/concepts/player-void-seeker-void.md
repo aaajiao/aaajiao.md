@@ -9,7 +9,7 @@
 |---|---:|---|---|
 | *User, Love, High-Frequency Trading* | 2017 | The User names an identity produced through platforms and everyday interfaces. | A person reduced to an operational identity inside networked governance. |
 | Ocula interview: *Metagame* | 2021 | User → Bot → Player appears as a sequence in the practice. | Player names an active relation to a rule system rather than a position outside it. |
-| *The Eve of Parasitism* | 2015–present | First-person game and bullet-hell sequence are placed beside factory, club, and logistics material. | The sequence enters a concrete reality-political situation. |
+| *The Eve of Parasitism* | 2015–present | ALL footage and *Danmaku* share one screen; another screen presents recorded first-person gameplay from *1bit*, beside factory and logistics material. | The sequence enters a concrete reality-political situation through recorded game traces rather than direct exhibition interaction. |
 
 ## Relations
 

@@ -24,13 +24,13 @@ The work does not resolve these contradictions or claim to speak for the craftsm
 | Screen | Material | Function |
 |---|---|---|
 | 1 | Footage of craftsmen at work | Makes bodily technique, attention, and under-recognised creativity visible |
-| 2 | The final two days of Shanghai club ALL, including a bullet-hell game sequence | Holds youth culture, desire, cultural consumption, and temporary escape together |
-| 3 | First-person game | Lets a visitor enter without assigning a fixed identity; perception is carried by each player's experience |
+| 2 | Footage from the final two days of Shanghai club ALL combined on the same screen with footage from [Danmaku](https://github.com/aaajiao/Danmaku) | Places the club’s temporary collectivity beside the bullet-hell practice of grazing and finding negative space |
+| 3 | Recorded gameplay from [1bit](https://github.com/aaajiao/1bit) | Carries a first-person trace of movement, gaze, pressure, and resistance into the installation without making the exhibition screen directly interactive |
 | 4 | Data visualisation, histories of industrial transfer, global labour flows, a China–EU low-value parcel study, and 3D scans of the studio-factory | Makes logistics, tax thresholds, statistics, infrastructure, and the conversion of lived scenes into information visible |
 
 The screens are not four explanations of the same thesis. They form an unstable field in which labour, urban affect, game agency, logistics, and information systems pressure one another.
 
-The game and data layers have their own project repositories: [Danmaku](https://github.com/aaajiao/Danmaku) is the original browser bullet-hell work; [1bit](https://github.com/aaajiao/1bit) is the first-person 3D work; and [CHINA-EU-FLOW-ASCII](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII) is the 1-bit ASCII visualisation of China–EU e-commerce parcel flows. They are not supplementary illustrations but working media through which the project’s digital and material tracks meet.
+The game and data layers have their own project repositories: [Danmaku](https://github.com/aaajiao/Danmaku) is the original browser bullet-hell work shown together with the ALL material on Screen 2; [1bit](https://github.com/aaajiao/1bit) is the first-person 3D work whose recorded gameplay occupies Screen 3; and [CHINA-EU-FLOW-ASCII](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII) is the 1-bit ASCII visualisation of China–EU e-commerce parcel flows. They are not supplementary illustrations but working media through which the project’s digital and material tracks meet.
 
 ### Artificial flowers and the logistics field
 

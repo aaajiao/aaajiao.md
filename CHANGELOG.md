@@ -2,6 +2,13 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.10.1 — 2026-09-02
+
+### Corrected
+
+- Corrected the four-screen mapping for *The Eve of Parasitism*: Screen 2 combines ALL footage with *Danmaku*, and Screen 3 presents recorded gameplay from *1bit*.
+- Removed the implication that the exhibition’s third screen is directly interactive.
+
 ## 1.10.0 — 2026-08-01
 
 ### Added

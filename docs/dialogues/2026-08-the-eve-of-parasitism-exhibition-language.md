@@ -6,7 +6,7 @@
 
 ## Starting situation
 
-The project had a four-screen installation proposal, factory and ALL footage, a first-person and bullet-hell game, data visualisation, 3D scans, and artificial flowers. The task was to turn this material into public exhibition language without reducing it to a list of elements or a single explanatory claim.
+The project had a four-screen installation proposal: factory footage; ALL footage combined with *Danmaku* on one screen; recorded first-person gameplay from *1bit*; data visualisation and 3D scans; and artificial flowers. The task was to turn this material into public exhibition language without reducing it to a list of elements or a single explanatory claim.
 
 ## What changed
 
@@ -17,6 +17,8 @@ Purchased artificial flowers are clarified as readymades and material evidence: 
 The data screen now explicitly includes a study of China–EU low-value, duty-exempt parcels before and during COVID, with attention to subsequent customs-regime adjustments. Parcel volume is treated as a way to make platform pricing, tax thresholds, cross-border fulfilment, deflationary competition, and trade friction visible together. Cheapness is a produced condition, not a neutral characteristic of goods.
 
 The project’s terms **Player**, **Void-Seeker**, and **Void** are now accompanied by an accessible conceptual annotation. The game term was confirmed as **grazing / 擦弹 / グレイズ**. Grazing supplies the Void with a formal mechanism: a temporary shelter reached through proximity to danger, without a promise of external escape or total transformation. The project repositories for [Danmaku](https://github.com/aaajiao/Danmaku), [1bit](https://github.com/aaajiao/1bit), and [CHINA-EU-FLOW-ASCII](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII) are the relevant primary technical records.
+
+The screen mapping was later corrected: the ALL documentary material and *Danmaku* share Screen 2, while Screen 3 presents a recording of *1bit*. The exhibition does not make Screen 3 directly interactive; first-person agency is encountered through the trace of a recorded playthrough.
 
 ## Relation to practice
 

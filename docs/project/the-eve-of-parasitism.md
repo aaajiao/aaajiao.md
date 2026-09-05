@@ -64,6 +64,16 @@ Decolonial practice here is not a return to a pure non-Western authenticity or a
 
 The work keeps this possibility partly hidden. A viewer may reach a thought close to the artist's, or arrive elsewhere. The purpose is not a fixed answer but the thinking process activated by the encounter.
 
+## Dated current question — 2026-09-05
+
+**Status:** emerging. The artist described the work as still in progress and unpublished.
+
+In the September 5 dialogue, aaajiao described the work as partly a question addressed to himself, and as a work that may not have an audience. His difficulty is not only how to circulate a finished expression: expression itself addresses others, and the loss of motivation to serve or respond to others has also reduced the desire and expectation to express. The existence of this dossier or the work in progress cannot establish that this desire remains intact.
+
+The open question is whether to keep responding to an imperfect system whose power relations he dislikes but in which his expression participates, or to acknowledge the circulation of power and interest and continue living without attending to it. He did not resolve this question into continued production, withdrawal, or silence. His proposal to recover curiosity leaves room for discoveries that structural analysis has not already determined; it is not a claim to have recovered creative motivation.
+
+See the [dated deposit](../dialogues/2026-09-financial-freedom-and-expression.md) and [full edited conversation](../dialogues/2026-09-financial-freedom-and-expression-conversation.md). This addition records a current question; the project's material configuration remains documented above.
+
 ## Open questions
 
 - How can the bullet-hell game make shelter perceptible without explaining it?
@@ -80,3 +90,4 @@ The work keeps this possibility partly hidden. A viewer may reach a thought clos
 - `docs/research/the-eve-of-parasitism-source-ledger.md` — evidence, provenance, and verification status for public claims
 - `docs/dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` — provisional decolonial extension
 - `docs/concepts/decoloniality-and-unexchangeable-critique.md` — concept card for coloniality and unexchangeable critique
+- `docs/dialogues/2026-09-financial-freedom-and-expression.md` — emerging deposit on financial freedom, curiosity, and the changing desire to respond

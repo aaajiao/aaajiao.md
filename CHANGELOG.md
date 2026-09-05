@@ -2,6 +2,17 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.11.0 — 2026-09-05
+
+### Added
+
+- The September 5 voice conversation on financial freedom, livelihood, metadata, curiosity, and the changing desire to express: a full edited conversation record, an emerging dialogue deposit, and a source ledger for the comparative cases.
+- Dated current questions in *The Eve of Parasitism* and dated responses in the Player → Void-Seeker → Void and unexchangeable critique concept cards.
+
+### Changed
+
+- Added skill navigation and index entries that distinguish the edited conversation, provisional deposit, and source verification. Preserved the artist's corrections and unresolved choices without promoting this dialogue into Core or presenting the ongoing project as completed.
+
 ## 1.10.1 — 2026-09-02
 
 ### Corrected

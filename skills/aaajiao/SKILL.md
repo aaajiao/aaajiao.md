@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.10.1"
+  version: "1.11.0"
 ---
 
 # aaajiao
@@ -85,6 +85,16 @@ The exhibition text is not a neutral explanation added after the work. It clarif
 *The Eve of Parasitism* should not claim the completed position of a “decolonial work.” It tests coloniality as a continuing organisation of logistics, knowledge, perception, and value after formal colonial rule. The project names a double capture: factory creativity is converted into productive and national-industrial capacity, while cultural-political critique can be converted into internationally circulating symbolic capital without becoming effective in local material politics. The term **unexchangeable critique / 不可兑换的批判** holds this gap without making cultural work useless or treating the Global South as innocent.
 
 **Open question:** Can a decolonial extension redistribute authorial, classificatory, or perceptual power within the work, rather than merely describing their unequal distribution?
+
+#### 2026-09-05 — Financial freedom, curiosity, and the desire to express
+
+**Status:** emerging
+
+The dialogue corrected two premature readings: livelihood can shape a person's conditions without defining their whole person; and diminished motivation to address others can diminish expression itself, not only its promotion. Curiosity was proposed as room for discovery beyond an already trusted structural explanation. *The Eve of Parasitism* remains in progress and unpublished; whether to keep responding to an imperfect system remains open. These are dated questions, not a permanent self-description or additions to Core.
+
+**Records:** `docs/dialogues/2026-09-financial-freedom-and-expression.md` is the deposit; `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` preserves the full available exchange in edited form, including corrections; `docs/research/2026-09-05-financial-freedom-and-expression-source-ledger.md` distinguishes comparative sources and their limits. Read the conversation when the development of the question matters; the deposit does not replace it.
+
+**Open question:** What encounter could renew the desire to express when neither career advancement nor the expectation of responding to others supplies its former motivation?
 
 ## Who
 
@@ -219,7 +229,8 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Record | Path | Use |
 |--------|------|-----|
 | Project dossiers | `docs/project/` | Current, structured descriptions of active projects; historical names remain as redirects or archival records |
-| Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts |
+| Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts; separately labelled edited conversation records retain fuller exchanges when archived |
+| September 2026 conversation | `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` | Full available voice exchange in edited form, with source limits and speaker corrections; dated source record, not settled knowledge |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |

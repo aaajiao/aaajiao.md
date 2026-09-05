@@ -1,7 +1,7 @@
 # Concept Card: Decoloniality and Unexchangeable Critique / 解殖民性与不可兑换的批判
 
 **Status:** `emerging`  
-**Last reviewed:** 2026-08-01
+**Last reviewed:** 2026-09-05
 
 ## Earlier formulations
 
@@ -25,6 +25,10 @@ In *The Eve of Parasitism*, **unexchangeable critique / 不可兑换的批判** 
 
 The project therefore refuses two simplifications: that the Global South is a coherent innocent subject; and that access to global cultural language automatically produces local political agency. Decolonial practice begins by keeping those two false conversions visible.
 
+### Dated response — 2026-09-05 (`emerging`)
+
+The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.md) distinguishes understanding a structure, being able to live according to that understanding, and bearing the consequences. Shared knowledge or real trust does not create equal resources or exit rights. The artist's current question is whether to keep responding to a system in which his own expression participates. Reading this through unexchangeable critique is a provisional connection, not proof that critique is useless or a confirmed cause of his diminished desire to express.
+
 ## Tensions and counterexamples
 
 - Does “unexchangeable critique” overstate the separation between cultural work and material politics, thereby repeating the very impotence it diagnoses?
@@ -42,3 +46,4 @@ The project therefore refuses two simplifications: that the Global South is a co
 
 - `docs/dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md`
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md`
+- `docs/dialogues/2026-09-financial-freedom-and-expression.md`

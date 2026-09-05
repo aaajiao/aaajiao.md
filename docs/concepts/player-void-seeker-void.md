@@ -1,7 +1,7 @@
 # Concept Card: Player → Void-Seeker → Void / 玩家 → 虚空探索者 → 虚空
 
 **Status:** `revising`  
-**Last reviewed:** 2026-08-01
+**Last reviewed:** 2026-09-05
 
 ## Earlier formulations
 
@@ -23,6 +23,10 @@ This sequence joins digital identity to the material track of the practice. It t
 
 **Void / 虚空** is neither blankness, failure, nor utopia. In *The Eve of Parasitism*, it is a temporary shelter that appears under pressure. The bullet-hell mechanic of **grazing**—Chinese: **擦弹**; Japanese: **グレイズ**—gives it a precise form: a projectile passes close enough to register danger without hitting the player. This moment does not overturn the system or promise permanent exit. It makes agency perceptible again.
 
+### Dated response — 2026-09-05 (`emerging`)
+
+The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.md) adds a present question rather than a new definition: recognising a system's rules and having greater material freedom do not guarantee the desire to act or express within it. aaajiao's proposal to recover curiosity holds open discoveries not predetermined by structural explanation. This must not turn Void-Seeker into a promised cure for his current loss of expressive desire, or equate a player's temporary agency with another person's material right to exit.
+
 ## Tensions and counterexamples
 
 - Does the language of shelter risk making precarity appear survivable or desirable?
@@ -39,3 +43,4 @@ This sequence joins digital identity to the material track of the practice. It t
 
 - `docs/dialogues/2026-08-the-eve-of-parasitism.md`
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md`
+- `docs/dialogues/2026-09-financial-freedom-and-expression.md`

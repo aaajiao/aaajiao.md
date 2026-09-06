@@ -141,6 +141,10 @@ vercel dev           # full local dev (frontend + API)
 bun run build        # production build
 ```
 
+The project uses stable TypeScript 7.0.2 for type checking, the Pretext `postinstall` build, and Vercel API compilation. Use Vercel CLI 59.11.7 or newer (`npm install -g vercel@latest`); older CLI builders rely on the JavaScript compiler API removed in TypeScript 7. The matching `@vercel/node` and its `@vercel/build-utils` peer dependency are pinned in `package.json`.
+
+Use `bun install --frozen-lockfile` to reproduce the pinned toolchain and `vercel build` to validate the API functions as well as the frontend. The deployed API runtime is Node.js 24.
+
 ## Architecture
 
 ```

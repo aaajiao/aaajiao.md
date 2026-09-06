@@ -199,6 +199,7 @@ When the scraper pushes new data, the site reflects it within ~60s (in-memory TT
 
 ## Gotchas
 
+- **TypeScript 7 and Vercel**: Use Vercel CLI 59.11.7 or newer with the pinned `@vercel/node` 12.0.1 and its `@vercel/build-utils` 14.9.1 peer. Older builders call the removed JavaScript compiler API and can fail even when `bun run build` passes. Type checking, Pretext compilation, and the API builder all use TypeScript 7 directly. Validate compiler upgrades with a frozen install and the full `vercel build`.
 - **API imports must use `.js` extension**: The project uses `"type": "module"` (ESM). Imports in `api/` files from `shared/types` must use `../../shared/types.js` or Vercel serverless functions crash at runtime with `Cannot find module`.
 - **Streamdown `linkSafety`**: Streamdown defaults `linkSafety: { enabled: true }`, which converts `<a>` tags to `<button>` elements with a confirmation modal. Always pass `linkSafety={{ enabled: false }}` to make links directly clickable — and pass a **module-level constant** (`src/lib/streamdown.ts`'s `LINK_SAFETY`), never a fresh object literal per render: Streamdown's internal `memo()` compares `linkSafety` by reference, so a new `{ enabled: false }` object every render defeats the memoization.
 - **Markdown links**: Use standard markdown link syntax `[text](url)` and `[![](img)](img)` instead of raw HTML `<a>` tags — Streamdown may sanitize raw HTML.

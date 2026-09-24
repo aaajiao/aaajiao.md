@@ -2,6 +2,18 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.12.0 — 2026-09-24
+
+### Added
+
+- The September 24 text exchange on Naomi Klein and Astra Taylor's *End Times Fascism*: an emerging dialogue deposit, an edited conversation record, and a source ledger. The ledger separates reviews, the authors' 2025 writing, and same-day news; the book itself has not been read.
+- A dated current question in *The Eve of Parasitism* and a dated response in the Player → Void-Seeker → Void card. Both record the assistant-proposed contrast between the bunker as exit and grazing as *doikayt* / hereness.
+- Project source-ledger entry ALL-04: The Shelter, ALL's predecessor, occupied a Mao-era air-raid shelter. It is recorded as a counterexample to that contrast.
+
+### Changed
+
+- Added a Growth Log entry and navigation for the new records. The artist affirmed the book's relevance and asked for the deposit, but confirmed none of the assistant's specific connections. Nothing moves into Core. The unexchangeable-critique card is unchanged.
+
 ## 1.11.0 — 2026-09-05
 
 ### Added

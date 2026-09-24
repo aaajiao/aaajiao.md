@@ -74,6 +74,18 @@ The open question is whether to keep responding to an imperfect system whose pow
 
 See the [dated deposit](../dialogues/2026-09-financial-freedom-and-expression.md) and [full edited conversation](../dialogues/2026-09-financial-freedom-and-expression-conversation.md). This addition records a current question; the project's material configuration remains documented above.
 
+## Dated current question — 2026-09-24
+
+**Status:** emerging. The contrast below was proposed by the assistant and has not been confirmed by the artist.
+
+aaajiao shared a review of Naomi Klein and Astra Taylor's *End Times Fascism: And the Fight for the Living World* (2026) and said it responds well to the concerns of the present. He then asked for the exchange to be deposited. He did not choose among the connections the assistant offered.
+
+The assistant proposed two kinds of shelter. The shelter of end-times politics is the **bunker**: private islands, fortified enclaves, off-planet plans, the armed nation. Its logic is exit, removing oneself from a shared world. The shelter of this project is **grazing / 擦弹 / グレイズ**: staying inside the bullet field and registering danger without being hit. Its logic is closer to what the book, according to its reviewers and drawing on the Jewish Labor Bund, names *doikayt* or "hereness": pursuing justice where one lives rather than in a state built elsewhere. The contrast may help answer how the Void as shelter can avoid being read as escape.
+
+The contrast is not clean. While sources were being checked for the deposit, it was confirmed that The Shelter, ALL's predecessor, occupied a Mao-era air-raid shelter on Yongfu Road. It closed at the end of 2016 after its licence was not renewed. A bunker built for wartime survival was reoccupied as temporary collectivity, then closed by an administrative decision. Hereness can happen inside a bunker. Whether this history should enter the work, or remain research context, was not discussed.
+
+The book itself has not been read; claims about it rest on reviews and the authors' earlier writing. See the [dated deposit](../dialogues/2026-09-end-times-fascism-and-shelter.md), [edited conversation](../dialogues/2026-09-end-times-fascism-and-shelter-conversation.md), and [source ledger](../research/2026-09-24-end-times-fascism-source-ledger.md). The four-screen configuration is unchanged.
+
 ## Open questions
 
 - How can the bullet-hell game make shelter perceptible without explaining it?
@@ -91,3 +103,4 @@ See the [dated deposit](../dialogues/2026-09-financial-freedom-and-expression.md
 - `docs/dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` — provisional decolonial extension
 - `docs/concepts/decoloniality-and-unexchangeable-critique.md` — concept card for coloniality and unexchangeable critique
 - `docs/dialogues/2026-09-financial-freedom-and-expression.md` — emerging deposit on financial freedom, curiosity, and the changing desire to respond
+- `docs/dialogues/2026-09-end-times-fascism-and-shelter.md` — emerging deposit on *End Times Fascism* and two kinds of shelter: bunker as exit, grazing as hereness

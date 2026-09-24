@@ -1,7 +1,7 @@
 # Concept Card: Player → Void-Seeker → Void / 玩家 → 虚空探索者 → 虚空
 
 **Status:** `revising`  
-**Last reviewed:** 2026-09-05
+**Last reviewed:** 2026-09-24
 
 ## Earlier formulations
 
@@ -27,9 +27,15 @@ This sequence joins digital identity to the material track of the practice. It t
 
 The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.md) adds a present question rather than a new definition: recognising a system's rules and having greater material freedom do not guarantee the desire to act or express within it. aaajiao's proposal to recover curiosity holds open discoveries not predetermined by structural explanation. This must not turn Void-Seeker into a promised cure for his current loss of expressive desire, or equate a player's temporary agency with another person's material right to exit.
 
+### Dated response — 2026-09-24 (`emerging`, assistant-proposed)
+
+The [September 24 dialogue](../dialogues/2026-09-end-times-fascism-and-shelter.md) set the Void beside the shelters described in reviews of Klein and Taylor's *End Times Fascism*. The assistant proposed that the elite **bunker** is shelter as exit: withdrawal from a shared world. **Grazing** is shelter as *doikayt*, or "hereness": staying in the danger field and keeping one action perceptible. The artist asked for the exchange to be deposited but did not confirm this contrast. It is a candidate for testing, not a revised definition.
+
 ## Tensions and counterexamples
 
 - Does the language of shelter risk making precarity appear survivable or desirable?
+- If grazing is "hereness", is staying a practice or only the aesthetic of those without a right to exit? For them, remaining is not a choice.
+- The Shelter, ALL's predecessor, occupied a Mao-era air-raid shelter: a bunker reoccupied as temporary collectivity, then closed by licensing. Does this undo the bunker/grazing contrast, or make it more precise?
 - Does a player’s learned agency translate to material conditions where the cost of failure is distributed unequally?
 - Can the work keep the Void hidden enough to remain an encounter rather than an illustrated concept?
 
@@ -44,3 +50,4 @@ The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.m
 - `docs/dialogues/2026-08-the-eve-of-parasitism.md`
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md`
 - `docs/dialogues/2026-09-financial-freedom-and-expression.md`
+- `docs/dialogues/2026-09-end-times-fascism-and-shelter.md`

@@ -1,7 +1,7 @@
 # Source Ledger: *The Eve of Parasitism* / 寄生前夜
 
 **Status:** active research record  
-**Last reviewed:** 2026-08-01
+**Last reviewed:** 2026-09-24
 
 ## How to use this ledger
 
@@ -12,6 +12,7 @@ This is an evidence record, not a bibliography and not an exhibition statement. 
 | ALL-01 | ALL was a key Shanghai venue for underground and alternative electronic music, operating at its Xiangyang Bei Lu location since 2017 and closing that location after an eight-year run. | [SmartShanghai, “Oh No, All Club is Closing”](https://www.smartshanghai.com/articles/things-to-do/all-club) | 2017–2025 | High | Cite or paraphrase in public text with attribution where needed. |
 | ALL-02 | ALL continued the underground electronic-music lineage associated with The Shelter. | [SmartShanghai](https://www.smartshanghai.com/articles/things-to-do/all-club); [French Music Export report](https://cnm.fr/wp-content/uploads/2025/02/IF-L_industrie-musicale-chinoise-et-francaise-2021-anglais.pdf) | 2020–2025 | High | Suitable as context; avoid claiming a total history of Shanghai nightlife from these sources alone. |
 | ALL-03 | ALL’s last two days are filmed material in the installation. | Artist’s footage and project material | 2025 | Primary | Confirm exact dates, credits, and consent status before publication. |
+| ALL-04 | The Shelter, ALL’s predecessor at 5 Yongfu Road, occupied a Mao-era air-raid shelter and closed on 31 December 2016 after its licence was not renewed. | [China Music Radar](https://www.chinamusicradar.com/venues/the-shelter-2007-2016/comment-page-1/); [VICE](https://www.vice.com/en/article/clubs-closed-space-dance-tunnel-2016/); [That’s Shanghai](https://www.thatsmags.com/shanghai/directory/1503/the-shelter-1) | 2007–2016 | Medium–high | Suitable as context. The licensing reason comes from press reports, not official records. Added 2026-09-24 as a counterexample to the bunker/grazing contrast; see `2026-09-24-end-times-fascism-source-ledger.md` SHL-01. |
 | EU-01 | The EU abolished the VAT exemption for imported goods below €22 on 1 July 2021; import VAT procedures apply to consignments up to €150 through IOSS and related arrangements. | [European Commission: Customs formalities for low-value consignments](https://taxation-customs.ec.europa.eu/customs/customs-procedures-import-and-export/customs-operations/customs-formalities-low-value-consignments_en) | 2021–present | High | Use precise distinction: €22 concerned VAT exemption; €150 concerns customs-duty threshold and simplified procedures. |
 | EU-02 | The EU applied a temporary €3 customs duty per item to imported low-value consignments up to €150 from 1 July 2026, ending the prior duty exemption through 30 June 2026. | [European Commission, 8 June 2026](https://taxation-customs.ec.europa.eu/news/guidance-and-legal-text-temporary-flat-fee-low-value-imports-which-will-apply-until-1-july-2028-2026-06-08_en) | 2026–2028 | High | Date-sensitive: review before every public reuse. Do not conflate this customs duty with the 2021 VAT change. |
 | EU-03 | *CHINA-EU-FLOW-ASCII* visualises China→EU cross-border e-commerce logistics in a 1-bit ASCII interface. Its volume series is total EU low-value (<€150) imports; China→EU is inferred as the dominant share rather than directly counted for every year. | [aaajiao/CHINA-EU-FLOW-ASCII README](https://github.com/aaajiao/CHINA-EU-FLOW-ASCII); [European Commission low-value-consignment series](https://taxation-customs.ec.europa.eu/customs/eu-customs-union-facts-and-figures/goods-bought-online_en) | 2020–2025 | High for format and stated methodology; mixed official / estimated data | State the metric precisely. Official annual counts cover 2022–2025; 2020–2021 use a pre-reform baseline because systematic customs counts did not yet exist. |
@@ -28,6 +29,7 @@ This is an evidence record, not a bibliography and not an exhibition statement. 
 - A supply chain can become an instrument of state violence or geopolitical coercion when its infrastructure is mobilised by industrial policy, trade rules, and strategic competition.
 - The plastic flower does not stand for nature; it is a readymade trace of circulation, replication, and transferred value.
 - ALL’s closure can be read as a fracture in an urban infrastructure of temporary collectivity.
+- The Shelter’s air-raid bunker can be read as a bunker reoccupied as temporary collectivity, which complicates the contrast between shelter as exit and shelter as hereness (assistant-proposed, 2026-09-24).
 
 These propositions need to remain visibly interpretive in public writing. They can be developed through the work, but should not be presented as if a single source proves them.
 
@@ -43,3 +45,4 @@ These propositions need to remain visibly interpretive in public writing. They c
 - `docs/project/the-eve-of-parasitism.md`
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md`
 - `docs/concepts/player-void-seeker-void.md`
+- `docs/research/2026-09-24-end-times-fascism-source-ledger.md`

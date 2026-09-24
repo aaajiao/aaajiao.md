@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.11.0"
+  version: "1.12.0"
 ---
 
 # aaajiao
@@ -95,6 +95,16 @@ The dialogue corrected two premature readings: livelihood can shape a person's c
 **Records:** `docs/dialogues/2026-09-financial-freedom-and-expression.md` is the deposit; `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` preserves the full available exchange in edited form, including corrections; `docs/research/2026-09-05-financial-freedom-and-expression-source-ledger.md` distinguishes comparative sources and their limits. Read the conversation when the development of the question matters; the deposit does not replace it.
 
 **Open question:** What encounter could renew the desire to express when neither career advancement nor the expectation of responding to others supplies its former motivation?
+
+#### 2026-09-24 — Two kinds of shelter: bunker and grazing
+
+**Status:** emerging
+
+aaajiao shared a review of Naomi Klein and Astra Taylor's *End Times Fascism* (2026) and said it responds well to present concerns. He asked for the exchange to be deposited without choosing among the assistant's proposed connections. Those proposals are recorded as assistant-proposed and unconfirmed. They include: the elite **bunker** as shelter by exit, against **grazing** as shelter by *doikayt* / "hereness"; the observation that removing the apocalypse from the book's metadata still leaves hoarding; and **单一化** as a filter of system form, beside the book's definition of fascism by elite intent. A post-dialogue source check found a counterexample. The Shelter, ALL's predecessor, occupied an air-raid bunker. The book itself has not been read. Nothing moves into Core.
+
+**Records:** `docs/dialogues/2026-09-end-times-fascism-and-shelter.md` is the deposit; `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` preserves the text exchange with editorial notes; `docs/research/2026-09-24-end-times-fascism-source-ledger.md` records what reviews, earlier essays, and same-day news can and cannot support.
+
+**Open question:** Is grazing a practice of staying, or the aesthetic of those who have no right to exit?
 
 ## Who
 
@@ -231,6 +241,7 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Project dossiers | `docs/project/` | Current, structured descriptions of active projects; historical names remain as redirects or archival records |
 | Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts; separately labelled edited conversation records retain fuller exchanges when archived |
 | September 2026 conversation | `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` | Full available voice exchange in edited form, with source limits and speaker corrections; dated source record, not settled knowledge |
+| September 24 conversation | `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` | Text exchange on *End Times Fascism* in edited form, with editorial notes on citations and omitted names; dated source record, not settled knowledge |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |

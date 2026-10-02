@@ -1,7 +1,7 @@
 # Concept Card: Decoloniality and Unexchangeable Critique / 解殖民性与不可兑换的批判
 
 **Status:** `emerging`  
-**Last reviewed:** 2026-09-05
+**Last reviewed:** 2026-10-02
 
 ## Earlier formulations
 
@@ -29,6 +29,10 @@ The project therefore refuses two simplifications: that the Global South is a co
 
 The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.md) distinguishes understanding a structure, being able to live according to that understanding, and bearing the consequences. Shared knowledge or real trust does not create equal resources or exit rights. The artist's current question is whether to keep responding to a system in which his own expression participates. Reading this through unexchangeable critique is a provisional connection, not proof that critique is useless or a confirmed cause of his diminished desire to express.
 
+### Dated response — 2026-10-02 (`emerging`)
+
+The [canned-culture dialogue](../dialogues/2026-10-02-canned-culture-tradition-and-present.md) asks how contemporary art can package conflict into style, taste, scarcity, and price. This touches the conversion of critique into circulating value without equating monetary valuation with local political efficacy. The [new concept card](canned-culture.md) retains the metaphor's limits: a priced work can still hold living experience, and neither institutional recognition nor participatory form guarantees an effect. Comparative material must change the inquiry while preserving each region's history; the essay does not claim a completed decolonial position or change this project's mechanisms.
+
 ## Tensions and counterexamples
 
 - Does “unexchangeable critique” overstate the separation between cultural work and material politics, thereby repeating the very impotence it diagnoses?
@@ -47,3 +51,4 @@ The [September dialogue](../dialogues/2026-09-financial-freedom-and-expression.m
 - `docs/dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md`
 - `docs/dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md`
 - `docs/dialogues/2026-09-financial-freedom-and-expression.md`
+- [2026-10-02 canned culture, historical forms, and the present](../dialogues/2026-10-02-canned-culture-tradition-and-present.md)

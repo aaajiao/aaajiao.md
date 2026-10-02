@@ -2,6 +2,19 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.13.0 — 2026-10-02
+
+### Added
+
+- An emerging dialogue deposit on canned culture, historical-form choices, continuity and rupture, political expression, and contemporary art's conversion of conflict into style and price. It preserves the artist's corrections and unresolved questions.
+- The author-confirmed complete essay and a source ledger preserving the accompanying notes, 14 comparative source groups, research limits, portable local references, and restricted Basecamp publication provenance. The essay is not presented as a transcript; original output files remain unchanged.
+- A revising canned-culture concept card with an emerging current response, plus a dated backlink in the unexchangeable critique card. No new judgment was promoted to Core and no artwork or project was invented.
+
+### Changed
+
+- Added Growth Log and index navigation for the October records. Clarified that topic-based dialogue need not create a project dossier, and that a locally loaded skill should read the same checkout's references before falling back to GitHub.
+- Separated the source notes' earlier writing-only authorization from the subsequent skill-update stage; retained the original research's verification limits without claiming a new external source audit.
+
 ## 1.12.0 — 2026-09-24
 
 ### Added

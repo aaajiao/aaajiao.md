@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.12.0"
+  version: "1.13.0"
 ---
 
 # aaajiao
@@ -105,6 +105,16 @@ aaajiao shared a review of Naomi Klein and Astra Taylor's *End Times Fascism* (2
 **Records:** `docs/dialogues/2026-09-end-times-fascism-and-shelter.md` is the deposit; `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` preserves the text exchange with editorial notes; `docs/research/2026-09-24-end-times-fascism-source-ledger.md` records what reviews, earlier essays, and same-day news can and cannot support.
 
 **Open question:** Is grazing a practice of staying, or the aesthetic of those who have no right to exit?
+
+#### 2026-10-02 — Canned culture, historical forms, and answering the present
+
+**Status:** emerging
+
+The question shifted from who may inherit a tradition to why a person today chooses a historical form, and what makes it available, expressible, and displayable. The initial claim of complete rupture was narrowed to lived experience, class position, and public cultural order; a felt but hard-to-describe continuity through language, habit, learning, and labour remains unresolved. The artist's critique of political limits and the governing national-rejuvenation narrative concerns the dominant public cultural order, not all local life or every person's motives. The “canned culture” metaphor also turns on contemporary art's conversion of conflict into style, taste, scarcity, and price. Reworking, consumption, or having a price does not by itself make culture false or dead. Comparative sources must change the question, not merely authorise it. These are dated candidate judgments, not additions to Core.
+
+**Records:** [Dialogue deposit](../../docs/dialogues/2026-10-02-canned-culture-tradition-and-present.md) preserves the corrections and Seeds; [author-confirmed essay](../../docs/dialogues/2026-10-02-canned-culture-article.md) preserves the complete written outcome, not a transcript; [concept card](../../docs/concepts/canned-culture.md) holds the provisional metaphor; [source ledger](../../docs/research/2026-10-02-canned-culture-source-ledger.md) retains research limits and the restricted Basecamp publication record.
+
+**Open question:** Can a borrowed form keep one's present conditions open to attention and response? “面对现实的勇气和回答现实的勇气” remains an invitation, without requiring guaranteed political change or a direct political declaration from every work.
 
 ## Who
 
@@ -242,6 +252,7 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Conversation deposits | `docs/dialogues/` | Curated outcomes of meaningful dialogues; not verbatim transcripts; separately labelled edited conversation records retain fuller exchanges when archived |
 | September 2026 conversation | `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` | Full available voice exchange in edited form, with source limits and speaker corrections; dated source record, not settled knowledge |
 | September 24 conversation | `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` | Text exchange on *End Times Fascism* in edited form, with editorial notes on citations and omitted names; dated source record, not settled knowledge |
+| October 2026 canned-culture dialogue | [Deposit](../../docs/dialogues/2026-10-02-canned-culture-tradition-and-present.md), [essay](../../docs/dialogues/2026-10-02-canned-culture-article.md), [concept card](../../docs/concepts/canned-culture.md), [ledger](../../docs/research/2026-10-02-canned-culture-source-ledger.md) | Read for historical-form choices, continuity/rupture, cultural availability, or style and price; preserves corrections, author judgments, and source limits |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |
@@ -250,9 +261,9 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | Historical archive | `docs/archive/` | Superseded project formulations and contextual records; never read as current instruction without checking status |
 | Changelog | `CHANGELOG.md` | Version history for the skill |
 
-When a dialogue changes the practice, create or update its project dossier first, then add a dated deposit and changelog entry. For a recurring concept, run a Concept Return and update its card. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
+When a dialogue changes an existing project, update its dossier first, then add a dated deposit and changelog entry. A topic-based dialogue can have a deposit, written outcome, and source ledger without inventing a project. For a recurring concept or one materially changed through dialogue, run a Concept Return and update its card; distinguish earlier methods from the new term. Keep `SKILL.md` concise: it should orient users and link to the living records rather than duplicate them.
 
-Fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`
+When using this skill from a repository checkout, read that checkout's `docs/` first so local deposits remain available before publication. When local references are unavailable, fetch via raw URLs: `https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/`. Paths in backticks are repository-relative; Markdown links resolve from this file.
 
 ### Primary Sources (aaajiao's own voice)
 

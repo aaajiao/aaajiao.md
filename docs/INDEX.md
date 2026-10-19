@@ -38,7 +38,7 @@ This index distinguishes active working knowledge from revision material, histor
 
 ## Sources
 
-Interviews, letters, media coverage, and completed applications remain in their existing directories. Treat them as dated evidence of a position at the time of writing, not automatically as the current position.
+Interviews, letters, media coverage, and completed applications remain in their existing directories. Treat them as dated evidence of a position at the time of writing, not automatically as the current position. An assistant-proposed seed list that has not passed through a dialogue stays here as a research record. It is not active working knowledge.
 
 | Document | Source role | Last updated |
 |---|---|---|
@@ -48,6 +48,8 @@ Interviews, letters, media coverage, and completed applications remain in their 
 | `research/2026-09-24-end-times-fascism-source-ledger.md` | Source ledger separating reviews, the authors' earlier writing, doikayt sources, The Shelter, and same-day news; the book itself unread | 2026-09-24 |
 | [《罐头打开以后：我们为什么借过去表达今天》](dialogues/2026-10-02-canned-culture-article.md) | Author-confirmed complete essay published to restricted Basecamp; written outcome, not a transcript or settled knowledge | 2026-10-02 |
 | [Canned-culture source ledger](research/2026-10-02-canned-culture-source-ledger.md) | Preserves the confirmed source notes, 14 source groups and their limits, local method references, publication provenance, and the boundary between writing and skill integration | 2026-10-02 |
+| [Newsletter-readings source ledger](research/2026-10-19-newsletter-readings-source-ledger.md) | URLs named in the 2026-10-19 assistant reading notes, the candidate seed each note says a source supports, and public-use limits. Pages were not re-read; paraphrases and names without a URL stay unverified | 2026-10-19 |
+| [Newsletter-readings seed list](research/2026-10-19-newsletter-readings-seeds.md) | Seven `emerging` themes from those notes. Assistant-proposed, unconfirmed by the artist; candidate questions for a future dialogue or Concept Return. Not a dialogue deposit. `SKILL.md` and Core are unchanged | 2026-10-19 |
 
 ## Archive rules
 

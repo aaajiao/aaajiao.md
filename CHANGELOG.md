@@ -2,6 +2,19 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## Unreleased — 2026-10-19
+
+Records only. The skill stays at `1.13.0`, so this entry has no version number of its own. It joins the next version that changes `SKILL.md`.
+
+### Added
+
+- A dated source ledger for seven assistant-proposed themes from art-newsletter reading notes. For each named article or exhibition it records the source, the original URL, which candidate seed the notes say it supports, confidence, and public-use status. Publication dates and page contents were not in the notes and were not re-checked. Second-hand paraphrases, and names with no URL, are marked unverified.
+- A seed list, not a dialogue deposit, for the same seven themes. No dialogue took place. Each item is `emerging` and labeled assistant-proposed, unconfirmed by the artist: a candidate question for a future dialogue or Concept Return. Pointers to the 2026-09-24 grazing deposit, the unexchangeable-critique card, and the Player → Void-Seeker → Void card are cross-references only.
+
+### Changed
+
+- Indexed the two research files. `skills/aaajiao/SKILL.md` is unchanged, including its Growth Log, Core, Critical Lens, navigation, and `metadata.version` (`1.13.0`). No existing concept card or dialogue deposit was edited. The artist has not confirmed any of these themes. Nothing enters Core.
+
 ## 1.13.0 — 2026-10-02
 
 ### Added

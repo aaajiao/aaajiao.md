@@ -1,6 +1,6 @@
 # aaajiao — Contemporary artist, works archive
 
-> aaajiao (徐文恺, Xu Wenkai) is a media artist based between Berlin and Shanghai. Born 1984 in Wuhan, CS background. His practice uses concepts from technology as filters to reveal patterns in society — algorithmic governance, platform politics, digital identity, trade infrastructure.
+> aaajiao (徐文恺, Xu Wenkai) is a media artist based between Berlin and Shanghai. Born 1984 in Xi'an; studied computer science at Wuhan University. His practice uses concepts from technology as filters to reveal patterns in society — algorithmic governance, platform politics, digital identity, trade infrastructure.
 
 This site is the canonical works archive plus a portable agent skill. The same URLs serve JSON, Markdown, or raw bytes via HTTP `Accept` content negotiation. All endpoints declare `Content-Signal: ai-input=yes, ai-train=yes, search=yes`.
 

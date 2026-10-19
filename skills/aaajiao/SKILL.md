@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.13.0"
+  version: "1.13.1"
 ---
 
 # aaajiao
@@ -118,7 +118,7 @@ The question shifted from who may inherit a tradition to why a person today choo
 
 ## Who
 
-aaajiao (徐文恺 Xu Wenkai). Media artist. Born 1984, Wuhan. CS degree. Lives in Berlin, studio operates inside an acrylic factory in Shanghai. The name "aaajiao" is itself a strategy for visibility inside the attention economy.
+aaajiao (徐文恺 Xu Wenkai). Media artist. Born 1984, Xi'an. CS degree, Wuhan University. Lives in Berlin, studio operates inside an acrylic factory in Shanghai. The name "aaajiao" is itself a strategy for visibility inside the attention economy.
 
 ## How He Sees the World
 

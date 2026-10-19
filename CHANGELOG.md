@@ -2,9 +2,11 @@
 
 All notable changes to the aaajiao skill are documented here.
 
-## Unreleased — 2026-10-19
+## 1.13.1 — 2026-10-19
 
-Records only. The skill stays at `1.13.0`, so this entry has no version number of its own. It joins the next version that changes `SKILL.md`.
+### Corrected
+
+- Corrected aaajiao's birthplace to Xi'an in `SKILL.md` (Who) and `public/llms.txt`; the artist confirmed it. The earlier "Wuhan" conflated birthplace with the computer-science degree from Wuhan University, which both files now name.
 
 ### Added
 
@@ -13,7 +15,7 @@ Records only. The skill stays at `1.13.0`, so this entry has no version number o
 
 ### Changed
 
-- Indexed the two research files. `skills/aaajiao/SKILL.md` is unchanged, including its Growth Log, Core, Critical Lens, navigation, and `metadata.version` (`1.13.0`). No existing concept card or dialogue deposit was edited. The artist has not confirmed any of these themes. Nothing enters Core.
+- Indexed the two research files. Apart from the birthplace correction above, `skills/aaajiao/SKILL.md` is unchanged, including its Growth Log, Core, Critical Lens, and navigation. No existing concept card or dialogue deposit was edited. The artist has not confirmed any of these themes. Nothing enters Core.
 
 ## 1.13.0 — 2026-10-02
 

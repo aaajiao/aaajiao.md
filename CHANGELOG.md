@@ -2,7 +2,9 @@
 
 All notable changes to the aaajiao skill are documented here.
 
-## 1.13.1 — 2026-10-19
+## Unreleased — 2026-10-19
+
+Records only. The skill stays at `1.13.0`, so this entry has no version number of its own. It joins the next version that changes `SKILL.md`.
 
 ### Added
 

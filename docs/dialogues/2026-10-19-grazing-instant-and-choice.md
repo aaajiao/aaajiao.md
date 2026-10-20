@@ -6,7 +6,7 @@
 
 ## Starting situation
 
-The open question from 2026-09-24: is grazing a practice of staying, or the aesthetic of those who have no right to exit? A newsletter reading (Economies of Deferral, a soldier waiting under arms) was offered as a contrast: someone who stays close to danger without being able to leave.
+The open question from 2026-09-24: is grazing a practice of staying, or the aesthetic of those who have no right to exit? The assistant offered a contrast from its 2026-10-19 newsletter reading notes: soldiers waiting with guns, people who stay close to danger without being able to leave. The image is the notes' unverified paraphrase of a Rafik Greiss conversation (NL-04 in the [source ledger](../research/2026-10-19-newsletter-readings-source-ledger.md)), not a checked account of it.
 
 ## What changed
 

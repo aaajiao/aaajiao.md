@@ -90,7 +90,7 @@ The book itself has not been read; claims about it rest on reviews and the autho
 
 **Status:** emerging.
 
-On 2026-10-19 the open question above — whether grazing is a practice of staying, or the aesthetic of those who have no right to exit — was returned to in dialogue. The artist's statements, what remains labeled assistant-proposed and unconfirmed, and the questions still open are recorded only in the [dated deposit](../dialogues/2026-10-19-grazing-instant-and-choice.md). They are not copied into this dossier. The four-screen configuration and the descriptions above are unchanged.
+On 2026-10-19 the open question from the 2026-09-24 deposit — whether grazing is a practice of staying, or the aesthetic of those who have no right to exit — was returned to in dialogue. The artist's statements, what remains labeled assistant-proposed and unconfirmed, and the questions still open are recorded only in the [dated deposit](../dialogues/2026-10-19-grazing-instant-and-choice.md). They are not copied into this dossier. The four-screen configuration and the descriptions above are unchanged.
 
 ## Open questions
 

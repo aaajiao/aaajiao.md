@@ -6,7 +6,7 @@ This index distinguishes active working knowledge from revision material, histor
 
 | Document | Role | Last updated |
 |---|---|---|
-| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter, plus a 2026-10-19 pointer to the grazing dialogue | 2026-10-19 |
+| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter, plus a 2026-10-19 pointer to the grazing dialogue | 2026-10-20 |
 | `dialogues/2026-08-the-eve-of-parasitism.md` | First curated dialogue deposit for the current project | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` | Curated deposit on exhibition language, logistics research, and concept annotations | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` | Curated deposit on coloniality and unexchangeable critique | 2026-08-01 |
@@ -51,6 +51,8 @@ Interviews, letters, media coverage, and completed applications remain in their 
 | [Canned-culture source ledger](research/2026-10-02-canned-culture-source-ledger.md) | Preserves the confirmed source notes, 14 source groups and their limits, local method references, publication provenance, and the boundary between writing and skill integration | 2026-10-02 |
 | [Newsletter-readings source ledger](research/2026-10-19-newsletter-readings-source-ledger.md) | URLs named in the 2026-10-19 assistant reading notes, the candidate seed each note says a source supports, and public-use limits. Pages were not re-read; paraphrases and names without a URL stay unverified | 2026-10-19 |
 | [Newsletter-readings seed list](research/2026-10-19-newsletter-readings-seeds.md) | Seven `emerging` themes from those notes. Assistant-proposed, unconfirmed by the artist; candidate questions for a future dialogue or Concept Return. Not a dialogue deposit. `SKILL.md` and Core are unchanged | 2026-10-19 |
+| [Grazing proposal, Chinese draft](dialogues/2026-10-19-documenta16-grazing-proposal-cn.md) | Chinese text of the documenta 16 "AI thread" proposal *擦弹：在 AI 条件下辨认仍可行动的位置*, from the unpublished Basecamp draft of 2026-10-19. Text only: image positions keep their captions. A dated written outcome, not a dialogue deposit or settled knowledge; lines that restate `SKILL.md` are not new evidence | 2026-10-19 |
+| [Grazing proposal, English](dialogues/2026-10-19-documenta16-grazing-proposal-en.md) | English version as the artist published it on restricted Basecamp on 2026-10-20, under the same terms; the archive notes list the four differences between the versions | 2026-10-20 |
 
 ## Archive rules
 

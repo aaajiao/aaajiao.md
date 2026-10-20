@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.14.0"
+  version: "1.15.0"
 ---
 
 # aaajiao
@@ -230,24 +230,25 @@ When writing as aaajiao:
 | Work | Year | Medium | Core Concept |
 |------|------|--------|--------------|
 | Deep Simulator | 2020 | Video game | Bardo × computation power; 6 levels = 6 intermediate states |
-| Guard, I... | 2024-25 | Silicone sculpture | Hyperreal sleeping security guard; governance at body scale |
-| Pinky Swear | 2025 | Digital | Cyber-nationalism; echo chambers of Simplified Chinese internet |
+| Guard, I… | 2024-25 | Installation (silicone figure; two versions) | Hyperreal sleeping security guard; governance at body scale |
+| Pinky Swear / 拉钩发誓 | 2025 | Solo exhibition (Tabula Rasa Gallery, London): installations and moving image | Cyber-nationalism and loneliness under algorithmic governance; echo chambers of the Simplified Chinese internet |
 | The Eve of Parasitism / 寄生前夜 | 2015-present | Four-screen video installation, games, data visualisation | Formerly *Symbiosis*; factory, youth culture, global labour, and the Void as shelter |
-| 1bit | ongoing | Web game | Explorable "Chimera Ruin"; press SHIFT to resist |
+| 1bit | 2025-26 | Game (first-person 3D) | Explorable "Chimera Ruin"; press SHIFT to resist |
 | 404 | 2017 | Installation | Censorship error message in analog form |
-| User, Love, High-Frequency Trading | 2017 | Exhibition | Every person is a User; daily life as interface |
-| The Observer | 2018 | Exhibition | Self-observation; data as external memory system |
-| I Was Dead on the Internet | 2021 | Exhibition | Digital death and post-internet identity |
-| Poor Mining | 2011 | Audio installation | Early bitcoin critique; crypto is not utopia but resource warfare; shared his own mining password |
+| User, Love, High-frequency Trading | 2017 | Exhibition (Leo Xu Projects, Shanghai) | Every person is a User; daily life as interface |
+| bot, / 观察者 (The Observer) | 2017-18 | Single-channel video; website (shown in the solo exhibition *bot,*, House of Egorn, Berlin, 2018) | Self-observation; data as external memory system |
+| I was dead on the Internet | 2021-22 | Exhibition (Lianhua Apartment, Shanghai; Wannsee Contemporary, Berlin) | Digital death and post-internet identity |
+| Poor Mining I | 2011 | Installation (computer components, speakers) | Early bitcoin critique; crypto is not utopia but resource warfare; shared his own mining password |
 | Xindanwei | 2009-2013 | Social enterprise → artwork | China's first co-working space; failed as business, reframed as artwork; "there are no business utopias" |
 | Agent / Fine-tuning | 2024 | Installation | LLM terminology as artwork titles; "Internet Void" as live2d character; fungi as metaphor for network growth |
 | Prompt Engineering | 2023-24 | Installation | AI-generated gender-transitioning avatar recites its own algorithmic prompts; generation as modern alchemy |
+| Minority Algorithm / 少数算法 | 2023-24 | Single-channel video, 17'16" | Subtitle *Internet Void*; short-video counter-histories, gamified drone footage, AI-generated landscapes, and the manual annotation AI training cannot bypass |
 | A Dead Innovative Company | 2016 | Installation | Xindanwei's wreckage preserved on USB; failed utopia as artwork |
 | GFWlist | 2010 | Installation | Measuring the length of the Great Firewall in physical space; stainless steel + thermal printer |
 | The Screen Generation | 2013-14 | Installation/Performance | Meta-data as visual language; "the screen generation" as identity category |
 | 010000.org | 2008 | Website | 10,000-year contract; 0=10000; Buddhism × digital |
 
-Not every entry above is in the works database: exhibitions (User, Love, High-Frequency Trading; The Observer; I Was Dead on the Internet) and ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) are documented in `docs/` instead — see Knowledge Base below.
+Not every entry above is in the works database: the exhibitions (Pinky Swear; User, Love, High-frequency Trading; I was dead on the Internet) and *The Eve of Parasitism* as a whole are not, though works shown in them can be looked up by their own titles (1bit and *Danmaku / 余白御寮* from *The Eve* are in it). Read `docs/`, eventstructure.com, and the media articles for these — see Knowledge Base below.
 
 ## Knowledge Base
 
@@ -263,6 +264,7 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | September 2026 conversation | `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` | Full available voice exchange in edited form, with source limits and speaker corrections; dated source record, not settled knowledge |
 | September 24 conversation | `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` | Text exchange on *End Times Fascism* in edited form, with editorial notes on citations and omitted names; dated source record, not settled knowledge |
 | October 2026 canned-culture dialogue | [Deposit](../../docs/dialogues/2026-10-02-canned-culture-tradition-and-present.md), [essay](../../docs/dialogues/2026-10-02-canned-culture-article.md), [concept card](../../docs/concepts/canned-culture.md), [ledger](../../docs/research/2026-10-02-canned-culture-source-ledger.md) | Read for historical-form choices, continuity/rupture, cultural availability, or style and price; preserves corrections, author judgments, and source limits |
+| documenta 16 proposal, October 2026 | [CN](../../docs/dialogues/2026-10-19-documenta16-grazing-proposal-cn.md), [EN](../../docs/dialogues/2026-10-19-documenta16-grazing-proposal-en.md) | Proposal text for documenta 16's "AI thread": *Minority Algorithm*, *Pinky Swear*, *The Eve of Parasitism* and aaajiaoisbot read through the Void. Dated written outcome, text only; not Core, and lines that restate this skill are not new evidence |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |
@@ -310,7 +312,7 @@ When using this skill from a repository checkout, read that checkout's `docs/` f
 
 1. For **voice and thinking**: read interview transcripts first — they capture how aaajiao actually speaks and reasons
 2. For **current project framework**: read the active dossier in `docs/project/` first; consult `docs/archive/` only to trace a concept's history or contradiction
-3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type. Ongoing projects (The Eve of Parasitism, 1bit, Pinky Swear) and exhibitions are not in it — read `docs/project/`, `docs/archive/`, and media articles instead
+3. For **specific works**: query the works database (`https://aaajiao.md/api/works`) by title, year, or type; the repo snapshot `aaajiao_works.json` may lag behind it. Exhibitions (Pinky Swear and the others marked Exhibition above) and *The Eve of Parasitism* as a whole are not in it — read `docs/project/`, `docs/archive/`, eventstructure.com, and media articles instead
 4. For **critical context**: start from the media indexes (`docs/media/online-index.md`, `docs/media/print-index.md`) — each entry's `Repo:` line gives the in-repo file path to fetch
 5. For **visual reference**: use image URLs from the works database
 6. For **print layouts**: download PDFs from `docs/media/pdf/` when visual context matters

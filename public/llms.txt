@@ -17,12 +17,13 @@ This site is the canonical works archive plus a portable agent skill. The same U
 - [SKILL.md](https://raw.githubusercontent.com/aaajiao/aaajiao.md/main/skills/aaajiao/SKILL.md): identity, double-helix framework, methodology, voice rules
 - [Repo](https://github.com/aaajiao/aaajiao.md): source for site and skill
 
-## Knowledge base (primary sources)
+## Knowledge base
 
+- [Documentation index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/INDEX.md): status of each document — active, source record, or archive
 - [Interviews](https://github.com/aaajiao/aaajiao.md/tree/main/docs/interview): podcast transcripts and artist interviews — primary source for voice and thinking
-- [Letters](https://github.com/aaajiao/aaajiao.md/tree/main/docs/letter): personal correspondence (private voice)
-- [Open call applications](https://github.com/aaajiao/aaajiao.md/tree/main/docs/opencall): exhibition applications (public voice)
-- [Project documents](https://github.com/aaajiao/aaajiao.md/tree/main/docs/project): ongoing project documentation including Symbiosis
+- [Project dossier](https://github.com/aaajiao/aaajiao.md/tree/main/docs/project): the current project, *The Eve of Parasitism / 寄生前夜*
+- [Dialogues](https://github.com/aaajiao/aaajiao.md/tree/main/docs/dialogues), [concept cards](https://github.com/aaajiao/aaajiao.md/tree/main/docs/concepts), [research ledgers](https://github.com/aaajiao/aaajiao.md/tree/main/docs/research): dated deposits, written outcomes, and source records; candidate knowledge, not settled positions
+- [Archive](https://github.com/aaajiao/aaajiao.md/tree/main/docs/archive): a dated letter, an exhibition application, and superseded project formulations (including *Symbiosis*) — provenance, not current position
 - [Media articles](https://github.com/aaajiao/aaajiao.md/tree/main/docs/media/articles): 58 Markdown articles, critical reception 2010–2023
 - [Media PDFs](https://github.com/aaajiao/aaajiao.md/tree/main/docs/media/pdf): 40 print magazine layouts
 - [Print index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/print-index.md) | [Online index](https://github.com/aaajiao/aaajiao.md/blob/main/docs/media/online-index.md)

@@ -44,20 +44,22 @@ export function SkillTab() {
       label: 'What It Contains',
       description: '内容 / Distillation + knowledge base',
       command: `curl -s ${rawUrl} | head -20`,
-      content: `// SKILL.md — the distillation (~2200 words)
-//   Identity, double helix framework,
+      content: `// SKILL.md — the distillation (~4400 words)
+//   Growth log, identity, double helix,
 //   concept-as-filter methodology,
 //   core stances, voice rules, 18 key works,
 //   critical lens checklist
 //
-// docs/ — the knowledge base (108 files)
-//   interviews/    4 transcripts (podcast + Ocula)
-//   letter/        personal writing
-//   opencall/      exhibition applications
-//   project/       Symbiosis + Matsutake framework
+// docs/ — the knowledge base (134 files)
+//   interview/     4 transcripts (podcast + Ocula)
+//   project/       The Eve of Parasitism dossier
+//   dialogues/     dated deposits + written outcomes
+//   concepts/      concept cards
+//   research/      source ledgers
+//   archive/       letter, application, superseded docs
 //   media/         58 articles (MD) + 40 PDFs
 //
-// aaajiao_works.json — 163 artworks with metadata`,
+// aaajiao_works.json — 163-work snapshot`,
     },
     {
       label: 'Update',

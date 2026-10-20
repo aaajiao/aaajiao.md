@@ -2,7 +2,7 @@
 
 All notable changes to the aaajiao skill are documented here.
 
-## 1.14.0 — 2026-10-20
+## 1.15.0 — 2026-10-20
 
 ### Added
 
@@ -10,7 +10,35 @@ All notable changes to the aaajiao skill are documented here.
 
 ### Changed
 
-- Added a Growth Log entry and indexed the deposit. The *Eve of Parasitism* dossier gains a dated pointer to the deposit and no new claims. No concept card was revised.
+- Added a Growth Log entry and indexed the deposit. The *Eve of Parasitism* dossier gains a dated pointer to the deposit and no new claims. No concept card was revised. Updated the site skill tab's word and file counts.
+
+## 1.14.0 — 2026-10-20
+
+### Added
+
+- The documenta 16 "AI thread" proposal *Grazing / 擦弹* as two text-only written outcomes in `docs/dialogues/`: the Chinese draft of 2026-10-19 (`2026-10-19-documenta16-grazing-proposal-cn.md`) and the English version (`…-en.md`) the artist published on restricted Basecamp on 2026-10-20. Each keeps its text as written and adds an archive note on provenance, the four differences between the versions, and the omitted images, whose positions keep their captions.
+
+### Changed
+
+- Indexed both texts under Sources in `docs/INDEX.md`, added a Living Records row in `SKILL.md`, and updated the site skill tab's file and word counts. At the artist's request only the two texts were added: no dialogue deposit, source ledger, concept-card response or Growth Log entry, and no images. Nothing enters Core.
+
+## 1.13.2 — 2026-10-20
+
+### Corrected
+
+- Key Works in `SKILL.md`, checked against the live works API (170 works) and eventstructure.com on 2026-10-20. *Pinky Swear / 拉钩发誓* was listed as a 2025 "Digital" work; it is a 2025 solo exhibition at Tabula Rasa Gallery, London, of installations and moving image. *Guard, I…* is an installation, in two versions. *1bit* is dated 2025–2026 and typed as a game. *The Observer* is now listed under its title *bot,* (观察者): the 2017–2018 single-channel video and website, which is in the works database and was shown in the 2018 solo exhibition at House of Egorn, Berlin. *User, Love, High-frequency Trading* and *I was dead on the Internet* follow eventstructure's spelling; the latter has both venues (Shanghai 2021, Berlin 2022). *Poor Mining* is *Poor Mining I*, an installation.
+- The notes on what the works database holds were out of date. *1bit* and *Danmaku* are in it; the exhibitions and *The Eve of Parasitism* as a whole are not. The repo snapshot `aaajiao_works.json` (163 works) lags behind the live API.
+- *The Eve of Parasitism* dossier described the parcel study as China→EU parcels from before COVID. It now states the metric as the existing source-ledger rows do: all low-value parcels entering the EU, 2020–2025, with China the dominant share, 2020–2021 estimated, and the duty exemption ending on 30 June 2026.
+- `public/llms.txt` linked to `docs/letter` and `docs/opencall`, which no longer exist, and described the project documents as *Symbiosis*. It now lists the index, the current dossier, the dialogue, concept and research records, and the archive.
+- The skill tab on the site gave stale counts and directories (~2200 words, 108 files, `letter/`, `opencall/`, Symbiosis). It now matches the repository.
+
+### Added
+
+- A Key Works row for *Minority Algorithm / 少数算法* (2023–2024, single-channel video), taken from the works database.
+
+### Changed
+
+- No new concept or position enters Core: the Key Works edits are factual corrections plus one established work from the works database. Growth Log, concept cards, and dialogue deposits are unchanged.
 
 ## 1.13.1 — 2026-10-19
 

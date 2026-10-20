@@ -6,7 +6,7 @@ This index distinguishes active working knowledge from revision material, histor
 
 | Document | Role | Last updated |
 |---|---|---|
-| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter | 2026-09-24 |
+| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter | 2026-10-20 |
 | `dialogues/2026-08-the-eve-of-parasitism.md` | First curated dialogue deposit for the current project | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` | Curated deposit on exhibition language, logistics research, and concept annotations | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` | Curated deposit on coloniality and unexchangeable critique | 2026-08-01 |

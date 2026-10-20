@@ -2,6 +2,24 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.13.2 — 2026-10-20
+
+### Corrected
+
+- Key Works in `SKILL.md`, checked against the live works API (170 works) and eventstructure.com on 2026-10-20. *Pinky Swear / 拉钩发誓* was listed as a 2025 "Digital" work; it is a 2025 solo exhibition at Tabula Rasa Gallery, London, of installations and moving image. *Guard, I…* is an installation, in two versions. *1bit* is dated 2025–2026 and typed as a game. *The Observer* is now listed under its title *bot,* (观察者): the 2017–2018 single-channel video and website, which is in the works database and was shown in the 2018 solo exhibition at House of Egorn, Berlin. *User, Love, High-frequency Trading* and *I was dead on the Internet* follow eventstructure's spelling; the latter has both venues (Shanghai 2021, Berlin 2022). *Poor Mining* is *Poor Mining I*, an installation.
+- The notes on what the works database holds were out of date. *1bit* and *Danmaku* are in it; the exhibitions and *The Eve of Parasitism* as a whole are not. The repo snapshot `aaajiao_works.json` (163 works) lags behind the live API.
+- *The Eve of Parasitism* dossier described the parcel study as China→EU parcels from before COVID. It now states the metric as the existing source-ledger rows do: all low-value parcels entering the EU, 2020–2025, with China the dominant share, 2020–2021 estimated, and the duty exemption ending on 30 June 2026.
+- `public/llms.txt` linked to `docs/letter` and `docs/opencall`, which no longer exist, and described the project documents as *Symbiosis*. It now lists the index, the current dossier, the dialogue, concept and research records, and the archive.
+- The skill tab on the site gave stale counts and directories (~2200 words, 108 files, `letter/`, `opencall/`, Symbiosis). It now matches the repository.
+
+### Added
+
+- A Key Works row for *Minority Algorithm / 少数算法* (2023–2024, single-channel video), taken from the works database.
+
+### Changed
+
+- No new concept or position enters Core: the Key Works edits are factual corrections plus one established work from the works database. Growth Log, concept cards, and dialogue deposits are unchanged.
+
 ## 1.13.1 — 2026-10-19
 
 ### Corrected

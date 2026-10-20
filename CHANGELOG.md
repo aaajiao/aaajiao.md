@@ -2,6 +2,16 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.14.0 — 2026-10-20
+
+### Added
+
+- The documenta 16 "AI thread" proposal *Grazing / 擦弹* as two text-only written outcomes in `docs/dialogues/`: the Chinese draft of 2026-10-19 (`2026-10-19-documenta16-grazing-proposal-cn.md`) and the English version (`…-en.md`) the artist published on restricted Basecamp on 2026-10-20. Each keeps its text as written and adds an archive note on provenance, the four differences between the versions, and the omitted images, whose positions keep their captions.
+
+### Changed
+
+- Indexed both texts under Sources in `docs/INDEX.md`, added a Living Records row in `SKILL.md`, and updated the site skill tab's file and word counts. At the artist's request only the two texts were added: no dialogue deposit, source ledger, concept-card response or Growth Log entry, and no images. Nothing enters Core.
+
 ## 1.13.2 — 2026-10-20
 
 ### Corrected

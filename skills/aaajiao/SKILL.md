@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.13.2"
+  version: "1.14.0"
 ---
 
 # aaajiao
@@ -254,6 +254,7 @@ All reference documents are in the `aaajiao.md` repository on GitHub:
 | September 2026 conversation | `docs/dialogues/2026-09-financial-freedom-and-expression-conversation.md` | Full available voice exchange in edited form, with source limits and speaker corrections; dated source record, not settled knowledge |
 | September 24 conversation | `docs/dialogues/2026-09-end-times-fascism-and-shelter-conversation.md` | Text exchange on *End Times Fascism* in edited form, with editorial notes on citations and omitted names; dated source record, not settled knowledge |
 | October 2026 canned-culture dialogue | [Deposit](../../docs/dialogues/2026-10-02-canned-culture-tradition-and-present.md), [essay](../../docs/dialogues/2026-10-02-canned-culture-article.md), [concept card](../../docs/concepts/canned-culture.md), [ledger](../../docs/research/2026-10-02-canned-culture-source-ledger.md) | Read for historical-form choices, continuity/rupture, cultural availability, or style and price; preserves corrections, author judgments, and source limits |
+| documenta 16 proposal, October 2026 | [CN](../../docs/dialogues/2026-10-19-documenta16-grazing-proposal-cn.md), [EN](../../docs/dialogues/2026-10-19-documenta16-grazing-proposal-en.md) | Proposal text for documenta 16's "AI thread": *Minority Algorithm*, *Pinky Swear*, *The Eve of Parasitism* and aaajiaoisbot read through the Void. Dated written outcome, text only; not Core, and lines that restate this skill are not new evidence |
 | Deposit template | `docs/dialogues/_template.md` | Required structure for a new dialogue deposit |
 | Concept cards | `docs/concepts/` | Historical definitions, work evidence, current response, and unresolved tensions for a recurring concept |
 | Concept-card template | `docs/concepts/_template.md` | Required structure for a Concept Return |

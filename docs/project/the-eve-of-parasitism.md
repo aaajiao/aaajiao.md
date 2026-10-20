@@ -86,6 +86,12 @@ The contrast is not clean. While sources were being checked for the deposit, it 
 
 The book itself has not been read; claims about it rest on reviews and the authors' earlier writing. See the [dated deposit](../dialogues/2026-09-end-times-fascism-and-shelter.md), [edited conversation](../dialogues/2026-09-end-times-fascism-and-shelter-conversation.md), and [source ledger](../research/2026-09-24-end-times-fascism-source-ledger.md). The four-screen configuration is unchanged.
 
+## Dated pointer — 2026-10-19
+
+**Status:** emerging.
+
+On 2026-10-19 the open question above — whether grazing is a practice of staying, or the aesthetic of those who have no right to exit — was returned to in dialogue. The artist's statements, what remains labeled assistant-proposed and unconfirmed, and the questions still open are recorded only in the [dated deposit](../dialogues/2026-10-19-grazing-instant-and-choice.md). They are not copied into this dossier. The four-screen configuration and the descriptions above are unchanged.
+
 ## Open questions
 
 - How can the bullet-hell game make shelter perceptible without explaining it?
@@ -104,3 +110,4 @@ The book itself has not been read; claims about it rest on reviews and the autho
 - `docs/concepts/decoloniality-and-unexchangeable-critique.md` — concept card for coloniality and unexchangeable critique
 - `docs/dialogues/2026-09-financial-freedom-and-expression.md` — emerging deposit on financial freedom, curiosity, and the changing desire to respond
 - `docs/dialogues/2026-09-end-times-fascism-and-shelter.md` — emerging deposit on *End Times Fascism* and two kinds of shelter: bunker as exit, grazing as hereness
+- `docs/dialogues/2026-10-19-grazing-instant-and-choice.md` — emerging deposit on grazing, the instant, and the politics of choice; pointer only from the 2026-10-19 note above

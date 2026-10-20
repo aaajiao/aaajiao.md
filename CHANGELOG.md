@@ -2,6 +2,16 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.14.0 — 2026-10-20
+
+### Added
+
+- An emerging dialogue deposit (2026-10-19) on grazing in the bullet-hell game of *The Eve of Parasitism*. The artist locates grazing in choosing to stay close to danger while exit remains possible, and moves the weight to the instant of choosing. The Absorption / Trance comparison stays labeled assistant-proposed and unconfirmed. Status remains emerging. Nothing enters Core.
+
+### Changed
+
+- Added a Growth Log entry and indexed the deposit. The *Eve of Parasitism* dossier gains a dated pointer to the deposit and no new claims. No concept card was revised.
+
 ## 1.13.1 — 2026-10-19
 
 ### Corrected

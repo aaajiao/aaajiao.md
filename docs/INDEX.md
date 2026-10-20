@@ -6,13 +6,14 @@ This index distinguishes active working knowledge from revision material, histor
 
 | Document | Role | Last updated |
 |---|---|---|
-| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter | 2026-09-24 |
+| `project/the-eve-of-parasitism.md` | Current dossier for *The Eve of Parasitism / 寄生前夜*, with dated questions on whether to keep responding and on two kinds of shelter, plus a 2026-10-19 pointer to the grazing dialogue | 2026-10-19 |
 | `dialogues/2026-08-the-eve-of-parasitism.md` | First curated dialogue deposit for the current project | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-exhibition-language.md` | Curated deposit on exhibition language, logistics research, and concept annotations | 2026-08-01 |
 | `dialogues/2026-08-the-eve-of-parasitism-decolonial-extension.md` | Curated deposit on coloniality and unexchangeable critique | 2026-08-01 |
 | `dialogues/2026-09-financial-freedom-and-expression.md` | Emerging deposit on financial freedom, curiosity, and expressive desire; unresolved questions remain Seeds | 2026-09-05 |
 | `dialogues/2026-09-end-times-fascism-and-shelter.md` | Emerging deposit on *End Times Fascism*: bunker as exit, grazing as hereness; assistant-proposed contrasts remain Seeds | 2026-09-24 |
 | [Canned-culture dialogue](dialogues/2026-10-02-canned-culture-tradition-and-present.md) | Emerging deposit on historical-form choices, continuity/rupture, public expression, and art's style/price; preserves corrections and Seeds | 2026-10-02 |
+| [Grazing dialogue](dialogues/2026-10-19-grazing-instant-and-choice.md) | Emerging deposit on grazing: choosing to stay while exit remains possible, and the instant of choosing. The Absorption / Trance note stays assistant-proposed and unconfirmed | 2026-10-19 |
 | [Canned-culture concept card](concepts/canned-culture.md) | Revising card with an emerging response; a provisional filter for selection and use, not Core or a test of cultural legitimacy | 2026-10-02 |
 | `concepts/player-void-seeker-void.md` | Active concept card for the Player → Void-Seeker → Void sequence, with dated emerging responses | 2026-09-24 |
 | `concepts/decoloniality-and-unexchangeable-critique.md` | Emerging concept card for the project’s decolonial extension; dated responses distinguish cultural circulation, price, and political efficacy | 2026-10-02 |

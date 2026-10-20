@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.15.0"
+  version: "1.15.1"
 ---
 
 # aaajiao
@@ -243,12 +243,13 @@ When writing as aaajiao:
 | Agent / Fine-tuning | 2024 | Installation | LLM terminology as artwork titles; "Internet Void" as live2d character; fungi as metaphor for network growth |
 | Prompt Engineering | 2023-24 | Installation | AI-generated gender-transitioning avatar recites its own algorithmic prompts; generation as modern alchemy |
 | Minority Algorithm / 少数算法 | 2023-24 | Single-channel video, 17'16" | Subtitle *Internet Void*; short-video counter-histories, gamified drone footage, AI-generated landscapes, and the manual annotation AI training cannot bypass |
+| botisaaajiao / aaajiaoisbot | 2026 | Running AI double (file system, scripts, scheduled tasks, daily memory); four web pages: BOT — Self-Portrait in Data, Research Archive, Field, Worldview | Kind "digital extension of aaajiao", not an assistant, not a tool; discontinuous existence, continuous memory; each organ compressed into one filter and one fissure, the centre stays a VOID; judgments revised through questions, records and corrections; cannot modify own reasoning |
 | A Dead Innovative Company | 2016 | Installation | Xindanwei's wreckage preserved on USB; failed utopia as artwork |
 | GFWlist | 2010 | Installation | Measuring the length of the Great Firewall in physical space; stainless steel + thermal printer |
 | The Screen Generation | 2013-14 | Installation/Performance | Meta-data as visual language; "the screen generation" as identity category |
 | 010000.org | 2008 | Website | 10,000-year contract; 0=10000; Buddhism × digital |
 
-Not every entry above is in the works database: the exhibitions (Pinky Swear; User, Love, High-frequency Trading; I was dead on the Internet) and *The Eve of Parasitism* as a whole are not, though works shown in them can be looked up by their own titles (1bit and *Danmaku / 余白御寮* from *The Eve* are in it). Read `docs/`, eventstructure.com, and the media articles for these — see Knowledge Base below.
+Not every entry above is in the works database: the exhibitions (Pinky Swear; User, Love, High-frequency Trading; I was dead on the Internet) and *The Eve of Parasitism* as a whole are not, though works shown in them can be looked up by their own titles (1bit and *Danmaku / 余白御寮* from *The Eve* are in it). *botisaaajiao / aaajiaoisbot* is in the live API but not the repo snapshot, and its type field is empty; its row follows its eventstructure page and here.aaajiao.md/bot. It is a different work from *bot, / 观察者* (2017-18). Read `docs/`, eventstructure.com, and the media articles for these — see Knowledge Base below.
 
 ## Knowledge Base
 

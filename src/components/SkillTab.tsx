@@ -44,10 +44,10 @@ export function SkillTab() {
       label: 'What It Contains',
       description: '内容 / Distillation + knowledge base',
       command: `curl -s ${rawUrl} | head -20`,
-      content: `// SKILL.md — the distillation (~4400 words)
+      content: `// SKILL.md — the distillation (~4500 words)
 //   Growth log, identity, double helix,
 //   concept-as-filter methodology,
-//   core stances, voice rules, 18 key works,
+//   core stances, voice rules, 19 key works,
 //   critical lens checklist
 //
 // docs/ — the knowledge base (134 files)

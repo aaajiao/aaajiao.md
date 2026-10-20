@@ -2,6 +2,16 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.15.1 — 2026-10-20
+
+### Added
+
+- A Key Works row for *botisaaajiao / aaajiaoisbot* (2026), taken from the works database. Its type field there is empty, so the medium and concept follow the artist's published pages: the eventstructure work page, here.aaajiao.md/bot and the medium line of the public proposal page, checked on 2026-10-20. The note under the table says it is in the live API but not the repo snapshot, and that it is a different work from *bot, / 观察者* (2017–2018).
+
+### Changed
+
+- The site skill tab now counts ~4500 words and 19 key works. No new concept or position enters Core; the Growth Log, concept cards and dialogue deposits are unchanged.
+
 ## 1.15.0 — 2026-10-20
 
 ### Added

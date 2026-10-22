@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { handleOptions } from '../shared/respond.js'
 
+if (process.env.VERCEL === '1') console.info(`[runtime] node=${process.version}`)
+
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (handleOptions(req, res)) return
 

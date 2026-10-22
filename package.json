@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "tsc -p node_modules/@chenglou/pretext/tsconfig.build.json",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node --version && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

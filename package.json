@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "tsc -p node_modules/@chenglou/pretext/tsconfig.build.json",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node --version && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,5 +26,8 @@
     "@vitejs/plugin-react": "^5.1.0",
     "typescript": "7.0.2",
     "vite": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=24.22.1 <25"
   }
 }

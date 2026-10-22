@@ -143,7 +143,7 @@ bun run build        # production build
 
 The project uses stable TypeScript 7.0.2 for type checking, the Pretext `postinstall` build, and Vercel API compilation. Use Vercel CLI 59.11.7 or newer (`npm install -g vercel@latest`); older CLI builders rely on the JavaScript compiler API removed in TypeScript 7. The matching `@vercel/node` and its `@vercel/build-utils` peer dependency are pinned in `package.json`.
 
-Use `bun install --frozen-lockfile` to reproduce the pinned toolchain and `vercel build` to validate the API functions as well as the frontend. The deployed API runtime is Node.js 24.
+Use `bun install --frozen-lockfile` to reproduce the pinned toolchain and `vercel build` to validate the API functions as well as the frontend. The deployed API runtime targets Node.js 24, with 24.22.1 as the minimum security version (`engines.node`: `>=24.22.1 <25`). `.nvmrc` and `.node-version` select that baseline for local Node tooling. This baseline includes the [October 21, 2026 security fixes](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases). Vercel manages patch versions within Node 24; verify the deployed runtime separately, since these settings alone do not confirm patch rollout.
 
 ## Architecture
 

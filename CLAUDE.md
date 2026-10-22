@@ -32,6 +32,8 @@ bun run build        # tsc + vite build → dist/
 
 No test runner or linter is configured.
 
+Use Node.js 24.22.1 or newer within 24.x for Node tooling and Vercel functions; `.nvmrc`, `.node-version`, and `engines.node` define this security baseline. Bun remains the package manager. Do not change global runtimes during repository maintenance. Vercel manages deployed patch versions, so verify deployment separately.
+
 ## Architecture
 
 ```

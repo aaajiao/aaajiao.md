@@ -2,6 +2,18 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.16.0 — 2026-11-14
+
+### Added
+
+- An emerging dialogue deposit on John Berger's influence. aaajiao confirmed that Berger's views have had a big influence on him (「他的观点对我影响很大」) and asked that this be added to the skill. He did not say which parts. Merve Emre's *New Yorker* review of Tom Overton's *John Berger: From Life* (web text read 2026-11-14) is the source for the Berger material. Every link from that review to the practice stays labeled assistant-proposed and unconfirmed.
+- A source ledger separating his one confirmed sentence from Emre's paraphrase, Berger's words as she quotes them, Tamás's term as she applies it, and Overton as she recounts him. The biography, *Ways of Seeing*, and the novels were not read.
+
+### Changed
+
+- Added a Growth Log entry and indexed the deposit and the ledger. No project dossier and no concept card. Core, vocabulary, the Critical Lens, and the theoretical anchors are unchanged. Nothing enters Core.
+- The site skill tab now counts ~4600 words and 136 files in `docs/`.
+
 ## 1.15.1 — 2026-10-20
 
 ### Added

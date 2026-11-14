@@ -14,6 +14,7 @@ This index distinguishes active working knowledge from revision material, histor
 | `dialogues/2026-09-end-times-fascism-and-shelter.md` | Emerging deposit on *End Times Fascism*: bunker as exit, grazing as hereness; assistant-proposed contrasts remain Seeds | 2026-09-24 |
 | [Canned-culture dialogue](dialogues/2026-10-02-canned-culture-tradition-and-present.md) | Emerging deposit on historical-form choices, continuity/rupture, public expression, and art's style/price; preserves corrections and Seeds | 2026-10-02 |
 | [Grazing dialogue](dialogues/2026-10-19-grazing-instant-and-choice.md) | Emerging deposit on grazing: choosing to stay while exit remains possible, and the instant of choosing. The Absorption / Trance note stays assistant-proposed and unconfirmed | 2026-10-19 |
+| [John Berger dialogue](dialogues/2026-11-14-john-berger-influence.md) | Emerging deposit. aaajiao confirmed that Berger's views have had a big influence on him and did not say which parts. Links from Emre's review to the practice stay assistant-proposed and unconfirmed | 2026-11-14 |
 | [Canned-culture concept card](concepts/canned-culture.md) | Revising card with an emerging response; a provisional filter for selection and use, not Core or a test of cultural legitimacy | 2026-10-02 |
 | `concepts/player-void-seeker-void.md` | Active concept card for the Player → Void-Seeker → Void sequence, with dated emerging responses | 2026-09-24 |
 | `concepts/decoloniality-and-unexchangeable-critique.md` | Emerging concept card for the project’s decolonial extension; dated responses distinguish cultural circulation, price, and political efficacy | 2026-10-02 |
@@ -53,6 +54,7 @@ Interviews, letters, media coverage, and completed applications remain in their 
 | [Newsletter-readings seed list](research/2026-10-19-newsletter-readings-seeds.md) | Seven `emerging` themes from those notes. Assistant-proposed, unconfirmed by the artist; candidate questions for a future dialogue or Concept Return. Not a dialogue deposit. `SKILL.md` and Core are unchanged | 2026-10-19 |
 | [Grazing proposal, Chinese draft](dialogues/2026-10-19-documenta16-grazing-proposal-cn.md) | Chinese text of the documenta 16 "AI thread" proposal *擦弹：在 AI 条件下辨认仍可行动的位置*, from the unpublished Basecamp draft of 2026-10-19. Text only: image positions keep their captions. A dated written outcome, not a dialogue deposit or settled knowledge; lines that restate `SKILL.md` are not new evidence | 2026-10-19 |
 | [Grazing proposal, English](dialogues/2026-10-19-documenta16-grazing-proposal-en.md) | English version as the artist published it on restricted Basecamp on 2026-10-20, under the same terms; the archive notes list the four differences between the versions | 2026-10-20 |
+| [John Berger source ledger](research/2026-11-14-john-berger-source-ledger.md) | Emre's *New Yorker* review of Overton's *John Berger: From Life*, read 2026-11-14. Separates the artist's one confirmed sentence from Emre's paraphrase, quotations, Tamás's term, and Overton as recounted. The book, *Ways of Seeing*, and the novels were not read | 2026-11-14 |
 
 ## Archive rules
 

@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.15.1"
+  version: "1.16.0"
 ---
 
 # aaajiao
@@ -125,6 +125,16 @@ Dialogue returned to the 2026-09-24 question of whether grazing is a practice of
 **Records:** [Dialogue deposit](../../docs/dialogues/2026-10-19-grazing-instant-and-choice.md).
 
 **Open question:** Can the instant opened in play be carried back into reality, or does it stay inside the game?
+
+#### 2026-11-14 — John Berger's influence
+
+**Status:** emerging
+
+aaajiao said that John Berger's views have had a big influence on him (「他的观点对我影响很大」) and asked that this be added to the skill. He did not say which parts. Links drawn from Merve Emre's review of Tom Overton's *John Berger: From Life* stay assistant-proposed and unconfirmed. Nothing enters Core.
+
+**Records:** [Dialogue deposit](../../docs/dialogues/2026-11-14-john-berger-influence.md); [source ledger](../../docs/research/2026-11-14-john-berger-source-ledger.md).
+
+**Open question:** Which parts of Berger influenced him most?
 
 ## Who
 

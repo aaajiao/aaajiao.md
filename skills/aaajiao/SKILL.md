@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.16.0"
+  version: "1.17.0"
 ---
 
 # aaajiao
@@ -135,6 +135,16 @@ aaajiao said that John Berger's views have had a big influence on him (「他的
 **Records:** [Dialogue deposit](../../docs/dialogues/2026-11-14-john-berger-influence.md); [source ledger](../../docs/research/2026-11-14-john-berger-source-ledger.md).
 
 **Open question:** Which parts of Berger influenced him most?
+
+#### 2026-11-16 — Euphoria and imposed trance
+
+**Status:** emerging
+
+aaajiao selected this seed from the weekly recap for the repository on 2026-11-16 and did not confirm the interpretation. The distinction between the euphoria of collective invention and the trance imposed under economic contraction stays assistant-proposed. Nothing enters Core.
+
+**Records:** [Dialogue deposit](../../docs/dialogues/2026-11-16-euphoria-vs-trance-seed.md); [source ledger](../../docs/research/2026-11-16-euphoria-vs-trance-source-ledger.md).
+
+**Open question:** What separates them on a screen — an exit channel, or future time?
 
 ## Who
 

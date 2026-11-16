@@ -2,6 +2,18 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.17.0 — 2026-11-16
+
+### Added
+
+- An emerging seed, filed as a dialogue deposit, on distinguishing the euphoria of collective invention from the trance imposed under economic contraction. aaajiao selected it from the weekly seed recap for the repository on 2026-11-16 and did not confirm the interpretation. Luce deLire's *e-flux journal* #166 essay (October 2026) and Alessandro Sbordoni's *Spike* interview (21 October 2026) were read. Every link to Absorption / Trance and Internet Void stays labeled assistant-proposed and unconfirmed. Nothing enters Core.
+- A source ledger separating that selection from deLire's sentences, Sbordoni's answers, the interviewer's introduction, and paraphrases of the briefing. Spinoza, Doctorow, and the books were not read. The weekly recap's Chinese was not checked against the English.
+
+### Changed
+
+- Added a Growth Log entry and indexed the deposit and the ledger. No project dossier and no concept card. Core, vocabulary, the Critical Lens, and the theoretical anchors are unchanged.
+- The site skill tab now counts ~4700 words and 138 files in `docs/`.
+
 ## 1.16.0 — 2026-11-14
 
 ### Added

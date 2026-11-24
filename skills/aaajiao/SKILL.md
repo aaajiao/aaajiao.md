@@ -9,7 +9,7 @@ description: >
   "double helix", "absorption", "trance", "deflation export".
 license: MIT
 metadata:
-  version: "1.17.0"
+  version: "1.18.0"
 ---
 
 # aaajiao
@@ -146,6 +146,16 @@ aaajiao selected this seed from the weekly recap for the repository on 2026-11-1
 
 **Open question:** What separates them on a screen — an exit channel, or future time?
 
+#### 2026-11-24 — *Deep Simulator*: the room and the release
+
+**Status:** emerging
+
+A written interview on *Deep Simulator* asked what changed between the room at Castello di Rivoli and the download. While correcting the assistant's draft, aaajiao confirmed facts the record lacked. Content is the same in every version; the download keeps the player's place, and the exhibition build starts from the beginning. Testing shortcuts were kept on purpose because it is a metagame. Rivoli had no plants, and the London gallery version was more complete. It is played with a gamepad. Many people came to know the game through Ag's book. The general method of keeping the traces of testing stays assistant-proposed. Nothing enters Core.
+
+**Records:** [Written interview](../../docs/interview/2026_deep-simulator_written-interview_en.md); [dialogue deposit](../../docs/dialogues/2026-11-24-deep-simulator-room-and-release.md); [source ledger](../../docs/research/2026-11-24-deep-simulator-source-ledger.md).
+
+**Open question:** Is keeping the traces of making a method beyond this metagame?
+
 ## Who
 
 aaajiao (徐文恺 Xu Wenkai). Media artist. Born 1984, Xi'an. CS degree, Wuhan University. Lives in Berlin, studio operates inside an acrylic factory in Shanghai. The name "aaajiao" is itself a strategy for visibility inside the attention economy.
@@ -249,7 +259,7 @@ When writing as aaajiao:
 
 | Work | Year | Medium | Core Concept |
 |------|------|--------|--------------|
-| Deep Simulator | 2020 | Video game | Bardo × computation power; 6 levels = 6 intermediate states |
+| Deep Simulator | 2020 | Video game (metagame; gamepad) and installation | Bardo × computation power; 6 levels = 6 intermediate states; same content everywhere, the download keeps your place, the exhibition build starts over |
 | Guard, I… | 2024-25 | Installation (silicone figure; two versions) | Hyperreal sleeping security guard; governance at body scale |
 | Pinky Swear / 拉钩发誓 | 2025 | Solo exhibition (Tabula Rasa Gallery, London): installations and moving image | Cyber-nationalism and loneliness under algorithmic governance; echo chambers of the Simplified Chinese internet |
 | The Eve of Parasitism / 寄生前夜 | 2015-present | Four-screen video installation, games, data visualisation | Formerly *Symbiosis*; factory, youth culture, global labour, and the Void as shelter |
@@ -306,6 +316,7 @@ When using this skill from a repository checkout, read that checkout's `docs/` f
 | Podcast: AI, Power & Reality (EN) | `docs/interview/2025_secondhand-experience_podcast_en.md` | English version of the above |
 | Ocula: Metagame (2021, full EN) | `docs/interview/2021_ocula_metagame_full.md` | Stephanie Bailey interview: User→Bot→Player trilogy, Deep Simulator, bardo × computation, Poor Mining, Xindanwei, NFTs |
 | Ocula: Metagame (2021, CN summary) | `docs/interview/2021_ocula_metagame.md` | Chinese version with key excerpts |
+| Deep Simulator written interview (2026, EN) | `docs/interview/2026_deep-simulator_written-interview_en.md` | Answers on the Rivoli room vs the download: continuity, testing shortcuts kept on purpose, local plants, gamepad, conservation and handover, the book by Ag |
 | Letter to Luyang | `docs/archive/2026-01-letter-to-luyang.md` | Historical personal voice; domestication, memory, transmission |
 | Overgaden Application | `docs/archive/2026-01-opencall-overgaden-v4.md` | Historical public voice; double helix in exhibition proposal form |
 | The Eve of Parasitism | `docs/project/the-eve-of-parasitism.md` | Current project dossier: four screens, parasitism, Void as shelter |

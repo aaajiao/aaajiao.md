@@ -2,6 +2,19 @@
 
 All notable changes to the aaajiao skill are documented here.
 
+## 1.18.0 — 2026-11-24
+
+### Added
+
+- aaajiao's written interview on *Deep Simulator*, sent by email on 2026-11-24, filed in `docs/interview/` with the words unchanged. The interviewer's name, address, and questions are withheld. It answers what changed between the room at Castello di Rivoli and the download, and what a future venue needs to know.
+- An emerging dialogue deposit from that interview. While correcting the assistant's draft, aaajiao confirmed: the same content in every version; continuity in the download and a fresh start in the exhibition build (hedged, as he remembers it); testing shortcuts kept on purpose because it is a metagame; no plants at Rivoli and a more complete London gallery version; a gamepad in every version; seat cushions, not the record's "yoga pillows"; and that many people came to know the game through Ag's book. The deposit also records his corrections to the draft. One method seed stays assistant-proposed.
+- A source ledger separating his statements of that day from the museum's pages, itch.io, Ag's epilogue, the book's credits, the 2022 OCAT interview, and Ocula 2021. Nobody played or inspected the build. The book's sales figure is his estimate.
+
+### Changed
+
+- Added a Growth Log entry. Updated the *Deep Simulator* Key Works row with the confirmed mechanism, and added the interview to Primary Sources. No project dossier and no concept card. Core, vocabulary, the Critical Lens, and the theoretical anchors are unchanged.
+- The site skill tab now counts ~4900 words and 141 files in `docs/`.
+
 ## 1.17.0 — 2026-11-16
 
 ### Added

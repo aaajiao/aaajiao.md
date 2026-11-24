@@ -44,14 +44,14 @@ export function SkillTab() {
       label: 'What It Contains',
       description: '内容 / Distillation + knowledge base',
       command: `curl -s ${rawUrl} | head -20`,
-      content: `// SKILL.md — the distillation (~4700 words)
+      content: `// SKILL.md — the distillation (~4900 words)
 //   Growth log, identity, double helix,
 //   concept-as-filter methodology,
 //   core stances, voice rules, 19 key works,
 //   critical lens checklist
 //
-// docs/ — the knowledge base (138 files)
-//   interview/     4 transcripts (podcast + Ocula)
+// docs/ — the knowledge base (141 files)
+//   interview/     5 records (podcast, Ocula, written)
 //   project/       The Eve of Parasitism dossier
 //   dialogues/     dated deposits + written outcomes
 //   concepts/      concept cards
